@@ -20,5 +20,10 @@
   "bugs": {
     "url": "https://github.com/mathfalcon/Henry-Bank/issues"
   },
-  "homepage": "https://github.com/mathfalcon/Henry-Bank#readme"
+  "homepage": "https://github.com/mathfalcon/Henry-Bank#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "pg": "^8.3.3",
+    "sequelize": "^6.3.5"
+  }
 }
