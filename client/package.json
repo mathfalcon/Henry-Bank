@@ -1,19 +1,22 @@
 {
-  "name": "client",
-  "version": "1.0.0",
-  "description": "Henry-Bank",
-  "main": "index.js",
+  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "eject": "expo eject"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mathfalcon/Henry-Bank.git"
+  "dependencies": {
+    "expo": "~39.0.2",
+    "expo-status-bar": "~1.0.2",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.2.tar.gz",
+    "react-native-web": "~0.13.12"
   },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/mathfalcon/Henry-Bank/issues"
+  "devDependencies": {
+    "@babel/core": "~7.9.0"
   },
-  "homepage": "https://github.com/mathfalcon/Henry-Bank#readme"
+  "private": true
 }
