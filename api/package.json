@@ -1,0 +1,24 @@
+{
+  "name": "src",
+  "version": "1.0.0",
+  "description": "Henry Bank",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon -L",
+    "forever": "forever index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mathfalcon/Henry-Bank.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=12.18.3",
+    "npm": ">=6.14.6"
+  },
+  "bugs": {
+    "url": "https://github.com/mathfalcon/Henry-Bank/issues"
+  },
+  "homepage": "https://github.com/mathfalcon/Henry-Bank#readme"
+}
