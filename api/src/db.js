@@ -35,7 +35,7 @@ const { UserInfo } = sequelize.models;
 const { Card } = sequelize.models;
 const { Transaction } = sequelize.models;
 const { User } = sequelize.models;
-const { Friend } = sequelize.models;
+const { Contact } = sequelize.models;
 
 // Console logging sequelize models
 console.log(sequelize.models)
@@ -44,11 +44,11 @@ console.log(sequelize.models)
 
 // User associations
 User.hasOne(UserInfo);
-User.hasMany(Account);
+User.hasOne(Account);
 Account.belongsTo(User);
 
 // Account associations
-Account.hasMany(Card);
+Account.hasOne(Card);
 Card.belongsTo(Account);
 
 // Transaction associations
@@ -56,8 +56,8 @@ Transaction.belongsTo(User, {as: 'sender'})
 Transaction.belongsTo(User, {as: 'receiver'})
 
 // Friend associations
-Friend.belongsTo(User, { foreignKey : 'user_first_id', constraints: false});
-Friend.belongsTo(User, { foreignKey : 'user_second_id' , constraints:false});
+Contact.belongsTo(User, { foreignKey : 'userId', constraints: false});
+Contact.belongsTo(User, { foreignKey : 'is_friend_of' , constraints:false});
 
 
 
