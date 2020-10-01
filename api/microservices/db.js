@@ -2,7 +2,7 @@ require('dotenv').config();
 const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
-const { userInfo } = require('os');
+
 const {
   DB_USER, DB_PASSWORD, DB_HOST,
 } = process.env;
@@ -43,7 +43,6 @@ console.log(sequelize.models)
 // Models associations
 
 // User associations
-User.hasOne(UserInfo);
 User.hasOne(Account);
 Account.belongsTo(User);
 
