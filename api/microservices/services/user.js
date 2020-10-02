@@ -29,7 +29,7 @@ server.put("/users/update/:id", (req, res, next) => {
     .then(user => {
       user.update({ email, password, passcode, img, docType, docNumber, name, surname, birth, phone, street, street_number, locality, state, country, })
     }).then((upduser) => res.send(upduser)
-    ).catch((err) => res.send(err));
+    ).catch((err) => res.status(400).send(err));
 });
 
 server.patch("/users/promote/:id", (req, res, next) => {
@@ -37,7 +37,7 @@ server.patch("/users/promote/:id", (req, res, next) => {
     .then(user => {
       user.update({ role: "admin" })
     }).then((upduser) => res.send(upduser)
-    ).catch((err) => res.send(err));
+    ).catch((err) => res.status(400).send(err));
 });
 
 server.listen(3000, () => {
