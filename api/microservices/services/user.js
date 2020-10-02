@@ -40,6 +40,14 @@ server.patch("/users/promote/:id", (req, res, next) => {
     ).catch((err) => res.status(400).send(err));
 });
 
+server.delete("/users/:id", (req, res) => {
+  User.destroy({ where: { id: req.params.id } }).then((deletedRecord) => {
+    if (deletedRecord === 1)
+      res.status(200).json({ message: "Usuario eliminado" });
+    else res.status(400).json({ message: "Usuario no encontrado" });
+  });
+});
+
 server.listen(3000, () => {
   console.log("Server running on 3000");
 });
