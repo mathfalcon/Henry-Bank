@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import RNPickerSelect from "react-native-picker-select";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+
 import {
   View,
   Text,
@@ -12,24 +13,39 @@ import {
   ScrollView,
 } from "react-native";
 
-//NOTA: imagino que debo agregar un campo para el email(email-address)
-
 function SignIn() {
-  // --STATES-- \\
-  const [dniOrPassport, setDniOrPassport] = useState(""); //Aun no logro que acepte la validación en este punto
-  const [document, setDocument] = useState([]);
-  const [firstName, setfirstName] = useState([]);
-  const [lastName, setLastName] = useState([]);
-
-  const [birthday, setBirthday] = useState([]);
-
-  const [numberPhone, setNumberPhone] = useState([]);
-  const [address, setAddress] = useState([]);
-  const [number, setNumber] = useState([]);
-  const [location, setLocation] = useState([]);
-  const [province, setProvince] = useState([]);
-  const [country, setCountry] = useState([]);
+  /* -------------------------------------------------------------------------- */
+  /*                                    State                                   */
+  /* -------------------------------------------------------------------------- */
+  const [input, setInput] = useState({
+    dniOrPassport: "",
+    document: "",
+    firstName: "",
+    lastName: "",
+    number: "",
+    address: "",
+    numberAddress: "",
+    location: "",
+    province: "",
+    country: "",
+  });
+  const [birthday, setBirthday] = useState("");
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  /* -------------------------------------------------------------------------- */
+  /*                               Handler Function                             */
+  /* -------------------------------------------------------------------------- */
+
+  const handleChange = (name, value) => {
+    setInput({
+      ...input,
+      [name]: value,
+    });
+  };
+
+  /* -------------------------------------------------------------------------- */
+  /*                             DateTimePickerModal                            */
+  /* -------------------------------------------------------------------------- */
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -49,17 +65,17 @@ function SignIn() {
   const submitInfo = () => {
     //Validacion...
     if (
-      dniOrPassport.trim() || //Aun no logro que acepte la validación en este punto
-      document.length < 1 ||
-      firstName.length < 1 ||
-      lastName.length < 1 ||
+      //Aun no logro que acepte la validación en este punto
+      input.document.length < 1 ||
+      input.firstName.length < 1 ||
+      input.lastName.length < 1 ||
       birthday.length < 1 ||
-      numberPhone.length < 1 ||
-      address.length < 1 ||
-      number.length < 1 ||
-      location.length < 1 ||
-      province.length < 1 ||
-      country.length < 1
+      input.number.length < 1 ||
+      input.address.length < 1 ||
+      input.numberAddress.length < 1 ||
+      input.location.length < 1 ||
+      input.province.length < 1 ||
+      input.country.length < 1
     ) {
       errorAlert();
       return;
@@ -86,84 +102,92 @@ function SignIn() {
           <Text style={style.titulo}>Alta de Cliente</Text>
         </View>
 
-        <View style={style.containerForm}>
-          <RNPickerSelect
-            onValueChange={(value) => setDniOrPassport(value)}
-            items={[
-              { label: "DNI", value: "DNI" },
-              { label: "Pasaporte", value: "Pasaporte" },
-            ]}
-          />
-
-          <TextInput
-            onChangeText={(text) => setDocument(text)}
-            placeholderTextColor="#aeaeae"
-            placeholder="Documento"
-            style={style.form}
-            keyboardType="numeric"
-          ></TextInput>
-
-          <TextInput
-            onChangeText={(text) => setfirstName(text)}
-            placeholder="Nombre"
-            style={style.form}
-          ></TextInput>
-
-          <Text style={style.label}>Fecha Nacimiento</Text>
-          <Text>{birthday}</Text>
-          <View style={style.buttonDate}>
-            <Button title="Elige tu fecha" onPress={showDatePicker} />
-            <DateTimePickerModal
-              isVisible={isDatePickerVisible}
-              mode="date"
-              onConfirm={handlerConfirm}
-              onCancel={hideDatePicker}
-              // IOS
-              headerTextIOS="Fecha de nacimiento"
-              cancelTextIOS="Cancelar"
-              confirmTextIOS="Confirmar"
+        <View style={style.container}>
+          <View style={style.containerForm}>
+            <RNPickerSelect
+              onValueChange={(value) => handleChange("dniOrPassport", value)}
+              items={[
+                { label: "DNI", value: "DNI" },
+                { label: "Pasaporte", value: "Pasaporte" },
+              ]}
             />
+
+            <TextInput
+              onChangeText={(text) => handleChange("document", text)}
+              placeholderTextColor="#aeaeae"
+              placeholder="Documento"
+              style={style.form}
+              keyboardType="numeric"
+            ></TextInput>
+
+            <TextInput
+              onChangeText={(text) => handleChange("firstName", text)}
+              placeholder="Nombre"
+              style={style.form}
+            ></TextInput>
+
+            <TextInput
+              onChangeText={(text) => handleChange("lastName", text)}
+              placeholder="Apellido"
+              style={style.form}
+            ></TextInput>
+
+            <Text style={style.label}>Fecha Nacimiento</Text>
+            <Text>{birthday}</Text>
+            <View style={style.buttonDate}>
+              <Button title="Elige tu fecha" onPress={showDatePicker} />
+              <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                onConfirm={handlerConfirm}
+                onCancel={hideDatePicker}
+                // IOS
+                headerTextIOS="Fecha de nacimiento"
+                cancelTextIOS="Cancelar"
+                confirmTextIOS="Confirmar"
+              />
+            </View>
+
+            <TextInput
+              onChangeText={(text) => handleChange("number", text)}
+              placeholder="Teléfono celular"
+              style={style.form}
+              keyboardType="numeric"
+            ></TextInput>
+
+            <TextInput
+              onChangeText={(text) => handleChange("adddress", text)}
+              placeholder="Domicilio Calle"
+              style={style.form}
+            ></TextInput>
+
+            <TextInput
+              onChangeText={(text) => handleChange("numberAddress", text)}
+              placeholder="Número"
+              style={style.form}
+              keyboardType="numeric"
+            ></TextInput>
+
+            <TextInput
+              onChangeText={(text) => handleChange("location", text)}
+              placeholder="Localidad"
+              style={style.form}
+            ></TextInput>
+
+            <TextInput
+              onChangeText={(text) => handleChange("province", text)}
+              placeholder="Provincia"
+              style={style.form}
+            ></TextInput>
+
+            <TextInput
+              onChangeText={(text) => handleChange("country", text)}
+              placeholder="Pais"
+              style={style.form}
+            ></TextInput>
+
+            <Button title="Registrate" onPress={() => submitInfo()} />
           </View>
-
-          <TextInput
-            onChangeText={(text) => setNumberPhone(text)}
-            placeholder="Teléfono celular"
-            style={style.form}
-            keyboardType="numeric"
-          ></TextInput>
-
-          <TextInput
-            onChangeText={(text) => setAddress(text)}
-            placeholder="Domicilio Calle"
-            style={style.form}
-          ></TextInput>
-
-          <TextInput
-            onChangeText={(text) => setNumber(text)}
-            placeholder="Número"
-            style={style.form}
-            keyboardType="numeric"
-          ></TextInput>
-
-          <TextInput
-            onChangeText={(text) => setLocation(text)}
-            placeholder="Localidad"
-            style={style.form}
-          ></TextInput>
-
-          <TextInput
-            onChangeText={(text) => setProvince(text)}
-            placeholder="Provincia"
-            style={style.form}
-          ></TextInput>
-
-          <TextInput
-            onChangeText={(text) => setCountry(text)}
-            placeholder="Pais"
-            style={style.form}
-          ></TextInput>
-
-          <Button title="Registrate" onPress={() => submitInfo()} />
         </View>
       </View>
     </ScrollView>
