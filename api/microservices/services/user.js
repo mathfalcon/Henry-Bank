@@ -1,7 +1,22 @@
 const express = require("express");
 const { User } = require("../db.js");
+const server = express();
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const morgan = require("morgan");
 
-let server = express();
+///////////////
+// MIDDLEWARES
+///////////////
+server.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
+server.use(bodyParser.json({ limit: "50mb" }));
+server.use(cookieParser());
+server.use(morgan("dev")); // Intializing console logger middleware for HTTP requests.
+
+///////////////
+// ROUTES
+///////////////
 
 // Route for getting all users in db
 server.get("/users", (req, res, next) => {
@@ -14,13 +29,27 @@ server.get("/users", (req, res, next) => {
 
 // Route for posting a new user to db
 server.post("/users", (req, res, next) => {
-  const { email, password, passcode, img, docType, docNumber, name, surname, birth, phone, street, street_number, locality, state, country, } = req.body;
+  const { email, password, passcode, docType, docNumber, name, surname, birth, phone, street, street_number, locality, state, country, role } = req.body;
 
-  //   User.create({
-  //     email: email,
-  //     password: password,
-  //   });
-
+  User.create({
+    email,
+    role,
+    password,
+    passcode,
+    docType,
+    docNumber,
+    name,
+    surname,
+    birth,
+    phone,
+    street,
+    street_number,
+    locality,
+    state,
+    country
+  }).then(userCreated => {
+    res.status(200).send(userCreated)
+  }).catch(err => res.send(err))
 });
 
 server.put("/users/update/:id", (req, res, next) => {
@@ -49,7 +78,7 @@ server.delete("/users/:id", (req, res) => {
 });
 
 server.listen(3000, () => {
-  console.log("Server running on 3000");
+  console.log("User service running on 3000");
 });
 
 module.exports = server;

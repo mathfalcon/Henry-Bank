@@ -34,12 +34,6 @@ module.exports = (sequelize) => {
       passcode: {
         type: DataTypes.INTEGER,
       },
-      img: {
-        type: DataTypes.BLOB,
-        get() {
-          return this.getDataValue("img").toString("utf8");
-        },
-      },
       salt: {
         type: DataTypes.STRING,
       },
