@@ -2,15 +2,19 @@ require('dotenv').config();
 const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
+const crypto = require("crypto");
 
 const {
   DB_USER, DB_PASSWORD, DB_HOST,
 } = process.env;
 
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/henrybank`, {
+  host: 'localhost',
+  dialect: 'postgres',
   logging: false, // set to console.log to see the raw SQL queries
   native: false, // lets Sequelize know we can use pg-native for ~30% more speed
 });
+
 const basename = path.basename(__filename);
 
 const modelDefiners = [];
@@ -31,7 +35,7 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // In sequelize.models we have all the models, using destructuring we assign them to a variable
 const { Account } = sequelize.models;
-const { UserInfo } = sequelize.models;
+const { Avatar } = sequelize.models;
 const { Card } = sequelize.models;
 const { Transaction } = sequelize.models;
 const { User } = sequelize.models;
@@ -45,6 +49,8 @@ console.log(sequelize.models)
 // User associations
 User.hasOne(Account);
 Account.belongsTo(User);
+User.hasOne(Avatar);
+Avatar.belongsTo(User);
 
 // Account associations
 Account.hasOne(Card);
@@ -58,6 +64,19 @@ Transaction.belongsTo(User, {as: 'receiver'})
 Contact.belongsTo(User, { foreignKey : 'userId', constraints: false});
 Contact.belongsTo(User, { foreignKey : 'is_friend_of' , constraints:false});
 
+
+// Prototype methods
+User.prototype.checkPassword = function (password) {
+  return (
+    crypto
+    .createHmac("sha1", this.salt)
+    .update(password)
+    .digest("hex") === this.password
+  )
+};
+User.prototype.randomSalt = function () {
+  return crypto.randomBytes(20).toString('hex');
+}
 
 
 module.exports = {

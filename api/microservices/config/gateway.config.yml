@@ -9,13 +9,20 @@ apiEndpoints:
     paths: '/ip'
   # User's routes
   user: 
+    methods: 'GET,POST,PUT' 
     host: localhost
-    paths: ['/users','/users/*'] 
+    paths: ['/users/','/users/*']
+  auth: 
+    methods: 'GET,POST'
+    host: localhost
+    paths: '/auth/*'
 serviceEndpoints:
   httpbin:
     url: 'https://httpbin.org'
   userService:
     url: 'http://localhost:3000'
+  authService:
+    url: 'http://localhost:3001'
 policies:
   - basic-auth
   - cors
@@ -45,4 +52,14 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: userService
+              changeOrigin: true
+  authPipeline:
+    apiEndpoints:
+      - auth
+    policies:
+    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+    # - key-auth:
+      - proxy:
+          - action:
+              serviceEndpoint: authService
               changeOrigin: true
