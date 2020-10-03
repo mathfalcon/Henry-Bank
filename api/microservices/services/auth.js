@@ -67,6 +67,8 @@ server.use((err, req, res, next) => {
 ///////////////
 // ROUTES /////
 ///////////////
+
+// Route for logging in
 server.post("/auth/login", (req, res, next) => {
   console.log(req.body);
   passport.authenticate("local-login", (err, user, info) => {
@@ -97,6 +99,7 @@ server.post("/auth/login", (req, res, next) => {
   })(req, res, next);
 });
 
+// Route for getting session's info in case User is logged
 server.get("/auth/info", (req, res, next) => {
   console.log(req.session);
   if (req.isAuthenticated()) {
@@ -115,18 +118,14 @@ server.get("/auth/info", (req, res, next) => {
   }
 });
 
-// Hacer un get a esta ruta, desloguea al usuario
+// Fetching this route, logs out the user
 server.get("/auth/logout", (req, res, next) => {
   console.log(req.session.destroy());
   req.logOut();
-  // .then((deleted) => {
-  //   req.logOut();
-  //   res.status(200).send({
-  //     message: 'Has salido de tu cuenta satisfactoriamente',
-  //     success: true
-  //   })
-  // })
-  // .catch(err => res.status(422).send(err))
+  res.status(200).send({
+    message: "Has salido de tu cuenta satisfactoriamente",
+    success: true,
+  });
 });
 
 //   server.get(
@@ -145,7 +144,7 @@ server.get("/auth/logout", (req, res, next) => {
 //     }
 //   );
 
-// Ruta para cambiar contraseña
+// Route for changing password
 server.put("/auth/change-password", (req, res, next) => {
   const { userId, currentPw, newPw } = req.body;
 
@@ -166,6 +165,7 @@ server.put("/auth/change-password", (req, res, next) => {
   });
 });
 
+// Deploying service server
 server.listen(3001, () => {
   console.log("Auth service running on 3001");
 });
