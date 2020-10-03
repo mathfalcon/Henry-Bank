@@ -1,8 +1,9 @@
 const path = require("path");
 const gateway = require("express-gateway");
+
+// Microservices require & routes.
 require("./services/user");
 require("./services/auth");
-
 
 const { conn } = require("./db.js");
 
