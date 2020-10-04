@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, Text, View } from 'react-native';
 import Home from './components/Home';
 import LogIn from './components/LogIn';
-import SignIn from "./components/SignIn"
+import SignUp from './components/SignUp';
 
 
 const Stack = createStackNavigator();
@@ -13,10 +13,10 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator headerMode='none'>
         <Stack.Screen name="home" component={Home} />   
-        <Stack.Screen name="log" component={LogIn} />  
-        <Stack.Screen name="sign" component={SignIn} />  
+        <Stack.Screen name="login" component={LogIn} />  
+        <Stack.Screen name="sign" component={SignUp} />  
       </Stack.Navigator>
     </NavigationContainer>
   );
