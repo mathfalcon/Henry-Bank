@@ -1,31 +1,28 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
+import { Provider } from "react-redux";
+import store from "./redux/store"
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { StyleSheet, Text, View } from 'react-native';
 import Home from './components/Home';
 import LogIn from './components/LogIn';
-import SignUp from './components/SignUp';
+import SignUp from "./components/SignUp";
+import ForgotPass from "./components/ForgotPass";
 
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator headerMode='none'>
-        <Stack.Screen name="home" component={Home} />   
-        <Stack.Screen name="login" component={LogIn} />  
-        <Stack.Screen name="sign" component={SignUp} />  
-      </Stack.Navigator>
-    </NavigationContainer>
+    // <Provider store={store}>
+      <NavigationContainer>      
+        <Stack.Navigator>
+            <Stack.Screen name="home" component={Home} />
+            <Stack.Screen name="log" component={LogIn} />  
+            <Stack.Screen name="sign" component={SignUp} />    
+            <Stack.Screen name="forgotPass" component={ForgotPass} />       
+        </Stack.Navigator>    
+      </NavigationContainer>
+    // </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    marginTop: 30
-  },
-});
-
