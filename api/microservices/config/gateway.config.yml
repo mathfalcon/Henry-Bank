@@ -13,7 +13,7 @@ apiEndpoints:
     host: localhost
     paths: ['/users/','/users/*']
   auth: 
-    methods: 'GET,POST'
+    methods: 'GET,POST,PUT'
     host: localhost
     paths: '/auth/*'
 serviceEndpoints:
