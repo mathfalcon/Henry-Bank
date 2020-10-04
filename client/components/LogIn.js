@@ -1,10 +1,11 @@
 import React from "react";
 import RNPickerSelect from "react-native-picker-select";
-import {View, Text, Image, StyleSheet, TextInput, Button,Alert} from "react-native";
+import { View, Text, Image, StyleSheet, TextInput, Alert, Button } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 function LogIn() {
-  return (  
-      <View style={style.container}>
+  return (
+    <View style={style.container}>
       <View>
         <Image
           style={style.imagen}
@@ -12,32 +13,31 @@ function LogIn() {
         />
         <Text style={style.titulo}>Iniciar Sesión</Text>
       </View>
-      <View style={style.containerForm}>        
+      <View style={style.containerForm}>
         <TextInput placeholder="Usuario" style={style.form}></TextInput>
-        <TextInput placeholder="Contraseña" style={style.form}></TextInput>   
-       </View>
-       <View style={style.buttons}>
-       <Button     
-        color= "yellow"  
+        <TextInput placeholder="Contraseña" style={style.form}></TextInput>
+      </View>
+      <View style={style.buttons}>
+        <Button
+          color="black"
+          style={style.logIn}
           title="Iniciar sesión"
           onPress={() => Alert.alert("iniciar sesion")}
         />
-         <Button
-         syle={{marginLeft:44}}
-         color="black"         
+        <Button
+          style={{ marginLeft: 44 }}
+          color="black"
           title="Registrarse"
           onPress={() => Alert.alert("Registrarse")}
         />
-       </View>
-
+      </View>
     </View>
-   
   );
 }
 
 const style = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     marginTop: 10,
     height: 1100,
     backgroundColor: "#eef0f2",
@@ -45,14 +45,14 @@ const style = StyleSheet.create({
     alignItems: "center",
   },
   buttons: {
-   flexDirection:"row",
-   justifyContent:'space-between',
-   width:"80%"
- },
- containerForm:{
-    marginTop:-20,
- },
-  form: {  
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "80%",
+  },
+  containerForm: {
+    marginTop: -20,
+  },
+  form: {
     height: 45,
     width: 300,
     borderRadius: 5,
@@ -66,7 +66,7 @@ const style = StyleSheet.create({
     fontSize: 35,
     marginLeft: 80,
     marginTop: 30,
-    bottom: 220
+    bottom: 220,
   },
   select: {
     width: 100,
