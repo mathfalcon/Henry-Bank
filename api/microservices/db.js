@@ -80,6 +80,6 @@ User.prototype.randomSalt = function () {
 
 
 module.exports = {
-  ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
-  conn: sequelize,     // para importart la conexión { conn } = require('./db.js');
+  ...sequelize.models, // to allow destructuring when importing models: const { Product, User } = require('./db.js');
+  conn: sequelize,     // to import the connection: { conn } = require('./db.js');
 };
