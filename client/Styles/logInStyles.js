@@ -1,0 +1,51 @@
+import { StyleSheet } from "react-native";
+import { initialWindowMetrics } from "react-native-safe-area-context";
+
+export default StyleSheet.create({
+    container: {
+      backgroundColor: '#fff',
+      marginTop: 10,
+      height: 1100,
+      backgroundColor: "#eef0f2",
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    buttons: {
+     flexDirection:"row",
+     justifyContent:'space-between',
+     width:"80%"
+   },
+   containerForm:{
+      marginTop:-100,
+   },
+    form: {  
+      height: 45,
+      width: 300,
+      borderRadius: 5,
+      backgroundColor: "white",
+      marginBottom: 20,
+      paddingLeft: 20,
+      fontSize: 20,
+    },
+    titulo: {
+      color: "white", //de momento negro. Hace falta un fondo tipo henry
+      fontSize: 35,
+      marginLeft: 80,
+      marginTop: 30,
+      bottom: 220
+    },
+    select: {
+      width: 100,
+      backgroundColor: "red",
+    },
+    imagen: {
+      width: 411,
+      height: 250,
+    },
+    forgotPass: {
+      alignSelf: "center",
+      marginBottom: 10,
+      fontSize: 15,      
+      color: "blue",
+    },
+  });

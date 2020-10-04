@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import RNPickerSelect from "react-native-picker-select";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-
+import styles from "../Styles/signInStyles.js";
 import {
   View,
   Text,
-  Image,
-  StyleSheet,
+  Image,  
   TextInput,
   Button,
   Alert,
@@ -93,17 +92,17 @@ function SignIn() {
 
   return (
     <ScrollView>
-      <View style={style.container}>
+      <View style={styles.container}>
         <View>
           <Image
-            style={style.imagen}
+            style={styles.imagen}
             source={require("../image/headerRegistro.png")}
           />
-          <Text style={style.titulo}>Alta de Cliente</Text>
+          <Text style={styles.titulo}>Alta de Cliente</Text>
         </View>
 
-        <View style={style.container}>
-          <View style={style.containerForm}>
+        <View style={styles.container}>
+          <View style={styles.containerForm}>
             <RNPickerSelect
               onValueChange={(value) => handleChange("dniOrPassport", value)}
               items={[
@@ -116,25 +115,25 @@ function SignIn() {
               onChangeText={(text) => handleChange("document", text)}
               placeholderTextColor="#aeaeae"
               placeholder="Documento"
-              style={style.form}
+              style={styles.form}
               keyboardType="numeric"
             ></TextInput>
 
             <TextInput
               onChangeText={(text) => handleChange("firstName", text)}
               placeholder="Nombre"
-              style={style.form}
+              style={styles.form}
             ></TextInput>
 
             <TextInput
               onChangeText={(text) => handleChange("lastName", text)}
               placeholder="Apellido"
-              style={style.form}
+              style={styles.form}
             ></TextInput>
 
-            <Text style={style.label}>Fecha Nacimiento</Text>
+            <Text style={styles.label}>Fecha Nacimiento</Text>
             <Text>{birthday}</Text>
-            <View style={style.buttonDate}>
+            <View style={styles.buttonDate}>
               <Button title="Elige tu fecha" onPress={showDatePicker} />
               <DateTimePickerModal
                 isVisible={isDatePickerVisible}
@@ -151,39 +150,39 @@ function SignIn() {
             <TextInput
               onChangeText={(text) => handleChange("number", text)}
               placeholder="Teléfono celular"
-              style={style.form}
+              style={styles.form}
               keyboardType="numeric"
             ></TextInput>
 
             <TextInput
               onChangeText={(text) => handleChange("adddress", text)}
               placeholder="Domicilio Calle"
-              style={style.form}
+              style={styles.form}
             ></TextInput>
 
             <TextInput
               onChangeText={(text) => handleChange("numberAddress", text)}
               placeholder="Número"
-              style={style.form}
+              style={styles.form}
               keyboardType="numeric"
             ></TextInput>
 
             <TextInput
               onChangeText={(text) => handleChange("location", text)}
               placeholder="Localidad"
-              style={style.form}
+              style={styles.form}
             ></TextInput>
 
             <TextInput
               onChangeText={(text) => handleChange("province", text)}
               placeholder="Provincia"
-              style={style.form}
+              style={styles.form}
             ></TextInput>
 
             <TextInput
               onChangeText={(text) => handleChange("country", text)}
               placeholder="Pais"
-              style={style.form}
+              style={styles.form}
             ></TextInput>
 
             <Button title="Registrate" onPress={() => submitInfo()} />
@@ -193,46 +192,5 @@ function SignIn() {
     </ScrollView>
   );
 }
-
-const style = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#eef0f2",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  containerForm: {
-    bottom: 70,
-  },
-  form: {
-    height: 45,
-    width: 300,
-    borderRadius: 5,
-    backgroundColor: "white",
-    marginBottom: 20,
-    paddingLeft: 20,
-    fontSize: 20,
-  },
-  titulo: {
-    color: "white", //de momento negro. Hace falta un fondo tipo henry
-    fontSize: 35,
-    marginLeft: 80,
-    marginTop: 30,
-    bottom: 220,
-  },
-  imagen: {
-    width: 411,
-    height: 250,
-  },
-  label: {
-    color: "#9EA0A4",
-    fontSize: 20,
-  },
-  buttonDate: {
-    width: 300,
-    marginBottom: 20,
-    color: "white",
-  },
-});
-
+                     
 export default SignIn;
