@@ -1,10 +1,18 @@
 import React from "react";
 import RNPickerSelect from "react-native-picker-select";
-import {View, Text, Image, TextInput, Button, Alert, Button} from "react-native";
+import {View, Text, Image, TextInput, Button, Alert} from "react-native";
 import { Avatar } from "react-native-elements";
 import styles from "../Styles/logInStyles.js";
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 function LogIn({ navigation }) {
+
+  const [showPass, setShowPass] = useState(false);
+
+  const handleShowPass = () => {
+    setShowPass(!showPass);
+  }
+
   return (  
       <View style={styles.container}>
       <View>
@@ -24,7 +32,20 @@ function LogIn({ navigation }) {
           containerStyle={{backgroundColor:"gray", alignSelf: "center", marginBottom: 50, marginTop:-50, }}
         />   
         <TextInput placeholder="Usuario" style={styles.form}></TextInput>
-        <TextInput placeholder="Contraseña" style={styles.form}></TextInput>
+        <View style={styles.containerPass}>
+          <TextInput          
+            secureTextEntry={!showPass}
+            placeholder="Contraseña"
+            style={styles.form}          
+          />        
+          <Icon
+            name={showPass ? 'eye' : 'eye-slash'}
+            size={15}
+            color="grey"
+            style={styles.eyeIcon}
+            onPress={handleShowPass}
+          />
+        </View>
         
         <Text
           style={styles.forgotPass}

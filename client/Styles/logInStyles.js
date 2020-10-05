@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import { initialWindowMetrics } from "react-native-safe-area-context";
 
 export default StyleSheet.create({
     container: {
@@ -18,7 +17,7 @@ export default StyleSheet.create({
    containerForm:{
       marginTop:-100,
    },
-    form: {  
+    form: {        
       height: 45,
       width: 300,
       borderRadius: 5,
@@ -48,4 +47,12 @@ export default StyleSheet.create({
       fontSize: 15,      
       color: "blue",
     },
+    containerPass:{      
+      flexDirection: 'row',      
+    },
+    eyeIcon: {
+      alignSelf:"center",
+      // marginLeft: -25,      
+      // marginBottom: 15
+    }
   });
