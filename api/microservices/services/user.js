@@ -59,8 +59,8 @@ server.patch("/users/promote/:id", (req, res, next) => {
 server.delete("/users/:id", (req, res) => {
   User.destroy({ where: { id: req.params.id } }).then((deletedRecord) => {
     if (deletedRecord === 1)
-      res.status(200).json({ message: "Usuario eliminado" });
-    else res.status(400).json({ message: "Usuario no encontrado" });
+      res.status(200).json({ message: "User deleted" });
+    else res.status(400).json({ message: "User not found" });
   });
 });
 
