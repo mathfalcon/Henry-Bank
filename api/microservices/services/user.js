@@ -56,7 +56,9 @@ server.get("/users/outcome/:id", (req, res, next) => {
 server.post("/users/create", (req, res, next) => {
   const { email, password, passcode, docType, docNumber, name, surname, birth, phone, street, street_number, locality, state, country, role } = req.body;
   User.create({ email, password, passcode, docType, docNumber, name, surname, birth, phone, street, street_number, locality, state, country, role })
-    .then(userCreated => { res.send({ success: true, message: "User Created: ", userCreated }) })
+    .then(userCreated => { 
+      Account.create({userId:userCreated.id});
+      res.send({ success: true, message: "User Created: ", userCreated }) })
     .catch((err) => res.status(400).send({ success: false, message: "Something went wrong: ", err }));
 });
 // Route for posting a 'created' transaction
