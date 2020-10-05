@@ -21,7 +21,7 @@ server.use(morgan("dev")); // Intializing console logger middleware for HTTP req
 // Route for getting all users
 server.get("/users", (req, res, next) => {
   User.findAll()
-    .then((users) => { res.status(200).send({ success: true, message: "users: ", users }) })
+    .then((users) => { res.send({ success: true, message: "users: ", users }) })
     .catch((err) => res.status(400).send({ success: false, message: "error: ", err }));
 });
 // Route for getting user income
@@ -34,9 +34,9 @@ server.get("/users/income/:id", (req, res, next) => {
             if (transactions[i].state === 'complete') sum += transactions[i].amount
           res.send({ success: true, message: "Your incomes are: ", sum })
         })
-        .catch((err) => res.status(400).send({ success: false, message: "error: ", err }));
+        .catch((err) => res.status(400).send({ success: false, message: "Error: ", err }));
     })
-    .catch((err) => res.status(400).send({ success: false, message: "error: ", err }));
+    .catch((err) => res.status(400).send({ success: false, message: "Error: ", err }));
 });
 // Route for getting user outcome
 server.get("/users/outcome/:id", (req, res, next) => {
@@ -48,41 +48,55 @@ server.get("/users/outcome/:id", (req, res, next) => {
             if (transactions[i].state === 'complete') sum += transactions[i].amount
           res.send({ success: true, message: "Your outcomes are: ", sum })
         })
-        .catch((err) => res.status(400).send({ success: false, message: "error: ", err }));
+        .catch((err) => res.status(400).send({ success: false, message: "Error: ", err }));
     })
-    .catch((err) => res.status(400).send({ success: false, message: "error: ", err }));
+    .catch((err) => res.status(400).send({ success: false, message: "Error: ", err }));
 });
 // Route for posting a new user 
 server.post("/users/create", (req, res, next) => {
   const { email, password, passcode, docType, docNumber, name, surname, birth, phone, street, street_number, locality, state, country, role } = req.body;
   User.create({ email, password, passcode, docType, docNumber, name, surname, birth, phone, street, street_number, locality, state, country, role })
-    .then(userCreated => { res.status(200).send(userCreated) })
-    .catch((err) => res.status(400).send({ success: false, message: "error: ", err }));
+    .then(userCreated => { res.send({ success: true, message: "User Created: ", userCreated }) })
+    .catch((err) => res.status(400).send({ success: false, message: "Error: ", err }));
 });
-// Route to update an user information
+// Route for posting a 'created' transaction
+server.post("/users/transaction/:sender/to/:receiver", (req, res, next) => {
+  const { amount, message } = req.body;
+  Transaction.create({ sender: req.params.sender, receiver: req.params.receiver, amount, message, state: 'created' })
+    .then(transactionCreated => { res.send({ success: true, message: "Transaction Created: ", transactionCreated }) })
+    .catch((err) => res.status(400).send({ success: false, message: "Error: ", err }));
+});
+// Route for completing a transaction
+server.patch("/users/transaction/:id", (req, res, next) => {
+  Transaction.findByPk(req.params.id)
+    .then(transaction => { transaction.update({ state: "complete" }) })
+    .then((completedTransaction) => res.send({ success: true, message: "Transaction Completed : ",completedTransaction }))
+    .catch((err) => res.status(400).send({ success: false, message: "Error: ", err }));
+});
+// Route for updating an user information
 server.put("/users/update/:id", (req, res, next) => {
   const { email, password, passcode, docType, docNumber, name, surname, birth, phone, street, street_number, locality, state, country, role } = req.body;
   User.findByPk(req.params.id)
     .then(user => { user.update({ email, password, passcode, docType, docNumber, name, surname, birth, phone, street, street_number, locality, state, country, role }) })
-    .then((updatedUser) => res.send(updatedUser))
-    .catch((err) => res.status(400).send({ success: false, message: "error: ", err }));
+    .then((updatedUser) => res.send({success: true, message: "Updated User: ",updatedUser}))
+    .catch((err) => res.status(400).send({ success: false, message: "Error: ", err }));
 });
 // Route to promote the user role to admin 
 server.patch("/users/promote/:id", (req, res, next) => {
   User.findByPk(req.params.id)
     .then(user => { user.update({ role: "admin" }) })
-    .then((updatedUser) => res.send(updatedUser))
-    .catch((err) => res.status(400).send({ success: false, message: "error: ", err }));
+    .then((promotedUser) => res.send({success: true, message: "Promoted User: ", promotedUser}))
+    .catch((err) => res.status(400).send({ success: false, message: "Error: ", err }));
 });
 // Route to delete an user 
 server.delete("/users/:id", (req, res) => {
   User.destroy({ where: { id: req.params.id } })
     .then((deletedRecord) => {
       if (deletedRecord === 1)
-        res.status(200).json({ success: true, message: "User deleted" });
-      else res.status(400).json({ success: false, message: "User not found" });
+        res.send({ success: true, message: "User Deleted" });
+      else res.status(400).send({ success: false, message: "User not found" });
     })
-    .catch((err) => res.status(400).send({ success: false, message: "error: ", err }));
+    .catch((err) => res.status(400).send({ success: false, message: "Error: ", err }));
 });
 
 server.listen(3000, () => {
