@@ -66,10 +66,10 @@ server.post("/users/transaction/:sender/to/:receiver", (req, res, next) => {
     .then(transactionCreated => { res.send({ success: true, message: "Transaction Created: ", transactionCreated }) })
     .catch((err) => res.status(400).send({ success: false, message: "Error: ", err }));
 });
-// Route for completing a transaction
-server.patch("/users/transaction/:id", (req, res, next) => {
+// Route for changing the state of a transaction ?state=value
+server.patch("/users/transaction/:id/", (req, res, next) => {
   Transaction.findByPk(req.params.id)
-    .then(transaction => { transaction.update({ state: "complete" }) })
+    .then(transaction => { transaction.update({ state: req.query.state }) })
     .then((completedTransaction) => res.send({ success: true, message: "Transaction Completed : ",completedTransaction }))
     .catch((err) => res.status(400).send({ success: false, message: "Error: ", err }));
 });
