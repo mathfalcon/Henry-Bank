@@ -8,6 +8,8 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "@react-native-community/datetimepicker": "3.0.0",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/native": "^5.7.5",
@@ -24,11 +26,16 @@
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "~2.10.1",
+    "react-native-vector-icons": "^7.1.0",
     "react-native-web": "~0.13.12",
     "react-navigation": "^4.4.2",
     "react-redux": "^7.2.1",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "expo-camera": "~9.0.0",
+    "expo-face-detector": "~8.3.0",
+    "expo-image-picker": "~9.1.0",
+    "expo-constants": "~9.2.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0"

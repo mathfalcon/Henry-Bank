@@ -9,20 +9,29 @@ export default StyleSheet.create({
       flexDirection: "column",
       alignItems: "center",
     },
-    button: {
+    buttonEnabled: {
      flexDirection:"row",
      justifyContent:'space-between',
      width:"80%",
      backgroundColor: "yellow",
      padding: 20,
-    borderRadius: 5,
+     borderRadius: 5,
    },
+   buttonDisabled: {
+    flexDirection:"row",
+    justifyContent:'space-between',
+    width:"80%",
+    backgroundColor: "yellow",
+    padding: 20,
+    borderRadius: 5,
+    opacity:.3
+  },
    buttonText: {
     fontSize: 20,
     color: 'red',
   },
   containerForm:{
-      marginTop:-20,
+      marginTop:-100,
    },
     form: {  
       height: 45,

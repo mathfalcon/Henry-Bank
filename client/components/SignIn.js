@@ -14,7 +14,7 @@ import styles from "../Styles/signInStyles.js";
 
 //NOTA: imagino que debo agregar un campo para el email(email-address)
 
-function SignIn() {
+function SignIn({ navigation }) {
   // --STATES-- \\
   const [dniOrPassport, setDniOrPassport] = useState(""); //Aun no logro que acepte la validación en este punto
   const [document, setDocument] = useState([]);
@@ -87,6 +87,7 @@ function SignIn() {
         </View>
 
         <View style={styles.containerForm}>
+        <Button title="Toma una foto" onPress={() => navigation.navigate('takePhoto')} />
           <RNPickerSelect
             onValueChange={(value) => setDniOrPassport(value)}
             items={[
@@ -94,7 +95,6 @@ function SignIn() {
               { label: "Pasaporte", value: "Pasaporte" },
             ]}
           />
-
           <TextInput
             onChangeText={(text) => setDocument(text)}
             placeholderTextColor="#aeaeae"
