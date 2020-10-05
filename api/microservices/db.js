@@ -34,12 +34,8 @@ let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].s
 sequelize.models = Object.fromEntries(capsEntries);
 
 // In sequelize.models we have all the models, using destructuring we assign them to a variable
-const { Account } = sequelize.models;
-const { Avatar } = sequelize.models;
-const { Card } = sequelize.models;
-const { Transaction } = sequelize.models;
-const { User } = sequelize.models;
-const { Contact } = sequelize.models;
+const { Account, Avatar, Card, Transaction, User, Contact } = sequelize.models;
+
 
 // Console logging sequelize models
 console.log(sequelize.models)
@@ -57,21 +53,21 @@ Account.hasOne(Card);
 Card.belongsTo(Account);
 
 // Transaction associations
-Transaction.belongsTo(User, {as: 'sender'})
-Transaction.belongsTo(User, {as: 'receiver'})
+Transaction.belongsTo(User, { as: 'sender' })
+Transaction.belongsTo(User, { as: 'receiver' })
 
 // Friend associations
-Contact.belongsTo(User, { foreignKey : 'userId', constraints: false});
-Contact.belongsTo(User, { foreignKey : 'is_friend_of' , constraints:false});
+Contact.belongsTo(User, { foreignKey: 'userId', constraints: false });
+Contact.belongsTo(User, { foreignKey: 'is_friend_of', constraints: false });
 
 
 // Prototype methods
 User.prototype.checkPassword = function (password) {
   return (
     crypto
-    .createHmac("sha1", this.salt)
-    .update(password)
-    .digest("hex") === this.password
+      .createHmac("sha1", this.salt)
+      .update(password)
+      .digest("hex") === this.password
   )
 };
 User.prototype.randomSalt = function () {
