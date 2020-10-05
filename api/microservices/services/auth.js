@@ -91,7 +91,7 @@ server.post("/auth/login", (req, res, next) => {
       }
       return res.status(200).send({
         success: true,
-        message: "Has ingresado satisfactoriamente",
+        message: "You've logged in successfully",
         info,
         user,
       });
@@ -113,7 +113,7 @@ server.get("/auth/info", (req, res, next) => {
       user: {
         role: "guest",
       },
-      message: "No estas logueado",
+      message: "You're not logged in",
     });
   }
 });
@@ -123,7 +123,7 @@ server.get("/auth/logout", (req, res, next) => {
   console.log(req.session.destroy());
   req.logOut();
   res.status(200).send({
-    message: "Has salido de tu cuenta satisfactoriamente",
+    message: "You have logged out successfully",
     success: true,
   });
 });
@@ -152,14 +152,14 @@ server.put("/auth/change-password", (req, res, next) => {
     if (!user.checkPassword(currentPw)) {
       res.send({
         success: false,
-        message: "La contraseña actual provista es incorrecta",
+        message: "The provided actual password is incorrect",
       });
     } else if (user.checkPassword(currentPw)) {
       user.password = newPw;
       user.save();
       res.status(200).send({
         success: true,
-        message: "La contraseña ha sido actualizada con éxito",
+        message: "The password has been successfully updated",
       });
     }
   });
