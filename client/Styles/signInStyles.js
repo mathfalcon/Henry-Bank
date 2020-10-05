@@ -7,9 +7,12 @@ export default StyleSheet.create({
       flexDirection: "column",
       alignItems: "center",
     },
-    containerForm: {
-      bottom: 70,
-    },
+    // containerForm: {
+    //   bottom: 200,
+    // },
+    containerForm:{
+      marginTop:-200,
+   },
     form: {
       height: 45,
       width: 300,
