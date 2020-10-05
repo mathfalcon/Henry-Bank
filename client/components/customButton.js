@@ -13,6 +13,7 @@ function CustomButton(props) {
     margin,
     letterSpacing,
   } = props.style;
+  
   const style = StyleSheet.create({
     container: {
       backgroundColor: backgroundColor || null,

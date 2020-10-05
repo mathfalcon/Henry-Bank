@@ -117,19 +117,19 @@ function SignIn() {
               placeholder="Documento"
               style={styles.form}
               keyboardType="numeric"
-            ></TextInput>
+            />
 
             <TextInput
               onChangeText={(text) => handleChange("firstName", text)}
               placeholder="Nombre"
               style={styles.form}
-            ></TextInput>
+            />
 
             <TextInput
               onChangeText={(text) => handleChange("lastName", text)}
               placeholder="Apellido"
               style={styles.form}
-            ></TextInput>
+            />
 
             <Text style={styles.label}>Fecha Nacimiento</Text>
             <Text>{birthday}</Text>

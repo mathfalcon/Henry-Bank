@@ -18,9 +18,9 @@ export default function App() {
   return (
     // <Provider store={store}>
       <NavigationContainer>      
-        <Stack.Navigator>
+        <Stack.Navigator headerMode='none'>
             <Stack.Screen name="home" component={Home} />
-            <Stack.Screen name="log" component={LogIn} />  
+            <Stack.Screen name="login" component={LogIn} />  
             <Stack.Screen name="sign" component={SignIn} />  
             <Stack.Screen name="forgotPass" component={ForgotPass} />
             <Stack.Screen name="takePhoto" component={TakePhoto} />

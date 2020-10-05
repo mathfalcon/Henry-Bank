@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import RNPickerSelect from "react-native-picker-select";
 import {View, Text, Image, TextInput, Button, Alert} from "react-native";
 import { Avatar } from "react-native-elements";
@@ -57,61 +57,18 @@ function LogIn({ navigation }) {
        <View style={styles.buttons}>
        <Button     
         color= "yellow"  
-          title="Iniciar sesión"
-          onPress={() => Alert.alert("iniciar sesion")}
+          title="SIGN IN"
+          onPress={() => Alert.alert("SIGN IN")}
         />
         <Button
           style={{ marginLeft: 44 }}
           color="black"
-          title="Registrarse"
-          onPress={() => Alert.alert("Registrarse")}
+          title="SIGN UP"
+          onPress={() => navigation.navigate("sign")}
         />
       </View>
     </View>
   );
 }
-
-const style = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    marginTop: 10,
-    height: 1100,
-    backgroundColor: "#eef0f2",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  buttons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "80%",
-  },
-  containerForm: {
-    marginTop: -20,
-  },
-  form: {
-    height: 45,
-    width: 300,
-    borderRadius: 5,
-    backgroundColor: "white",
-    marginBottom: 20,
-    paddingLeft: 20,
-    fontSize: 20,
-  },
-  titulo: {
-    color: "white", //de momento negro. Hace falta un fondo tipo henry
-    fontSize: 35,
-    marginLeft: 80,
-    marginTop: 30,
-    bottom: 220,
-  },
-  select: {
-    width: 100,
-    backgroundColor: "red",
-  },
-  imagen: {
-    width: 411,
-    height: 250,
-  },
-});
 
 export default LogIn;

@@ -7,6 +7,7 @@ export default StyleSheet.create({
       height: 1100,
       backgroundColor: "#eef0f2",
       flexDirection: "column",
+      justifyContent: 'center',
       alignItems: "center",
     },
     buttonEnabled: {
@@ -28,10 +29,11 @@ export default StyleSheet.create({
   },
    buttonText: {
     fontSize: 20,
-    color: 'red',
+    color: 'black',
   },
   containerForm:{
       marginTop:-100,
+      alignSelf: 'center'
    },
     form: {  
       height: 45,
