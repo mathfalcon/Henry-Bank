@@ -1,5 +1,5 @@
 const express = require("express");
-const { User } = require("../db.js");
+const { User, Account, Transaction } = require("../db.js");
 const server = express();
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
@@ -18,44 +18,52 @@ server.use(morgan("dev")); // Intializing console logger middleware for HTTP req
 // ROUTES
 ///////////////
 
-// Route for getting all users in db
+// Route for getting all users
 server.get("/users", (req, res, next) => {
   User.findAll()
-    .then((users) => {
-      res.status(200).send(users);
+    .then((users) => { res.status(200).send(users) })
+    .catch((err) => res.send(err));
+});
+// Route for getting user income
+server.get("/users/income/:id", (req, res, next) => {
+  Account.findOne({ where: { userId: id } })
+    .then((account) => {
+      res.status(200).send(users)
     })
     .catch((err) => res.send(err));
 });
-
-// Route for posting a new user to db
+// Route for getting user outcome
+server.get("/users/outcome/:id", (req, res, next) => {
+  Account.findOne({ where: { userId: id } })
+    .then((account) => {
+      Transaction.findAll({ where: { sender: account.id } });
+      res.status(200).send(users)
+    })
+    .catch((err) => res.send(err));
+});
+// Route for posting a new user 
 server.post("/users/create", (req, res, next) => {
   const { email, password, passcode, docType, docNumber, name, surname, birth, phone, street, street_number, locality, state, country, role } = req.body;
-
-  User.create({
-    email, role, password, passcode, docType, docNumber, name, surname, birth, phone, street, street_number,
-    locality, state, country
-  }).then(userCreated => {
-    res.status(200).send(userCreated)
-  }).catch(err => res.send(err))
+  User.create({ email, password, passcode, docType, docNumber, name, surname, birth, phone, street, street_number, locality, state, country, role })
+    .then(userCreated => { res.status(200).send(userCreated) })
+    .catch(err => res.send(err))
 });
-// Route to update an user information in db
+// Route to update an user information
 server.put("/users/update/:id", (req, res, next) => {
-  const { email, docType, docNumber, name, surname, birth, phone, street, street_number, locality, state, country, } = req.body;
+  const { email, password, passcode, docType, docNumber, name, surname, birth, phone, street, street_number, locality, state, country, role } = req.body;
   User.findByPk(req.params.id)
-    .then(user => {
-      user.update({ email, docType, docNumber, name, surname, birth, phone, street, street_number, locality, state, country, })
-    }).then((updatedUser) => res.send(updatedUser)
-    ).catch((err) => res.status(400).send(err));
+    .then(user => { user.update({ email, password, passcode, docType, docNumber, name, surname, birth, phone, street, street_number, locality, state, country, role }) })
+    .then((updatedUser) => res.send(updatedUser))
+    .catch((err) => res.status(400).send(err));
 });
-// Route to promote the user role to admin in db
+// Route to promote the user role to admin 
 server.patch("/users/promote/:id", (req, res, next) => {
   User.findByPk(req.params.id)
-    .then(user => {
-      user.update({ role: "admin" })
-    }).then((updatedUser) => res.send(updatedUser)
-    ).catch((err) => res.status(400).send(err));
+    .then(user => { user.update({ role: "admin" }) })
+    .then((updatedUser) => res.send(updatedUser))
+    .catch((err) => res.status(400).send(err));
 });
-// Route to delete an user from db
+// Route to delete an user 
 server.delete("/users/:id", (req, res) => {
   User.destroy({ where: { id: req.params.id } }).then((deletedRecord) => {
     if (deletedRecord === 1)
