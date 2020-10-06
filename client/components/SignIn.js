@@ -92,7 +92,7 @@ function SignIn({ navigation }) {
 
   return (
     <ScrollView>
-      <View style={styles.container}>
+        <View style={styles.container}>
         <View>
           <Image
             style={styles.imagen}
@@ -100,8 +100,6 @@ function SignIn({ navigation }) {
           />
           <Text style={styles.titulo}>Alta de Cliente</Text>
         </View>
-
-        <View style={styles.container}>
           <View style={styles.containerForm}>
           <Button title="Toma una foto" onPress={() => navigation.navigate('takePhoto')} />
             <RNPickerSelect
@@ -188,8 +186,7 @@ function SignIn({ navigation }) {
 
             <Button title="Registrate" onPress={() => submitInfo()} />
           </View>
-        </View>
-      </View>
+        </View>      
     </ScrollView>
   );
 }

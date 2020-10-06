@@ -118,7 +118,7 @@ export default SignupForm = ({ navigation }) => {
     },
   });
   const [check, setCheck] = useState(false);
-
+  
   return (
     <SafeAreaView>
       <KeyboardAwareScrollView>

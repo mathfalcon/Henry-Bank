@@ -4,12 +4,24 @@ export default StyleSheet.create({
     container: {
       backgroundColor: '#fff',
       marginTop: 10,
-      height: 1100,
+      height: 300,
       backgroundColor: "#eef0f2",
       flexDirection: "column",
       justifyContent: 'center',
       alignItems: "center",
     },
+
+
+    // button:{
+    //   color:"white",
+    //   backgroundColor:"blue",
+    //   borderWidth:0,
+    //   borderColor:"black",
+    //   padding:0,
+    //   margin:0,
+    //   letterSpacing:1,
+    // },
+
     buttonEnabled: {
      flexDirection:"row",
      justifyContent:'space-between',
@@ -45,11 +57,12 @@ export default StyleSheet.create({
       fontSize: 20,
     },
     titulo: {      
-      color: "white", //de momento negro. Hace falta un fondo tipo henry      
-      fontSize: 35,
-      marginLeft: 80,
+      color: "black", //de momento negro. Hace falta un fondo tipo henry      
+      fontSize: 30,
+      alignSelf: "center",      
+      // marginLeft: 80,
       marginTop: 30,
-      bottom: 220
+      // bottom: 220
     },
     select: {
       width: 100,
@@ -59,8 +72,4 @@ export default StyleSheet.create({
       width: 411,
       height: 250,
     },
-    error:{
-      color: "red",
-      fontSize: 15,
-    }
   });

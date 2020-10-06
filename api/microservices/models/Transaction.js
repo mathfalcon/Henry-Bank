@@ -5,11 +5,12 @@ module.exports = (sequelize) => {
   sequelize.define("transaction", {
     amount: {
         type: DataTypes.DECIMAL,
-        allowNull: false
+        allowNull: false,
+        validate: { min: 0.0 },
     },
     message: {
         type: DataTypes.STRING,
-        allowNull: false
+        defaultValue: 'transaccion'
     },
     state: {
         type: DataTypes.ENUM,
