@@ -16,8 +16,10 @@ import { CheckBox } from "react-native-elements";
 import CustomButton from "./customButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Alert } from "react-native";
+import axios from "axios";
+import { api } from "./Constants/constants";
 
-export default SignupForm = () => {
+export default SignupForm = ({ navigation }) => {
   const {
     values,
     isSubmitting,
@@ -30,7 +32,7 @@ export default SignupForm = () => {
     initialValues: {
       name: "",
       surname: "",
-      docType: "",
+      docType: "dni",
       docNumber: "",
       birth: "",
       phone: "",
@@ -45,9 +47,46 @@ export default SignupForm = () => {
       passcode: "",
       role: "client",
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       //Send values to database
-      console.log(values);
+
+      try {
+        const response = await axios.post(`${api}/users/create`, values);
+        response.data.success
+          ? Alert.alert(
+            "Complete",
+            'Your account has been created successfully',
+            [
+              {
+                text: "Understood",
+                onPress: () => navigation.navigate("login")
+              },
+            ],
+            { cancelable: false }
+          )
+          : Alert.alert(
+              "Error",
+              response.data.message,
+              [
+                {
+                  text: "Understood",
+
+                },
+              ],
+              { cancelable: false }
+            );
+      } catch (err) {
+        Alert.alert(
+          "Error",
+          err,
+          [
+            {
+              text: "Understood",
+            },
+          ],
+          { cancelable: false }
+        );
+      }
     },
     validate: (values) => {
       const errors = {};
@@ -79,7 +118,7 @@ export default SignupForm = () => {
     },
   });
   const [check, setCheck] = useState(false);
-  console.log(values);
+  
   return (
     <SafeAreaView>
       <KeyboardAwareScrollView>
@@ -130,16 +169,7 @@ export default SignupForm = () => {
             {touched.docNumber && errors.docNumber}
           </Text>
           <Item error={errors.birth ? true : false}>
-            {/*             <Input
-              placeholder="Birthdate"
-              onBlur={handleBlur("birth")}
-              name="birth"
-              onChangeText={(text) => setFieldValue("birth", text)}
-              value={values.birth}
-            /> */}
             <DatePicker
-              /*               name="birth"
-              onBlur={handleBlur("birth")} */
               defaultDate={new Date(2020, 6, 6)}
               maximumDate={new Date(2020, 6, 6)}
               locale={"en"}
@@ -288,7 +318,7 @@ export default SignupForm = () => {
           />
           <Button
             onPress={handleSubmit}
-            disabled={!check}
+            disabled={!check || Object.keys(errors).length > 0 ? true : false}
             block
             style={{ marginTop: 6 }}
           >

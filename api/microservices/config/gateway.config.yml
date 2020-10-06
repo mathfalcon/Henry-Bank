@@ -1,28 +1,27 @@
 http:
   port: 8080
+  hostname: 192.168.1.2
+https:
+  port: 8080
+  hostname: localhost
 admin:
   port: 9876
   host: localhost
 apiEndpoints:
-  api:
-    host: localhost
-    paths: '/ip'
   # User's routes
   user: 
     methods: 'GET,POST,PUT' 
-    host: localhost
+    host: 192.168.1.2
     paths: ['/users/','/users/*']
   auth: 
     methods: 'GET,POST,PUT'
-    host: localhost
+    host: 192.168.1.2
     paths: '/auth/*'
 serviceEndpoints:
-  httpbin:
-    url: 'https://httpbin.org'
   userService:
-    url: 'http://localhost:3000'
+    url: 'http://192.168.1.2:3000'
   authService:
-    url: 'http://localhost:3001'
+    url: 'http://192.168.1.2:3001'
 policies:
   - basic-auth
   - cors
@@ -33,22 +32,10 @@ policies:
   - proxy
   - rate-limit
 pipelines:
-  default:
-    apiEndpoints:
-      - api
-    policies:
-    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
-    # - key-auth:
-      - proxy:
-          - action:
-              serviceEndpoint: httpbin
-              changeOrigin: true
   userPipeline:
     apiEndpoints:
       - user
     policies:
-    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
-    # - key-auth:
       - proxy:
           - action:
               serviceEndpoint: userService
@@ -57,8 +44,6 @@ pipelines:
     apiEndpoints:
       - auth
     policies:
-    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
-    # - key-auth:
       - proxy:
           - action:
               serviceEndpoint: authService

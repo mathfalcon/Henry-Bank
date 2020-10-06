@@ -65,13 +65,15 @@ server.get("/users/outcome/:id", (req, res, next) => {
 
 // Route for posting a new user 
 server.post("/users/create", (req, res, next) => {
-  const { email, password, passcode, docType, docNumber, name, surname, birth, phone, street, street_number, locality, state, country, role } = req.body;
-  User.create({ email, password, passcode, docType, docNumber, name, surname, birth, phone, street, street_number, locality, state, country, role })
+  const { email, password, passcode, docType, docNumber, name, surname, birth, phone, street, streetNumber, locality, state, country, role } = req.body;
+  User.create({ email, password, passcode, docType, docNumber, name, surname, birth, phone, street, streetNumber, locality, state, country, role })
     .then(userCreated => {
       Account.create({ userId: userCreated.id }).then(accCreated => res.send({ success: true, message: "User and Account Created: ", userCreated, accCreated}))
       
     })
-    .catch((err) => res.status(400).send({ success: false, message: "Something went wrong: ", err }));
+    .catch((err) => {
+      console.log(err)
+      res.send({ success: false, message: "Something went wrong: ", err })});
 });
 // Route for posting a 'created' transaction
 server.post("/users/transaction/:sender/to/:receiver", (req, res, next) => {
@@ -87,9 +89,9 @@ server.post("/users/transaction/:sender/to/:receiver", (req, res, next) => {
 
 // Route for updating an user information
 server.put("/users/update/:id", (req, res, next) => {
-  const { email, password, passcode, docType, docNumber, name, surname, birth, phone, street, street_number, locality, state, country, role } = req.body;
+  const { email, password, passcode, docType, docNumber, name, surname, birth, phone, street, streetNumber, locality, state, country, role } = req.body;
   User.findByPk(req.params.id)
-    .then(user => { user.update({ email, password, passcode, docType, docNumber, name, surname, birth, phone, street, street_number, locality, state, country, role }) })
+    .then(user => { user.update({ email, password, passcode, docType, docNumber, name, surname, birth, phone, street, streetNumber, locality, state, country, role }) })
     .then((updatedUser) => res.send({ success: true, message: "Updated User: ", updatedUser }))
     .catch((err) => res.status(400).send({ success: false, message: "Something went wrong: ", err }));
 });
