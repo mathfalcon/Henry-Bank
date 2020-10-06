@@ -4,11 +4,12 @@ module.exports = (sequelize) => {
   sequelize.define("account", {
     balance: {
         type: DataTypes.DECIMAL,
-        allowNull: false,
+        defaultValue: 0.0,
+        validate: { min: 0.0 },
     },
     type: {
         type: DataTypes.ENUM,
-        allowNull: false,
+        defaultValue: 'argPeso',
         values: ['usDollar', 'argPeso']
     }
   });
