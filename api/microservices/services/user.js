@@ -27,7 +27,7 @@ server.get("/users", (req, res, next) => {
 // Route for getting a specific users
 server.get("/users/:id", (req, res, next) => {
   User.findByPk(req.params.id)
-    .then((user) => { res.send({ success: true, message: "User: ", user }) })
+    .then((user) => { user ? res.send({ success: true, message: "User: ", user }) : res.send({ success: false, message: "User not found" }) })
     .catch((err) => res.status(400).send({ success: false, message: "Something went wrong: ", err }));
 });
 // Route for getting user income
@@ -80,7 +80,13 @@ server.post("/users/transaction/:sender/to/:receiver", (req, res, next) => {
     .then(transactionCreated => { res.send({ success: true, message: "Transaction Created: ", transactionCreated }) })
     .catch((err) => res.status(400).send({ success: false, message: "Something went wrong: ", err }));
 });
-
+// Route for posting a 'charge' of money to an account
+server.post("/users/transaction/:sender/to/:receiver", (req, res, next) => {
+  const { amount, message } = req.body;
+  Transaction.create({ sender: req.params.sender, receiver: req.params.receiver, amount, message, state: 'created' })
+    .then(transactionCreated => { res.send({ success: true, message: "Transaction Created: ", transactionCreated }) })
+    .catch((err) => res.status(400).send({ success: false, message: "Something went wrong: ", err }));
+});
 ///////////////
 // ROUTES /PUT/
 ///////////////
