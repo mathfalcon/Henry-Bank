@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
@@ -10,23 +10,29 @@ import {
   Input,
   Picker,
   Button,
+  DatePicker,
 } from "native-base";
+import { CheckBox } from "react-native-elements";
 import CustomButton from "./customButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Alert } from "react-native";
+import axios from "axios";
+import { api } from "./Constants/constants";
 
-export default SignupForm = () => {
+export default SignupForm = ({ navigation }) => {
   const {
     values,
     isSubmitting,
     setFieldValue,
     handleSubmit,
     errors,
+    touched,
+    handleBlur,
   } = useFormik({
     initialValues: {
       name: "",
       surname: "",
-      docType: "",
+      docType: "dni",
       docNumber: "",
       birth: "",
       phone: "",
@@ -41,9 +47,46 @@ export default SignupForm = () => {
       passcode: "",
       role: "client",
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       //Send values to database
-      console.log(values);
+
+      try {
+        const response = await axios.post(`${api}/users/create`, values);
+        response.data.success
+          ? Alert.alert(
+            "Complete",
+            'Your account has been created successfully',
+            [
+              {
+                text: "Understood",
+                onPress: () => navigation.navigate("login")
+              },
+            ],
+            { cancelable: false }
+          )
+          : Alert.alert(
+              "Error",
+              response.data.message,
+              [
+                {
+                  text: "Understood",
+
+                },
+              ],
+              { cancelable: false }
+            );
+      } catch (err) {
+        Alert.alert(
+          "Error",
+          err,
+          [
+            {
+              text: "Understood",
+            },
+          ],
+          { cancelable: false }
+        );
+      }
     },
     validate: (values) => {
       const errors = {};
@@ -52,63 +95,59 @@ export default SignupForm = () => {
         errors.surname = "Must be a valid surname";
       if (!/^(?=.*\d)[0-9]{8,10}$/.test(values.docNumber))
         errors.docNumber = "Must be a valid document number";
-      if (!values.phone && values.phone.length >= 10)
+      if (values.phone.length <= 10)
         errors.phone = "Must be a valid phone number";
       if (!values.birth) errors.birth = "Must be a valid birthdate";
       if (
         !values.email.trim() ||
         !/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/.test(values.email)
       )
-        errors.email = "Must be a valid email";
-      if (!values.country) errors.country = "Must be a valid country";
-      if (!values.state) errors.state = "Must be a valid state";
-      if (!values.locality) errors.locality = "Must be a valid locality";
-      if (!values.street) errors.street = "Must be a valid street";
+        errors.email = "Must be a valid email.";
+      if (!values.country) errors.country = "Must be a valid country.";
+      if (!values.state) errors.state = "Must be a valid state.";
+      if (!values.locality) errors.locality = "Must be a valid locality.";
+      if (!values.street) errors.street = "Must be a valid street.";
       if (!values.streetNumber)
-        errors.streetNumber = "Must be a valid street number";
+        errors.streetNumber = "Must be a valid street number.";
       if (!/^(?=.*\d)(?=.*[A-Za-z])[A-Za-z0-9]{5,20}$/.test(values.password))
-        errors.password = "Must contain: 5-20 digits, A-Z and a-z";
-      if (values.confirmPassword !== values.password)
-        errors.confirmPassword = "Must the same pass";
-      if (!values.passcode) errors.passcode = "Must be a valid passcode";
+        errors.password = "Must contain: 5-20 digits, A-Z and a-z.";
+      if (values.confirmPassword !== values.password || !values.confirmPassword)
+        errors.confirmPassword = "Must the same password.";
+      if (!values.passcode) errors.passcode = "Must be a valid passcode.";
       return errors;
     },
   });
+  const [check, setCheck] = useState(false);
+
   return (
     <SafeAreaView>
       <KeyboardAwareScrollView>
-        <Form>
+        <Form style={{ padding: 18 }}>
           <Item error={errors.name ? true : false}>
-            <Label>Name: </Label>
             <Input
+              placeholder="Name"
+              onBlur={handleBlur("name")}
+              name="name"
               onChangeText={(text) => setFieldValue("name", text)}
-              value={values.firstName}
+              value={values.name}
             />
-            <Text
-              style={{
-                marginRight: 18,
-                color: "#e06d6d",
-              }}
-            >
-              {errors.name ? errors.name : ""}
-            </Text>
           </Item>
+          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
+            {touched.name && errors.name}
+          </Text>
           <Item error={errors.surname ? true : false}>
-            <Label>Surname: </Label>
             <Input
+              placeholder="Surname"
+              onBlur={handleBlur("surname")}
+              name="surname"
               onChangeText={(text) => setFieldValue("surname", text)}
               value={values.surname}
             />
-            <Text style={{ marginRight: 18, color: "#e06d6d" }}>
-              {errors.surname ? errors.surname : ""}
-            </Text>
           </Item>
+          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
+            {touched.surname && errors.surname}
+          </Text>
           <Item>
-            <Label>Document Type: </Label>
-            {/*             <Input
-              onChangeText={(text) => setFieldValue("docType", text)}
-              value={values.docType}
-            /> */}
             <Picker
               onValueChange={(value) => setFieldValue("docType", value)}
               selectedValue={values.docType}
@@ -118,127 +157,172 @@ export default SignupForm = () => {
             </Picker>
           </Item>
           <Item error={errors.docNumber ? true : false}>
-            <Label>Document Number: </Label>
             <Input
+              placeholder="Document Number"
+              onBlur={handleBlur("docNumber")}
+              name="docNumber"
               onChangeText={(text) => setFieldValue("docNumber", text)}
               value={values.docNumber}
             />
-            <Text style={{ marginRight: 18, color: "#e06d6d" }}>
-              {errors.docNumber ? errors.docNumber : ""}
-            </Text>
           </Item>
+          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
+            {touched.docNumber && errors.docNumber}
+          </Text>
           <Item error={errors.birth ? true : false}>
-            <Label>Birthdate: </Label>
-            <Input
-              onChangeText={(text) => setFieldValue("birth", text)}
-              value={values.birth}
+            <DatePicker
+              defaultDate={new Date(2020, 6, 6)}
+              maximumDate={new Date(2020, 6, 6)}
+              locale={"en"}
+              timeZoneOffsetInMinutes={undefined}
+              modalTransparent={false}
+              animationType={"fade"}
+              androidMode={"default"}
+              placeHolderText="Select birthdate"
+              textStyle={{ color: "black" }}
+              placeHolderTextStyle={{ color: "#d3d3d3" }}
+              onDateChange={(date) =>
+                setFieldValue("birth", date.toString().substr(4, 12))
+              }
+              disabled={false}
             />
-            <Text style={{ marginRight: 18, color: "#e06d6d" }}>
-              {errors.birth ? errors.birth : ""}
-            </Text>
+            <Text>Date: {values.birth}</Text>
           </Item>
+          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
+            {touched.birth && errors.birth}
+          </Text>
           <Item error={errors.phone ? true : false}>
-            <Label>Phone Number: </Label>
             <Input
+              placeholder="Phone Number"
+              onBlur={handleBlur("phone")}
+              name="phone"
               onChangeText={(text) => setFieldValue("phone", text)}
               value={values.phone}
             />
-            <Text style={{ marginRight: 18, color: "#e06d6d" }}>
-              {errors.phone ? errors.phone : ""}
-            </Text>
           </Item>
+          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
+            {touched.phone && errors.phone}
+          </Text>
           <Item error={errors.email ? true : false}>
-            <Label>Email: </Label>
             <Input
+              placeholder="Email"
+              onBlur={handleBlur("email")}
+              name="email"
               onChangeText={(text) => setFieldValue("email", text)}
               value={values.email}
             />
-            <Text style={{ marginRight: 18, color: "#e06d6d" }}>
-              {errors.email ? errors.email : ""}
-            </Text>
           </Item>
+          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
+            {touched.email && errors.email}
+          </Text>
           <Item error={errors.country ? true : false}>
-            <Label>Country: </Label>
             <Input
+              placeholder="Country"
+              onBlur={handleBlur("country")}
+              name="country"
               onChangeText={(text) => setFieldValue("country", text)}
               value={values.country}
             />
-            <Text style={{ marginRight: 18, color: "#e06d6d" }}>
-              {errors.country ? errors.country : ""}
-            </Text>
           </Item>
+          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
+            {touched.country && errors.country}
+          </Text>
           <Item error={errors.state ? true : false}>
-            <Label>State: </Label>
             <Input
+              placeholder="State"
+              onBlur={handleBlur("state")}
+              name="state"
               onChangeText={(text) => setFieldValue("state", text)}
               value={values.state}
             />
-            <Text style={{ marginRight: 18, color: "#e06d6d" }}>
-              {errors.state ? errors.state : ""}
-            </Text>
           </Item>
+          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
+            {touched.state && errors.state}
+          </Text>
           <Item error={errors.locality ? true : false}>
-            <Label>Locality: </Label>
             <Input
+              placeholder="Locality"
+              onBlur={handleBlur("locality")}
+              name="locality"
               onChangeText={(text) => setFieldValue("locality", text)}
               value={values.locality}
             />
-            <Text style={{ marginRight: 18, color: "#e06d6d" }}>
-              {errors.locality ? errors.locality : ""}
-            </Text>
           </Item>
+          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
+            {touched.locality && errors.locality}
+          </Text>
           <Item error={errors.street ? true : false}>
-            <Label>Street: </Label>
             <Input
+              placeholder="Street"
+              onBlur={handleBlur("street")}
+              name="street"
               onChangeText={(text) => setFieldValue("street", text)}
               value={values.street}
             />
-            <Text style={{ marginRight: 18, color: "#e06d6d" }}>
-              {errors.street ? errors.street : ""}
-            </Text>
           </Item>
+          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
+            {touched.street && errors.street}
+          </Text>
           <Item error={errors.streetNumber ? true : false}>
-            <Label>Street Number: </Label>
             <Input
+              placeholder="Street Number"
+              onBlur={handleBlur("streetNumber")}
+              name="streetNumber"
               onChangeText={(text) => setFieldValue("streetNumber", text)}
               value={values.streetNumber}
             />
-            <Text style={{ marginRight: 18, color: "#e06d6d" }}>
-              {errors.streetNumber ? errors.streetNumber : ""}
-            </Text>
           </Item>
+          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
+            {touched.streetNumber && errors.streetNumber}
+          </Text>
           <Item error={errors.password ? true : false}>
-            <Label>Password: </Label>
             <Input
+              placeholder="Password"
+              onBlur={handleBlur("password")}
+              name="password"
               onChangeText={(text) => setFieldValue("password", text)}
               value={values.password}
             />
-            <Text style={{ marginRight: 18, color: "#e06d6d" }}>
-              {errors.password ? errors.password : ""}
-            </Text>
           </Item>
+          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
+            {touched.password && errors.password}
+          </Text>
           <Item error={errors.confirmPassword ? true : false}>
-            <Label>Confirm Pass: </Label>
             <Input
+              placeholder="Confirm Password"
+              onBlur={handleBlur("confirmPassword")}
+              name="confirmPassword"
               onChangeText={(text) => setFieldValue("confirmPassword", text)}
               value={values.confirmPassword}
             />
           </Item>
-          <Text style={{ marginRight: 18, color: "#e06d6d" }}>
-            {errors.confirmPassword ? errors.confirmPassword : ""}
+          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
+            {touched.confirmPassword && errors.confirmPassword}
           </Text>
           <Item error={errors.passcode ? true : false}>
-            <Label>Passcode: </Label>
             <Input
+              placeholder="Passcode"
+              onBlur={handleBlur("passcode")}
+              name="passcode"
               onChangeText={(text) => setFieldValue("passcode", text)}
               value={values.passcode}
             />
-            <Text style={{ marginRight: 18, color: "#e06d6d" }}>
-              {errors.passcode ? errors.passcode : ""}
-            </Text>
           </Item>
-          <Button onPress={handleSubmit}>
-            <Text>SIGN IN</Text>
+          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
+            {touched.passcode && errors.passcode}
+          </Text>
+          <CheckBox
+            center
+            title="I accept the Terms of Use & Privacy Policy"
+            checked={check}
+            onPress={() => setCheck(!check)}
+          />
+          <Button
+            onPress={handleSubmit}
+            disabled={!check || Object.keys(errors).length > 0 ? true : false}
+            block
+            style={{ marginTop: 6 }}
+          >
+            <Text>SIGN UP</Text>
           </Button>
         </Form>
       </KeyboardAwareScrollView>
