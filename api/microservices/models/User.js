@@ -32,7 +32,7 @@ module.exports = (sequelize) => {
         },
       },
       passcode: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
       },
       salt: {
         type: DataTypes.STRING,
@@ -58,7 +58,7 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
       phone: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
       },
       street: {
         type: DataTypes.STRING,
