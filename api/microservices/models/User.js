@@ -80,6 +80,13 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      emailToken: {
+        type: DataTypes.STRING,
+      },
+      isVerified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      }
     },
     {
       paranoid: true,
