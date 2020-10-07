@@ -20,3 +20,13 @@ export const getLocation = ( country, state, locality, street, streetNumber ) =>
       });
   };
 };
+
+export const resetPass = ( email ) => {
+  return function (dispatch) {
+    axios
+      .post(`${C.SERVER_ADDRESS}/users/?????????`,email )
+      .then((response) => {
+        dispatch({ type: C.resetPass, payload: response });
+      });
+  };
+};

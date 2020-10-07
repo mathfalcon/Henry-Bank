@@ -4,7 +4,7 @@ export const API_LOCATION = '96db2928e9c031';
 
 // aca van los del GET
 export const userCreated = "USER_CREATED";
+export const resetPass = "RESET_PASS";
 
 // para la validación del domicilio en el signUpFrom
 export const validateAddress = "VALIDATE_ADDRESS";
-

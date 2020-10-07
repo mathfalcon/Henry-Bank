@@ -3,7 +3,8 @@ import * as C from "../constants";
 const initialState = {
   users: [],
   userCreationSuccess: false,
-  responseLocation: ""
+  responseLocation: "",
+  responseReset: "",
 };
 
 function userReducer(state = initialState, action) {  
@@ -14,6 +15,10 @@ function userReducer(state = initialState, action) {
   
     case C.validateAddress: {      
       return { ...state, responseLocation: action.payload };
+    }
+
+    case C.resetPass: {      
+      return { ...state, responseReset: action.payload };
     }
 
     default:
