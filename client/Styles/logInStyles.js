@@ -19,7 +19,7 @@ export default StyleSheet.create({
    },
     form: {        
       height: 45,
-      width: 300,
+      width: 1000,
       borderRadius: 5,
       backgroundColor: "white",
       marginBottom: 20,
