@@ -120,12 +120,14 @@ server.get("/auth/info", (req, res, next) => {
 
 // Fetching this route, logs out the user
 server.get("/auth/logout", (req, res, next) => {
-  console.log(req.session.destroy());
-  req.logOut();
-  res.status(200).send({
-    message: "You have logged out successfully",
-    success: true,
-  });
+  try {
+    req.session.destroy();
+    req.logOut();
+    res.status(200).send({success: true, message: 'You have logged out successfully'})
+  } catch (err){
+    res.send({success: false, err})
+  }
+
 });
 
 //   server.get(

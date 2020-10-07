@@ -36,7 +36,43 @@ export default SignupForm = ({ navigation }) => {
     },
     onSubmit: async (values) => {
       //Send values to database
-      Alert.alert("Redirect...")
+      try {
+        const response = await axios.post(`${api}/auth/login`, {email: values.user, password: values.password});
+        response.data.success
+          ? Alert.alert(
+            "Success",
+            'Your have logged in succesfully, you will now see your account details',
+            [
+              {
+                text: "Understood",
+                onPress: () => navigation.navigate("position")
+              },
+            ],
+            { cancelable: false }
+          )
+          : Alert.alert(
+              "Error",
+              response.data.message,
+              [
+                {
+                  text: "Understood",
+
+                },
+              ],
+              { cancelable: false }
+            );
+      } catch (err) {
+        Alert.alert(
+          "Error",
+          err,
+          [
+            {
+              text: "Understood",
+            },
+          ],
+          { cancelable: false }
+        );
+      }
     },
     validate: (values) => {
       const errors = {};
@@ -46,7 +82,6 @@ export default SignupForm = ({ navigation }) => {
       return errors;
     },
   });
-  const [check, setCheck] = useState(false);
   
   return (
     <SafeAreaView>
@@ -59,7 +94,7 @@ export default SignupForm = ({ navigation }) => {
         <Form style={{ padding: 18 }}>
           <Item error={errors.user ? true : false}>
             <Input
-              placeholder="User"
+              placeholder="Email"
               onBlur={handleBlur("user")}
               name="user"
               onChangeText={(text) => setFieldValue("user", text)}
@@ -83,28 +118,13 @@ export default SignupForm = ({ navigation }) => {
             {touched.user && errors.password}
           </Text>
   
-          <CheckBox
-            center
-            title="Login with my account"
-            checked={check}
-            onPress={() => setCheck(!check)}
-          />
           <Button
             onPress={handleSubmit}
-            disabled={!check || Object.keys(errors).length > 0 ? true : false}
             block
             style={{ marginTop: 6 }}
           >
             <Text>SIGN UP</Text>
           </Button>
-
-          <Button
-            onPress={() => navigation.navigate("position")}                        
-            style={{ marginTop: 6 }}
-          >
-            <Text>TEST POSITION</Text>
-          </Button>
-
         </Form>
       </KeyboardAwareScrollView>
     </SafeAreaView>

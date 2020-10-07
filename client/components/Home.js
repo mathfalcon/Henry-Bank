@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   StyleSheet,
   Button,
@@ -11,8 +11,13 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "./customButton";
 import styles from "../Styles/homeStyles.js";
+import axios from "axios";
+import { api } from "./Constants/constants";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserLogged } from "../redux/actions/authActions";
 
 function Home({ navigation }) {
+
   return (
     <SafeAreaView style={styles.mainContainer}>
       <View
