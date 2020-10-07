@@ -1,74 +1,104 @@
 import React, { useState } from "react";
-import RNPickerSelect from "react-native-picker-select";
-import {View, Text, Image, TextInput, Button, Alert} from "react-native";
-import { Avatar } from "react-native-elements";
-import styles from "../Styles/logInStyles.js";
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import { useFormik } from "formik";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import {
+  View,
+  Text,
+  Form,
+  Label,
+  Item,
+  Input,
+  Picker,
+  Button,
+  DatePicker,
+} from "native-base";
+import { CheckBox } from "react-native-elements";
+import CustomButton from "./customButton";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Alert, Image } from "react-native";
+import axios from "axios";
+import { api } from "./Constants/constants";
+import styles from '../Styles/logInStyles';
 
-function LogIn({ navigation }) {
-
-  const [showPass, setShowPass] = useState(false);
-
-  const handleShowPass = () => {
-    setShowPass(!showPass);
-  }
-
-  return (  
-      <View style={styles.container}>
-      <View>
+export default SignupForm = ({ navigation }) => {
+  const {
+    values,
+    isSubmitting,
+    setFieldValue,
+    handleSubmit,
+    errors,
+    touched,
+    handleBlur,
+  } = useFormik({
+    initialValues: {
+      user: "",
+      password: "",
+    },
+    onSubmit: async (values) => {
+      //Send values to database
+      Alert.alert("Redirect...")
+    },
+    validate: (values) => {
+      const errors = {};
+      if (values.user.length <= 2) errors.user = "The user is invalid";
+      if (values.password.length <= 2)
+        errors.password = "You must enter the password";
+      return errors;
+    },
+  });
+  const [check, setCheck] = useState(false);
+  
+  return (
+    <SafeAreaView>
         <Image
           style={styles.imagen}
           source={require("../image/headerRegistro.png")}
         />
-        <Text style={styles.titulo}>Iniciar Sesión</Text>
-      </View>
-      <View style={styles.containerForm}>
-        <Avatar
-          size="large"
-          rounded
-          icon={{name: 'user', type: 'font-awesome'}}
-          // onPress={() => console.log("Works!")}
-          activeOpacity={0.7}          
-          containerStyle={{backgroundColor:"gray", alignSelf: "center", marginBottom: 50, marginTop:-50, }}
-        />   
-        <TextInput placeholder="Usuario" style={styles.form}></TextInput>
-        <View style={styles.containerPass}>
-          <TextInput          
-            secureTextEntry={!showPass}
-            placeholder="Contraseña"
-            style={styles.form}          
-          />        
-          <Icon
-            name={showPass ? 'eye' : 'eye-slash'}
-            size={15}
-            color="grey"
-            style={styles.eyeIcon}
-            onPress={handleShowPass}
-          />
-        </View>
-        
-        <Text
-          style={styles.forgotPass}
-          onPress={() => navigation.navigate('forgotPass')}
-          >Olvide mi Contraseña
-        </Text>
-       
-       </View>
-       <View style={styles.buttons}>
-       <Button     
-        color= "yellow"  
-          title="SIGN IN"
-          onPress={() => Alert.alert("SIGN IN")}
-        />
-        <Button
-          style={{ marginLeft: 44 }}
-          color="black"
-          title="SIGN UP"
-          onPress={() => navigation.navigate("sign")}
-        />
-      </View>
-    </View>
-  );
-}
+        <Text style={styles.titulo}>Log In</Text>
+      <KeyboardAwareScrollView>
+        <Form style={{ padding: 18 }}>
+          <Item error={errors.user ? true : false}>
+            <Input
+              placeholder="User"
+              onBlur={handleBlur("user")}
+              name="user"
+              onChangeText={(text) => setFieldValue("user", text)}
+              value={values.user}
+            />
+          </Item>
+          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
+            {touched.user && errors.user}
+          </Text>
 
-export default LogIn;
+          <Item error={errors.password ? true : false}>
+            <Input
+              placeholder="Password"
+              onBlur={handleBlur("password")}
+              name="password"
+              onChangeText={(text) => setFieldValue("password", text)}
+              value={values.password}
+            />
+          </Item>
+          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
+            {touched.user && errors.password}
+          </Text>
+  
+          <CheckBox
+            center
+            title="Login with my account"
+            checked={check}
+            onPress={() => setCheck(!check)}
+          />
+          <Button
+            onPress={handleSubmit}
+            disabled={!check || Object.keys(errors).length > 0 ? true : false}
+            block
+            style={{ marginTop: 6 }}
+          >
+            <Text>SIGN UP</Text>
+          </Button>
+        </Form>
+      </KeyboardAwareScrollView>
+    </SafeAreaView>
+  );
+};
