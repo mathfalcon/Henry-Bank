@@ -19,7 +19,7 @@ export default StyleSheet.create({
    },
     form: {        
       height: 45,
-      width: 300,
+      width: 1000,
       borderRadius: 5,
       backgroundColor: "white",
       marginBottom: 20,
@@ -31,7 +31,7 @@ export default StyleSheet.create({
       fontSize: 35,
       marginLeft: 80,
       marginTop: 30,
-      bottom: 220
+      bottom: 100
     },
     select: {
       width: 100,
@@ -39,7 +39,7 @@ export default StyleSheet.create({
     },
     imagen: {
       width: 411,
-      height: 250,
+      height: 150,
     },
     forgotPass: {
       alignSelf: "center",

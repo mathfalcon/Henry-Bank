@@ -1,5 +1,9 @@
 http:
   port: 8080
+  hostname: 192.168.1.2
+https:
+  port: 8080
+  hostname: localhost
 admin:
   port: 9876
   host: localhost
@@ -7,23 +11,17 @@ apiEndpoints:
   # User's routes
   user: 
     methods: 'GET,POST,PUT' 
-    host: localhost
+    host: 192.168.1.2
     paths: ['/users/','/users/*']
   auth: 
     methods: 'GET,POST,PUT'
-    host: localhost
+    host: 192.168.1.2
     paths: '/auth/*'
-  registration: 
-    methods: 'GET,POST'
-    host: localhost
-    paths: ['/register/','/register/*']
 serviceEndpoints:
   userService:
-    url: 'http://localhost:3000'
+    url: 'http://192.168.1.2:3000'
   authService:
-    url: 'http://localhost:3001'
-  registerService:
-    url: 'http://localhost:3002'
+    url: 'http://192.168.1.2:3001'
 policies:
   - basic-auth
   - cors
@@ -38,8 +36,6 @@ pipelines:
     apiEndpoints:
       - user
     policies:
-    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
-    # - key-auth:
       - proxy:
           - action:
               serviceEndpoint: userService
@@ -48,19 +44,7 @@ pipelines:
     apiEndpoints:
       - auth
     policies:
-    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
-    # - key-auth:
       - proxy:
           - action:
               serviceEndpoint: authService
-              changeOrigin: true
-  registerPipeline:
-    apiEndpoints:
-      - register
-    policies:
-    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
-    # - key-auth:
-      - proxy:
-          - action:
-              serviceEndpoint: registerService
               changeOrigin: true
