@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -13,11 +14,17 @@ import {
 // import CustomButton from "./customButton";
 import { CheckBox } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { resetPass } from "../redux/actions/actions.js";
 import styles from "../Styles/forgotPassStyles.js";
+
 
 export default ForgotPass = () => {
 
   const [check, setCheck] = useState(false);
+  const { responseReset } = useSelector((state) => state.users);
+
+  const dispatch = useDispatch();  
+
   const {
     values,    
     setFieldValue,
@@ -33,7 +40,8 @@ export default ForgotPass = () => {
 
     onSubmit: (values) => {
       //Send values to database
-      console.log(values);
+      dispatch(resetPass( values.email ));
+      console.log('responseReset', responseReset);
     },
 
     validate: (values) => {
