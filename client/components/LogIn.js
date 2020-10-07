@@ -97,6 +97,14 @@ export default SignupForm = ({ navigation }) => {
           >
             <Text>SIGN UP</Text>
           </Button>
+
+          <Button
+            onPress={() => navigation.navigate("position")}                        
+            style={{ marginTop: 6 }}
+          >
+            <Text>TEST POSITION</Text>
+          </Button>
+
         </Form>
       </KeyboardAwareScrollView>
     </SafeAreaView>
