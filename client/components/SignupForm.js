@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { getLocation } from "../redux/actions/actions.js";
 import {
   View,
   Text,
@@ -20,6 +22,10 @@ import axios from "axios";
 import { api } from "./Constants/constants";
 
 export default SignupForm = ({ navigation }) => {
+
+  const { responseLocation } = useSelector((state) => state.users); 
+  const dispatch = useDispatch();  
+
   const {
     values,
     isSubmitting,
@@ -30,25 +36,31 @@ export default SignupForm = ({ navigation }) => {
     handleBlur,
   } = useFormik({
     initialValues: {
-      name: "",
-      surname: "",
+      name: "aaaaaa",
+      surname: "aaaaaa",
       docType: "dni",
-      docNumber: "",
+      docNumber: "30048282",
       birth: "",
-      phone: "",
-      email: "",
-      country: "",
-      state: "",
-      locality: "",
-      street: "",
-      streetNumber: "",
-      password: "",
-      confirmPassword: "",
-      passcode: "",
+      phone: "482797122222",
+      email: "matias23@hotmail.com",
+      country: "Argentina",
+      state: "Santa Fe",
+      locality: "Rosario",
+      street: "Ituzaingo",
+      streetNumber: "585",
+      password: "Henry1234",
+      confirmPassword: "Henry1234",
+      passcode: "1235678945",
       role: "client",
     },
+
     onSubmit: async (values) => {
       //Send values to database
+
+    dispatch(getLocation( values.country, values.state, values.locality, values.street, values.streetNumber ));    
+    
+    // tendriamos que ver qué tratamiento le damos a esta info, o para qué sirve
+    console.log('responseLocation', responseLocation.data[0].display_name);
 
       try {
         const response = await axios.post(`${api}/users/create`, values);
@@ -89,6 +101,15 @@ export default SignupForm = ({ navigation }) => {
       }
     },
     validate: (values) => {
+
+      const  mayority = ( birth ) => {
+        var today = new Date();
+        var birthDate = new Date(birth);
+        var age = today.getFullYear() - birthDate.getFullYear();        
+        if ( age < 16 ) return false;          
+        return true;
+      }  
+
       const errors = {};
       if (values.name.length <= 2) errors.name = "Must be a valid name";
       if (values.surname.length <= 2)
@@ -97,7 +118,7 @@ export default SignupForm = ({ navigation }) => {
         errors.docNumber = "Must be a valid document number";
       if (values.phone.length <= 10)
         errors.phone = "Must be a valid phone number";
-      if (!values.birth) errors.birth = "Must be a valid birthdate";
+      if ( !mayority(values.birth) ) errors.birth = "Must be over 18 years old";
       if (
         !values.email.trim() ||
         !/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/.test(values.email)
@@ -169,7 +190,7 @@ export default SignupForm = ({ navigation }) => {
             {touched.docNumber && errors.docNumber}
           </Text>
           <Item error={errors.birth ? true : false}>
-            <DatePicker
+            <DatePicker                           
               defaultDate={new Date(2020, 6, 6)}
               maximumDate={new Date(2020, 6, 6)}
               locale={"en"}

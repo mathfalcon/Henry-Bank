@@ -10,3 +10,13 @@ export const createUser = (userData) => {
       });
   };
 };
+
+export const getLocation = ( country, state, locality, street, streetNumber ) => {
+  return function (dispatch) {
+    axios
+      .post( `https://us1.locationiq.com/v1/search.php?key=${ C.API_LOCATION }&q=${ country }%20${ state }%20${ locality }%20${ street }%20${ streetNumber }&format=json`)
+      .then((response) => {
+        dispatch({ type: C.validateAddress, payload: response });
+      });
+  };
+};
