@@ -1,10 +1,11 @@
 import * as C from '../constants'
 import axios from "axios";
+import { api } from "../../components/Constants/constants";
 
 export const createUser = (userData) => {
   return function (dispatch) {
     axios
-      .post(`${C.SERVER_ADDRESS}/users/create`,userData)
+      .post(`${api}/users/create`,userData)
       .then((response) => {
         dispatch({ type: C.userCreated, payload: response.data });
       });
@@ -24,7 +25,7 @@ export const getLocation = ( country, state, locality, street, streetNumber ) =>
 export const resetPass = ( email ) => {
   return function (dispatch) {
     axios
-      .post(`${C.SERVER_ADDRESS}/users/?????????`,email )
+      .post(`${api}/users/?????????`,email )
       .then((response) => {
         dispatch({ type: C.resetPass, payload: response });
       });

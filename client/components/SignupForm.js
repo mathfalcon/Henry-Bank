@@ -59,8 +59,6 @@ export default SignupForm = ({ navigation }) => {
 
     dispatch(getLocation( values.country, values.state, values.locality, values.street, values.streetNumber ));    
     
-    // tendriamos que ver qué tratamiento le damos a esta info, o para qué sirve
-    console.log('responseLocation', responseLocation.data[0].display_name);
 
       try {
         const response = await axios.post(`${api}/users/create`, values);
