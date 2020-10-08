@@ -5,6 +5,7 @@ const gateway = require("express-gateway");
 require("./services/user");
 require("./services/auth");
 require("./services/register");
+require("./services/transaction");
 
 const { conn } = require("./db.js");
 

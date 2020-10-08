@@ -115,3 +115,4 @@ dist
 .pnp.*
 
 api/package-lock.json
+api/microservices/sendgrid.env
