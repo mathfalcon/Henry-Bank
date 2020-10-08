@@ -49,7 +49,7 @@ export default ThirdPageForm = ({ route, navigation }) => {
       role: "client",
     },
 
-    onSubmit: (values) => {      
+    onSubmit: async (values) => {      
 
       const accountInfo = {
         email: personalInfo.email,
