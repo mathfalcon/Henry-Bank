@@ -5,10 +5,9 @@ const cors = require("cors");
 const morgan = require("morgan");
 const expressSession = require("express-session");
 const SessionStore = require("express-session-sequelize")(expressSession.Store);
-const { conn } = require("../db");
+const { conn, User } = require("../db");
 const passport = require("../passport/setup");
 const server = express();
-const { User } = require("../db.js");
 
 ///////////////
 // MIDDLEWARES
@@ -64,12 +63,27 @@ server.use((err, req, res, next) => {
   res.status(status).send(message);
 });
 
+// Middleware to verified email
+const isNotVerified = async (req, res, next) => {
+  try {
+      const user = await User.findOne({ where: { email: req.body.email }});
+      if (user.isVerified) {
+          return next();
+      }
+      res.send({ success: false, message: "Your account has not been verified. Please check your email to verify your account" });
+      return res.redirect('/');
+  } catch (error) {
+      console.log(error);
+      res.send({ success: false, message: "Something went wrong. Please contact us for assistance.", error });
+  }
+};
+
 ///////////////
 // ROUTES /////
 ///////////////
 
 // Route for logging in
-server.post("/auth/login", (req, res, next) => {
+server.post("/auth/login", isNotVerified, (req, res, next) => {
   console.log(req.body);
   passport.authenticate("local-login", (err, user, info) => {
     if (err) {
