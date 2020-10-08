@@ -11,8 +11,6 @@ import Position from "./Position";
 // import CardPosition from "./components/CardPosition";
 // import MenuOperation from "./components/MenuOperation";
 // import Transaction from "./components/Transaction";
-import TakePhoto from "./TakePhoto";
-import Photo from "./Photo";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserLogged } from "../redux/actions/authActions";
 
@@ -34,9 +32,7 @@ export default function Index() {
         <Stack.Screen name="forgotPass" component={ForgotPass} />
         {/* <Stack.Screen name="cardPosition" component={CardPosition} />
           <Stack.Screen name="menuOp" component={MenuOperation} />
-          <Stack.Screen name="transaction" component={Transaction} />           */}
-        <Stack.Screen name="takePhoto" component={TakePhoto} />
-        <Stack.Screen name="photo" component={Photo} />
+          <Stack.Screen name="transaction" component={Transaction} />           */}        
       </Stack.Navigator>
     </NavigationContainer>
   );
