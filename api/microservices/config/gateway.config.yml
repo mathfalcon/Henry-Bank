@@ -54,3 +54,11 @@ pipelines:
           - action:
               serviceEndpoint: authService
               changeOrigin: true
+  authPipeline:
+    apiEndpoints:
+      - transaction
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: transactionService
+              changeOrigin: true
