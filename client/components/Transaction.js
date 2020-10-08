@@ -7,10 +7,10 @@ export default Transaction = () => {
       <Container>
         <Segment>
           <Button first>
-            <Text>Puppies</Text>
+            <Text>Tax</Text>
           </Button>
           <Button last active>
-            <Text>Cubs</Text>
+            <Text>Payments</Text>
           </Button>
         </Segment>
       </Container>
