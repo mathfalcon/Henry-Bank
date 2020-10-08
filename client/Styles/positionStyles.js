@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import { Row } from "native-base";
 
 export default StyleSheet.create({
     container: {
@@ -37,6 +36,8 @@ export default StyleSheet.create({
 
     moneySection: {
         alignSelf: 'center',
+        fontSize:30,
+        fontFamily: 'BreeSerifRegular'
     },
 
     cardPosition: {

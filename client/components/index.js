@@ -27,8 +27,8 @@ export default function Index() {
   return (
     <NavigationContainer>
       <Stack.Navigator headerMode="none">
-        <Stack.Screen name="home" component={Home} />
         <Stack.Screen name="position" component={Position} />
+        <Stack.Screen name="home" component={Home} />
         <Stack.Screen name="login" component={LogIn} />
         <Stack.Screen name="sign" component={SignupForm} />
         <Stack.Screen name="forgotPass" component={ForgotPass} />
