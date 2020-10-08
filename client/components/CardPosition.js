@@ -1,26 +1,42 @@
 import React from "react";
-import { Container, Content, Card, CardItem, Text, Body, Left, Button, Icon, Right } from "native-base";
+import {
+  Container,
+  Content,
+  Card,
+  CardItem,
+  Text,
+  Body,
+  Left,
+  Button,
+  Icon,
+  Right,
+} from "native-base";
 
-export default CardPosition = () => {
-
+export default CardPosition = (props) => {
+  console.log(props.user);
   return (
-    <Container>
-      <Content padder style={{
-        backgroundColor: "#e6ebed"
-      }}>
-        <Card >
-          <CardItem header bordered >
+    <Container
+      style={{
+        backgroundColor: "whitesmoke",
+        flex: 1,
+        flexDirection: "row",
+      }}
+    >
+      <Content padder>
+        <Card>
+          <CardItem header bordered>
             <Left>
               <Body>
-                <Text>Start</Text>
+                <Text>Account Balance</Text>
               </Body>
             </Left>
             <Text>Account movements</Text>
           </CardItem>
           <CardItem cardBody>
             <Body style={{ flex: 1, alignItems: "center" }}>
-              <Text >Consolidated position</Text>
-              <Text style={{ fontSize: 33 }}>$$$</Text>
+              <Text style={{ fontSize: 33, padding:15 }}>
+                ${props.user.user.account.balance}
+              </Text>
             </Body>
           </CardItem>
           <CardItem>
@@ -38,4 +54,4 @@ export default CardPosition = () => {
       </Content>
     </Container>
   );
-}
+};

@@ -36,10 +36,12 @@ export default StyleSheet.create({
       },
       mainButtonsContainer: {
         flex: 4.5,
+        width: '100%',
         alignItems: "center",
       },
       buttonLogIn: {
         color: "white",
+        width: 175,
         borderWidth: 1,
         borderColor: "white",
         margin: 5,
@@ -49,6 +51,7 @@ export default StyleSheet.create({
         borderWidth: 1,
         borderColor: "#ffff57",
         margin: 10,
+        width: 175,
       },
       welcomeText: {
         color: "white",

@@ -45,27 +45,28 @@ export default SecondPageForm = ({ route, navigation }) => {
     },
 
     onSubmit: async (values) => {
-      //Send values to database
+      //Send values to third panel
+      navigation.navigate("third", {values, personalInfo})
 
-    dispatch(getLocation( values.country, values.state, values.locality, values.street, values.streetNumber ));    
-    let locationInfo = responseLocation.data[0].display_name.split(',');
+    // dispatch(getLocation( values.country, values.state, values.locality, values.street, values.streetNumber ));    
+    // let locationInfo = responseLocation.data[0].display_name.split(',');
 
-    if ( responseLocation.status === 200 ) {
+    // if ( responseLocation.status === 200 ) {
 
-      Alert.alert(
-        "Confirm Location",
-        `Address: ${locationInfo[1]} ${locationInfo[0]}\nCity: ${locationInfo[4]}\nState: ${locationInfo[7]}\nCountry: ${locationInfo[9]}`,
-        [
-          {
-            text: "Cancel",
-            // onPress: () => console.log("Cancel Pressed"),
-            style: "cancel"
-          },
-          { text: "OK", onPress: () => navigation.navigate("third", {personalInfo, locationInfo}) }
-        ],
-        { cancelable: false }
-      );
-    }
+    //   Alert.alert(
+    //     "Confirm Location",
+    //     `Address: ${locationInfo[1]} ${locationInfo[0]}\nCity: ${locationInfo[4]}\nState: ${locationInfo[7]}\nCountry: ${locationInfo[9]}`,
+    //     [
+    //       {
+    //         text: "Cancel",
+    //         // onPress: () => console.log("Cancel Pressed"),
+    //         style: "cancel"
+    //       },
+    //       { text: "OK", onPress: () => navigation.navigate("third", {personalInfo, locationInfo}) }
+    //     ],
+    //     { cancelable: false }
+    //   );
+    // }
     
     },
     validate: (values) => {
@@ -87,7 +88,7 @@ export default SecondPageForm = ({ route, navigation }) => {
           <Header>
             <Left>
               <Button transparent onPress={() => navigation.goBack()}>
-                <Icon name='arrow-back' />
+              <Icon name="arrow-back" />
               </Button>
             </Left>
             <Body>

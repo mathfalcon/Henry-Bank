@@ -41,6 +41,7 @@ export default SignupForm = ({ navigation }) => {
           email: values.user,
           password: values.password,
         });
+        console.log(response.data);
         response.data.success
           ? Alert.alert(
               "Success",
@@ -109,6 +110,7 @@ export default SignupForm = ({ navigation }) => {
 
           <Item error={errors.password ? true : false}>
             <Input
+              secureTextEntry={true}
               placeholder="Password"
               onBlur={handleBlur("password")}
               name="password"
