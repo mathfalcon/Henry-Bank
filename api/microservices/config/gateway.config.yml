@@ -10,18 +10,24 @@ admin:
 apiEndpoints:
   # User's routes
   user: 
-    methods: 'GET,POST,PUT' 
+    methods: 'GET,POST,PUT,PATCH,DELETE' 
     host: 192.168.1.2
     paths: ['/users/','/users/*']
   auth: 
-    methods: 'GET,POST,PUT'
+    methods: 'GET,POST,PUT,PATCH,DELETE' 
     host: 192.168.1.2
     paths: '/auth/*'
+  transaction: 
+    methods: 'GET,POST,PUT,PATCH,DELETE' 
+    host: 192.168.1.2
+    paths: '/transaction/*'
 serviceEndpoints:
   userService:
     url: 'http://192.168.1.2:3000'
   authService:
     url: 'http://192.168.1.2:3001'
+  transactionService:
+    url: 'http://192.168.1.2:3002'
 policies:
   - basic-auth
   - cors
