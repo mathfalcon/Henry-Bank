@@ -1,4 +1,4 @@
-const { User } = require("../db.js");
+const { User, Account } = require("../db.js");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
@@ -8,7 +8,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-  User.findByPk(id)
+  User.findOne({where:{id}, include:Account})
     .then((user) => done(null, user))
     .catch((err) => {
       if (err) {

@@ -5,10 +5,12 @@ const cors = require("cors");
 const morgan = require("morgan");
 const expressSession = require("express-session");
 const SessionStore = require("express-session-sequelize")(expressSession.Store);
-const { conn } = require("../db");
+const { conn, User } = require("../db");
 const passport = require("../passport/setup");
+const crypto = require("crypto");
+const sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const server = express();
-const { User } = require("../db.js");
 
 ///////////////
 // MIDDLEWARES
@@ -64,12 +66,27 @@ server.use((err, req, res, next) => {
   res.status(status).send(message);
 });
 
-///////////////
-// ROUTES /////
-///////////////
+// Middleware to verified email
+const isNotVerified = async (req, res, next) => {
+  try {
+      const user = await User.findOne({ where: { email: req.body.email }});
+      if (user.isVerified) {
+          return next();
+      }
+      res.send({ success: false, message: "Your account has not been verified. Please check your email to verify your account" });
+      return res.redirect('/');
+  } catch (error) {
+      console.log(error);
+      res.send({ success: false, message: "Something went wrong. Please contact us for assistance.", error });
+  }
+};
+
+////////////////
+// ROUTES /POST/
+////////////////
 
 // Route for logging in
-server.post("/auth/login", (req, res, next) => {
+server.post("/auth/login", isNotVerified, (req, res, next) => {
   console.log(req.body);
   passport.authenticate("local-login", (err, user, info) => {
     if (err) {
@@ -98,6 +115,40 @@ server.post("/auth/login", (req, res, next) => {
     });
   })(req, res, next);
 });
+
+// Route for reset password
+server.post("/auth/reset_password", async (req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { email: req.body.email }});
+    if (!user) {
+      return res.status(404).send({ success: false, message: "User not found" });
+    }
+    const newPassword = crypto.randomBytes(4).toString('hex');
+    user.password = newPassword;
+    await user.save();
+    const msg = {
+      from: 'bankhenry7@gmail.com',
+      to: user.email,
+      subject: 'Henry Bank - Reset Password',
+      text: `
+          Hello ${user.name}, your new password is: ${newPassword}. Please log into your account and change it.
+      `,
+      html: `
+          <h1>Hello ${user.name},</h1>
+          <p>Your new password is: <strong> ${newPassword} </strong>. Please log into your account and change it.</p>
+      `
+    }
+    await sgMail.send(msg);
+    res.send({ success: true, message: `Your password has been reset`});
+  } catch (e) {
+    console.log(e);
+    return next(new Error(e));
+  }
+});
+
+////////////////
+// ROUTES /GET/
+////////////////
 
 // Route for getting session's info in case User is logged
 server.get("/auth/info", (req, res, next) => {
@@ -145,6 +196,10 @@ server.get("/auth/logout", (req, res, next) => {
 //       res.redirect("http://localhost:3000/");
 //     }
 //   );
+
+////////////////
+// ROUTES /PUT/
+////////////////
 
 // Route for changing password
 server.put("/auth/change-password", (req, res, next) => {

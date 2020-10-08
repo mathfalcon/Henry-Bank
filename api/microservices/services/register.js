@@ -8,9 +8,9 @@ const crypto = require('crypto');
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-///////////////
-// MIDDLEWARES
-///////////////
+////////////////
+// MIDDLEWARES /
+////////////////
 server.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 server.use(bodyParser.json({ limit: "50mb" }));
 server.use(cookieParser());

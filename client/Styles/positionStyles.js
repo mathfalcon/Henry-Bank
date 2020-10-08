@@ -1,66 +1,70 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
-    container: {
-        flex: 15,
-        backgroundColor: '#fff',
-        height: 300,
-        backgroundColor: "#eef0f2",
-        flexDirection: "column",
-        justifyContent: 'center',
-    },
+  container: {
+    flex: 1,
+    backgroundColor: "black",
+    flexDirection: "column",
+  },
 
-    headerSection: {
-        flex: 3,
-        flexDirection: 'row',
-        justifyContent: "space-between",
-        marginHorizontal: 25,
-        paddingTop: 5,
-        paddingBottom: 30,
-    },
+  headerSection: {
+    flex: 1.5,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    paddingLeft: 15,
+    paddingTop: 25,
+    paddingBottom: 25,
+    backgroundColor: "#151515",
+    width: "100%",
+  },
 
-    avatarSection: {
-        marginTop:30,
-        flexDirection: 'column',
-        backgroundColor:"#6d756d",
-        paddingTop:5,
-    },
+  avatarSection: {
+    flex: 3,
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+  },
+  moneySection: {
+    alignSelf: "center",
+    marginBottom: 5,
+    color: "whitesmoke",
+  },
 
-    textAvatar: {
-        marginBottom: 65,
-        color:"white",
-        paddingLeft:20,
-        paddingRight:20
-    },
-
-
-    moneySection: {
-        alignSelf: 'center',
-        fontSize:30,
-        fontFamily: 'BreeSerifRegular'
-    },
-
-    cardPosition: {
-        flex: 6,
-        padding: 25,
-    },
-
-    menuOp: {
-        flex: 1,
-    },
-
-    transaction: {
-        flex: 1,
-        paddingBottom: 30,
-    },
-    contentButton: {
-        marginLeft: "50%"
-    },
-    buttonLogOut: {
-        borderRadius: 10,
-        backgroundColor: 'dodgerblue',
-        borderWidth: 1,
-        borderColor: "white",
-        width: "50%",
-    },
+  cardPosition: {
+    flex: 6.5,
+    flexDirection: "column",
+    width: "100%",
+    justifyContent: "space-around",
+    paddingTop: 75,
+    backgroundColor: 'whitesmoke'
+  },
+  menuOp: {
+    flex: 1,
+  },
+  contentButton: {
+    marginLeft: "50%",
+  },
+  nameSection: {
+    justifyContent: "center",
+    flex: 4,
+    flexDirection: "column",
+    paddingRight: 45,
+  },
+  buttonsView: {
+    flex: 2,
+    flexDirection: "row",
+    backgroundColor: "whitesmoke",
+    justifyContent: "space-evenly",
+  },
+  sendMoneyButton: {
+    flexDirection: "row",
+    backgroundColor: "#151515",
+    height: 50,
+    width: 175,
+    justifyContent: "center",
+  },
+  sendMoneyText: {
+    alignSelf: "center",
+    color: "whitesmoke",
+  },
 });

@@ -3,19 +3,21 @@ import { useSelector, useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, Image } from "react-native";
 import {   
   Text,
   Form,
   Label,
   Item,
-  Input,  
+  Input, 
+  View,
 } from "native-base";
 // import CustomButton from "./customButton";
 import { CheckBox } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { resetPass } from "../redux/actions/actions.js";
 import styles from "../Styles/forgotPassStyles.js";
+import MenuOperation from './MenuOperation';
 
 
 export default ForgotPass = () => {
@@ -58,47 +60,56 @@ export default ForgotPass = () => {
   return (
     <SafeAreaView>
       <KeyboardAwareScrollView>
-      <Text style={styles.titulo}>Resetear Contraseña</Text>  
-        <Form style={styles.container}>
-          <Item error={errors.email ? true : false}>
-            {/* <Label>Email: </Label> */}
-            <Icon
-            name={"envelope"}
-            size={15}
-            color="grey"
+        <View style={styles.firstContainer}>
+          <Form style={styles.container}>
+            <Text style={styles.titulo}>Reset Password</Text>  
+            <Image
+            source={require("../assets/henryLogo.jpg")}
+            style={styles.logoImg}
           />
-            <Input
-              name='email'
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-              value={values.email}
-              placeholder='Enter email'
+            <Item style={styles.cBox} error={errors.email ? true : false}>
+              <Icon
+              name={"envelope"}
+              size={15}
+              color="grey"
             />
-          </Item>
-          <Text style={{ color: "#e06d6d" }}>
-              {touched.email && errors.email}
-          </Text>
+              <Input
+                style={styles.form}
+                name='email'
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
+                value={values.email}
+                placeholder='Enter email'
+                />
+            </Item>
+            <Text style={styles.errorMessage}>
+                {touched.email && errors.email}
+            </Text>
 
-          <CheckBox
-            center
-            title="I am not a robot"
-            checked={check}
-            onPress={() => setCheck(!check)}
-          />
+            <CheckBox
+              center
+              title="I am not a robot"
+              checked={check}
+              onPress={() => setCheck(!check)}
+            />
 
-          <TouchableOpacity
-            disabled={!check}
-            onPress={handleSubmit}
-            style={check ? styles.buttonEnabled : styles.buttonDisabled}
-          >
-              <Text style={styles.buttonText}>RESET PASSWORD</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              disabled={!check}
+              onPress={handleSubmit}
+              style={check ? styles.buttonEnabled : styles.buttonDisabled}
+            >
+                <Text style={styles.buttonText}>RESET PASSWORD</Text>
+            </TouchableOpacity>
 
-          {/* <CustomButton style={styles.button}>
-            <Text>RESET PASSWORD</Text>
-          </CustomButton> */}
+            {/* <CustomButton style={styles.button}>
+              <Text>RESET PASSWORD</Text>
+            </CustomButton> */}
 
-        </Form>
+          </Form>
+      <View style={styles.menuOp}>
+        <MenuOperation />
+      </View>
+        </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );
