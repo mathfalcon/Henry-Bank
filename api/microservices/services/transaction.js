@@ -5,9 +5,9 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 
-///////////////
-// MIDDLEWARES
-///////////////
+////////////////
+// MIDDLEWARES /
+////////////////
 server.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 server.use(bodyParser.json({ limit: "50mb" }));
 server.use(cookieParser());
@@ -29,7 +29,8 @@ server.get("/transactions/income/:userId", (req, res, next) => {
         .then((account) => {
             Transaction.findAll({ where: { receiver: account.id } })
                 .then((transactions) => {
-                    for (let i = 0, sum = 0; i < transactions.length; i++)
+                    let sum = 0;
+                    for (let i = 0; i < transactions.length; i++)
                         if (transactions[i].state === 'complete') sum += transactions[i].amount
                     res.send({ success: true, message: "Your incomes are: ", sum })
                 })
@@ -99,3 +100,9 @@ server.patch("/transactions/enrich/:userId", (req, res, next) => {
         })
         .catch((err) => res.status(400).send({ success: false, message: "Something went wrong: ", err }))
 });
+
+server.listen(3003, () => {
+    console.log("Transaction service running on 3003");
+});
+
+module.exports = server;

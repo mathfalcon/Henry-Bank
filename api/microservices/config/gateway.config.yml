@@ -17,6 +17,10 @@ apiEndpoints:
     methods: 'GET,POST,PUT,PATCH,DELETE' 
     host: 192.168.1.2
     paths: '/auth/*'
+  register: 
+    methods: 'GET,POST,PUT,PATCH,DELETE' 
+    host: 192.168.1.2
+    paths: '/register/*'
   transaction: 
     methods: 'GET,POST,PUT,PATCH,DELETE' 
     host: 192.168.1.2
@@ -26,8 +30,10 @@ serviceEndpoints:
     url: 'http://192.168.1.2:3000'
   authService:
     url: 'http://192.168.1.2:3001'
-  transactionService:
+  registerService:
     url: 'http://192.168.1.2:3002'
+  transactionService:
+    url: 'http://192.168.1.2:3003'
 policies:
   - basic-auth
   - cors
@@ -54,7 +60,15 @@ pipelines:
           - action:
               serviceEndpoint: authService
               changeOrigin: true
-  authPipeline:
+  registerPipeline:  
+    apiEndpoints:
+      - register
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: registerService
+              changeOrigin: true
+  transactionPipeline:
     apiEndpoints:
       - transaction
     policies:
