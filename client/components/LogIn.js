@@ -18,7 +18,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Alert, Image } from "react-native";
 import axios from "axios";
 import { api } from "./Constants/constants";
-import styles from '../Styles/logInStyles';
+import styles from "../Styles/logInStyles";
 
 export default SignupForm = ({ navigation }) => {
   const {
@@ -37,26 +37,28 @@ export default SignupForm = ({ navigation }) => {
     onSubmit: async (values) => {
       //Send values to database
       try {
-        const response = await axios.post(`${api}/auth/login`, {email: values.user, password: values.password});
+        const response = await axios.post(`${api}/auth/login`, {
+          email: values.user,
+          password: values.password,
+        });
         response.data.success
           ? Alert.alert(
-            "Success",
-            'Your have logged in succesfully, you will now see your account details',
-            [
-              {
-                text: "Understood",
-                onPress: () => navigation.navigate("position")
-              },
-            ],
-            { cancelable: false }
-          )
+              "Success",
+              "Your have logged in succesfully, you will now see your account details",
+              [
+                {
+                  text: "Understood",
+                  onPress: () => navigation.navigate("position"),
+                },
+              ],
+              { cancelable: false }
+            )
           : Alert.alert(
               "Error",
               response.data.message,
               [
                 {
                   text: "Understood",
-
                 },
               ],
               { cancelable: false }
@@ -82,16 +84,16 @@ export default SignupForm = ({ navigation }) => {
       return errors;
     },
   });
-  
+
   return (
     <SafeAreaView>
-        <Image
-          style={styles.imagen}
-          source={require("../image/headerRegistro.png")}
-        />
-        <Text style={styles.titulo}>Log In</Text>
       <KeyboardAwareScrollView>
         <Form style={{ padding: 18 }}>
+          <Text style={styles.tittle}>Welcome!</Text>
+          <Image
+            source={require("../assets/henryLogoBlack.jpg")}
+            style={styles.logoImg}
+          />
           <Item error={errors.user ? true : false}>
             <Input
               placeholder="Email"
@@ -114,18 +116,28 @@ export default SignupForm = ({ navigation }) => {
               value={values.password}
             />
           </Item>
-          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
+          <Text style={{ marginLeft: 18, color: "#e06d6d", marginBottom: 20 }}>
             {touched.user && errors.password}
           </Text>
-  
-          <Button
+
+          {/* <Button onPress={handleSubmit} block style={{ marginLeft: 15 }}>
+            <Text>LOGIN</Text>
+          </Button> */}
+          <CustomButton
+            style={styles.buttonLogin}
+            title="LOGIN"
             onPress={handleSubmit}
-            block
-            style={{ marginTop: 6 }}
-          >
-            <Text>SIGN UP</Text>
-          </Button>
+          />
         </Form>
+        <Text style={{ alignSelf: "center", marginTop: 100 }}>
+          <Text>Don't you have an account? </Text>
+          <Text
+            style={{ fontWeight: "bold" }}
+            onPress={() => navigation.navigate("sign")}
+          >
+            Sign Up
+          </Text>
+        </Text>
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );
