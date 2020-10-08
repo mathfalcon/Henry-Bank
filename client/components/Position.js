@@ -35,8 +35,9 @@ export default Position = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerSection}>
+
         <View style={styles.avatarSection}>
-          <Text style={styles.textAvatar}>Welcome User</Text>
+          <Text style={styles.textAvatar}>Welcome</Text>
           <Avatar
             size="large"
             icon={{ name: "user", type: "font-awesome" }}
@@ -46,33 +47,39 @@ export default Position = ({ navigation }) => {
               backgroundColor: "gray",
               alignSelf: "center",
               marginBottom: 50,
-              marginTop: -50,
+              marginTop: -60,
             }}
           />
         </View>
-        <Text style={styles.moneySection}>Dinero Disponible</Text>
+        <Text style={styles.moneySection}>Name of User</Text>
       </View>
 
       <View style={styles.cardPosition}>
         <CardPosition />
-        <CustomButton
-          style={{
-            color: "white",
-            backgroundColor: 'dodgerblue',
-            borderWidth: 1,
-            borderColor: "white",
-          }}
-          title="LOG OUT"
-          onPress={handleLogOut}
-        />
       </View>
 
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignContent: "center"
+        }}
+      >
+        <View style={styles.buttonLogOut} >
+          <CustomButton
+            style={{}}
+            title="LOG OUT"
+            onPress={handleLogOut}
+          />
+        </View>
+      </View>
+
+
+      {/* <View style={styles.transaction}>
+        <Transaction />
+      </View> */}
       <View style={styles.menuOp}>
         <MenuOperation />
-      </View>
-
-      <View style={styles.transaction}>
-        <Transaction />
       </View>
     </SafeAreaView>
   );

@@ -1,28 +1,41 @@
 import React from "react";
-import { Container, Header, Content, Card, CardItem, Text, Body } from "native-base";
+import { Container, Content, Card, CardItem, Text, Body, Left, Button, Icon, Right } from "native-base";
 
 export default CardPosition = () => {
-  
-    return (
-      <Container>        
-        <Content padder>
-          <Card>
-            <CardItem header bordered>
-              <Text>NativeBase</Text>
-            </CardItem>
-            <CardItem bordered>
+
+  return (
+    <Container>
+      <Content padder style={{
+        backgroundColor: "#e6ebed"
+      }}>
+        <Card >
+          <CardItem header bordered >
+            <Left>
               <Body>
-                <Text>
-                  NativeBase is a free and open source framework that enable
-                  developers to build....
-                </Text>
+                <Text>Start</Text>
               </Body>
-            </CardItem>
-            <CardItem footer bordered>
-              <Text>GeekyAnts</Text>
-            </CardItem>
-          </Card>
-        </Content>
-      </Container>
-    );
+            </Left>
+            <Text>Account movements</Text>
+          </CardItem>
+          <CardItem cardBody>
+            <Body style={{ flex: 1, alignItems: "center" }}>
+              <Text >Consolidated position</Text>
+              <Text style={{ fontSize: 33 }}>$$$</Text>
+            </Body>
+          </CardItem>
+          <CardItem>
+            <Left>
+              <Button transparent>
+                <Icon active name="chatbubbles" />
+                <Text>Last movements</Text>
+              </Button>
+            </Left>
+            <Right>
+              <Text>8th Oct</Text>
+            </Right>
+          </CardItem>
+        </Card>
+      </Content>
+    </Container>
+  );
 }

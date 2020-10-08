@@ -21,7 +21,7 @@ function CustomButton(props) {
       borderColor: borderColor || null,
       padding: padding || 10,
       margin: margin || null,
-      width: "100%",
+      
     },
     text: {
       color: color || "black",
