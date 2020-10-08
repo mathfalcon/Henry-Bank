@@ -1,10 +1,12 @@
 import React from 'react';
 import { Container, Header, Content, Footer, FooterTab, Button, Icon, Text } from 'native-base';
+import styles from "../Styles/MenuOperationStyles";
+
 
 export default MenuOperation = () => {
 
     return (
-      <Container>        
+      <Container >        
         <Footer>
           <FooterTab>
             <Button vertical>

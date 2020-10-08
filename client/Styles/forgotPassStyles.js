@@ -1,14 +1,21 @@
 import { StyleSheet } from "react-native";
-
+// 
 export default StyleSheet.create({
+    firstContainer: {
+      backgroundColor: "black",
+      height: 788,
+    },
     container: {
-      backgroundColor: '#fff',
-      marginTop: 10,
-      height: 300,
-      backgroundColor: "#eef0f2",
-      flexDirection: "column",
-      justifyContent: 'center',
+      marginTop: "11%",
+      marginLeft: 30,
+      width: 350,
+      height: "75%",
+      backgroundColor: "white",
       alignItems: "center",
+      justifyContent: 'center',
+      borderRadius: 20,
+      opacity: 0.94,
+
     },
 
 
@@ -23,21 +30,19 @@ export default StyleSheet.create({
     // },
 
     buttonEnabled: {
-     flexDirection:"row",
-     justifyContent:'space-between',
-     width:"80%",
-     backgroundColor: "yellow",
+     width:"70%",
+     backgroundColor: "#fffb57",
      padding: 20,
      borderRadius: 5,
+    marginTop: 30
    },
    buttonDisabled: {
-    flexDirection:"row",
-    justifyContent:'space-between',
-    width:"80%",
-    backgroundColor: "yellow",
+    width:"70%",
+    backgroundColor: "orange",
     padding: 20,
     borderRadius: 5,
-    opacity:.3
+    opacity:.5,
+    marginTop: 30
   },
    buttonText: {
     fontSize: 20,
@@ -48,21 +53,16 @@ export default StyleSheet.create({
       alignSelf: 'center'
    },
     form: {  
-      height: 45,
-      width: 300,
+      width: 10,
+      height: 40,
       borderRadius: 5,
-      backgroundColor: "white",
-      marginBottom: 20,
       paddingLeft: 20,
-      fontSize: 20,
     },
     titulo: {      
-      color: "black", //de momento negro. Hace falta un fondo tipo henry      
+      color: "black",    
       fontSize: 30,
-      alignSelf: "center",      
-      // marginLeft: 80,
-      marginTop: 30,
-      // bottom: 220
+      alignSelf: "center", 
+      marginBottom: "45%"
     },
     select: {
       width: 100,
@@ -71,5 +71,22 @@ export default StyleSheet.create({
     imagen: {
       width: 411,
       height: 250,
+    },
+    cBox: {
+      marginBottom: 10
+    },
+    errorMessage: {
+      color: "red",
+      marginBottom: 30
+    },
+    menuOp:{
+      marginTop: 100  
+    },
+    logoImg: {
+      height: 100,
+      width: 100,
+      alignSelf: "center",
+      marginTop: "-35%",
+      marginBottom: "10%"
     },
   });
