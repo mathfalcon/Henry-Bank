@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import styles from "../Styles/signInStyles.js";
-import {  
+import {
   Text,
-  Form,  
-  Item,  
-  Input,  
+  Form,
+  Item,
+  Input,
   Button,
   Container,
   Header,
   Left,
+  Icon,
   Body,
   Right,
   Title,
@@ -25,9 +25,8 @@ import axios from "axios";
 import { api } from "./Constants/constants";
 
 export default ThirdPageForm = ({ route, navigation }) => {
-
   const personalInfo = route.params.personalInfo;
-  const locationInfo = route.params.locationInfo;
+  const locationInfo = route.params.values;
 
   const [showPass, setShowPass] = useState(false);
   const [showconfirmPass, setShowconfirmPass] = useState(false);
@@ -42,15 +41,14 @@ export default ThirdPageForm = ({ route, navigation }) => {
     touched,
     handleBlur,
   } = useFormik({
-    initialValues: {      
+    initialValues: {
       password: "",
       confirmPassword: "",
       passcode: "",
       role: "client",
     },
 
-    onSubmit: async (values) => {      
-
+    onSubmit: async (values) => {
       const accountInfo = {
         email: personalInfo.email,
         password: values.password,
@@ -61,16 +59,14 @@ export default ThirdPageForm = ({ route, navigation }) => {
         surname: personalInfo.surname,
         birth: personalInfo.birth,
         phone: personalInfo.phone,
-        street: locationInfo[1],
-        streetNumber: locationInfo[0],
-        locality: locationInfo[4],
-        state: locationInfo[7],
-        country: locationInfo[9],
-        role: 'client',
-      }
-
-      // console.log('accountInfo',accountInfo);
-
+        street: locationInfo.street,
+        streetNumber: locationInfo.streetNumber,
+        locality: locationInfo.locality,
+        state: locationInfo.state,
+        country: locationInfo.country,
+        role: "client",
+      };
+      
       try {
         const response = await axios.post(`${api}/users/create`, accountInfo);
         response.data.success
@@ -109,10 +105,9 @@ export default ThirdPageForm = ({ route, navigation }) => {
         );
       }
     },
-    
-    validate: (values) => {
 
-    const errors = {};    
+    validate: (values) => {
+      const errors = {};
       if (!/^(?=.*\d)(?=.*[A-Za-z])[A-Za-z0-9]{5,20}$/.test(values.password))
         errors.password = "Must contain: 5-20 digits, A-Z and a-z.";
       if (values.confirmPassword !== values.password || !values.confirmPassword)
@@ -122,102 +117,107 @@ export default ThirdPageForm = ({ route, navigation }) => {
     },
   });
   const [check, setCheck] = useState(false);
-  
+
   return (
     <SafeAreaView>
       <KeyboardAwareScrollView>
-                
-      <Container>
+        <Container>
           <Header>
             <Left>
               <Button transparent onPress={() => navigation.goBack()}>
-                <Icon name='arrow-back' />
+                <Icon name="arrow-back" />
               </Button>
             </Left>
             <Body>
-            <Title style={{alignSelf:'center'}}>SECURITY INFO</Title>
+              <Title style={{ alignSelf: "center" }}>SECURITY INFO</Title>
             </Body>
             <Right>
               <Button transparent onPress={() => navigation.navigate("home")}>
                 <Text>Cancel</Text>
               </Button>
             </Right>
-          </Header>  
+          </Header>
 
           <Form style={{ paddingHorizontal: 20, paddingVertical: 15 }}>
-          
-          <Item error={errors.password ? true : false}>
-            <Input
-              secureTextEntry={!showPass}
-              placeholder="Password"
-              onBlur={handleBlur("password")}
-              name="password"
-              onChangeText={(text) => setFieldValue("password", text)}
-              value={values.password}
-            />
-            <Icon
-                name={showPass ? 'eye' : 'eye-slash'}
+            <Item error={errors.password ? true : false}>
+              <Input
+                secureTextEntry={!showPass}
+                placeholder="Password"
+                onBlur={handleBlur("password")}
+                name="password"
+                onChangeText={(text) => setFieldValue("password", text)}
+                value={values.password}
+              />
+              <Icon
+                type="Ionicons"
+                name={showPass ? "eye" : "eye-off"}
                 size={15}
-                color="grey"                
+                color="grey"
                 onPress={() => setShowPass(!showPass)}
-          />
-          </Item>
-          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
-            {touched.password && errors.password}
-          </Text>
-          <Item error={errors.confirmPassword ? true : false}>
-            <Input
-              secureTextEntry={!showconfirmPass}
-              placeholder="Confirm Password"
-              onBlur={handleBlur("confirmPassword")}
-              name="confirmPassword"
-              onChangeText={(text) => setFieldValue("confirmPassword", text)}
-              value={values.confirmPassword}
-            />
-            <Icon
-                name={showconfirmPass ? 'eye' : 'eye-slash'}
+              />
+            </Item>
+            <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
+              {touched.password && errors.password}
+            </Text>
+            <Item error={errors.confirmPassword ? true : false}>
+              <Input
+                secureTextEntry={!showconfirmPass}
+                placeholder="Confirm Password"
+                onBlur={handleBlur("confirmPassword")}
+                name="confirmPassword"
+                onChangeText={(text) => setFieldValue("confirmPassword", text)}
+                value={values.confirmPassword}
+              />
+              <Icon
+                type="Ionicons"
+                name={showconfirmPass ? "eye" : "eye-off"}
                 size={15}
-                color="grey"                
+                color="grey"
                 onPress={() => setShowconfirmPass(!showconfirmPass)}
-            />
-          </Item>
-          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
-            {touched.confirmPassword && errors.confirmPassword}
-          </Text>
-          <Item error={errors.passcode ? true : false}>
-            <Input
-              secureTextEntry={!showPasscode}
-              placeholder="Passcode"
-              onBlur={handleBlur("passcode")}
-              name="passcode"
-              onChangeText={(text) => setFieldValue("passcode", text)}
-              value={values.passcode}
-            />
-            <Icon
-                name={showPasscode ? 'eye' : 'eye-slash'}
+              />
+            </Item>
+            <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
+              {touched.confirmPassword && errors.confirmPassword}
+            </Text>
+            <Item error={errors.passcode ? true : false}>
+              <Input
+                secureTextEntry={!showPasscode}
+                placeholder="Passcode"
+                onBlur={handleBlur("passcode")}
+                name="passcode"
+                onChangeText={(text) => setFieldValue("passcode", text)}
+                value={values.passcode}
+              />
+              <Icon
+                type="Ionicons"
+                name={showPasscode ? "eye" : "eye-off"}
                 size={15}
-                color="grey"                
+                color="grey"
                 onPress={() => setShowPasscode(!showPasscode)}
-          />
-          </Item>
-          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
-            {touched.passcode && errors.passcode}
-          </Text>
-          <CheckBox
-            center
-            title="I accept the Terms of Use & Privacy Policy"
-            checked={check}
-            onPress={() => setCheck(!check)}
-          />
-          <Button
-            onPress={handleSubmit}
-            disabled={Object.values(errors).length > 0 ? true : false}
-            style={Object.values(errors).length > 0 ? styles.buttonDisabled : styles.buttonEnabled}
-            block            
-          >
-            <Text>CREATE ACCOUNT</Text>
-          </Button>
-        </Form>
+              />
+            </Item>
+            <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
+              {touched.passcode && errors.passcode}
+            </Text>
+            <CheckBox
+              center
+              title="I accept the Terms of Use & Privacy Policy"
+              checked={check}
+              onPress={() => setCheck(!check)}
+            />
+            <Button
+              onPress={handleSubmit}
+              disabled={Object.values(errors).length > 0 ? true : false}
+              style={
+                Object.values(errors).length > 0
+                  ? styles.buttonDisabled
+                  : styles.buttonEnabled
+              }
+              block
+            >
+              <Text>CREATE ACCOUNT</Text>
+            </Button>
+          </Form>
         </Container>
       </KeyboardAwareScrollView>
     </SafeAreaView>

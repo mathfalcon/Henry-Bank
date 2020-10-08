@@ -1,14 +1,12 @@
 import React from 'react';
 import { Container, Header, Content, Footer, FooterTab, Button, Icon, Text } from 'native-base';
-import styles from "../Styles/MenuOperationStyles";
 
 
 export default MenuOperation = () => {
 
-    return (
-      <Container >        
+    return (      
         <Footer>
-          <FooterTab>
+          <FooterTab style={{backgroundColor: '#151515'}}>
             <Button vertical>
               <Icon name="apps" />
               <Text>Apps</Text>
@@ -17,16 +15,15 @@ export default MenuOperation = () => {
               <Icon name="camera" />
               <Text>Camera</Text>
             </Button>
-            <Button vertical active>
-              <Icon active name="navigate" />
-              <Text>Navigate</Text>
+            <Button vertical active style={{backgroundColor:'#ffff6d'}}>
+              <Icon style={{color:'black'}} active type='FontAwesome' name="user" />
+              <Text style={{color:'black'}}>Account</Text>
             </Button>
             <Button vertical>
-              <Icon name="person" />
-              <Text>Contact</Text>
+              <Icon type='FontAwesome' name="users" />
+              <Text>Contacts</Text>
             </Button>
           </FooterTab>
         </Footer>
-      </Container>
    );
 }

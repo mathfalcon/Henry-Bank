@@ -17,42 +17,46 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserLogged } from "../redux/actions/authActions";
 
 function Home({ navigation }) {
-
+  const userLogged = useSelector((state) => state.auth);
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <View
-        style={{
-          flex: 1,
-          width: "60%",
-        }}
-      >
-        <View style={styles.logoContainer}>
-          <Image
-            source={require("../assets/henryLogo.jpg")}
-            style={styles.logoImg}
-          />
-          <Text style={styles.logoText}>Your E-Wallet</Text>
+      {userLogged.success ? (
+        navigation.navigate("position")
+      ) : (
+        <View
+          style={{
+            flex: 1,
+            width: "60%",
+          }}
+        >
+          <View style={styles.logoContainer}>
+            <Image
+              source={require("../assets/henryLogo.jpg")}
+              style={styles.logoImg}
+            />
+            <Text style={styles.logoText}>Your E-Wallet</Text>
+          </View>
+          <View style={styles.mainTitleContainer}>
+            <Text style={styles.titleText}>Henry Bank</Text>
+          </View>
+          <View style={styles.mainButtonsContainer}>
+            <Text style={styles.welcomeText}>Welcome!</Text>
+            <CustomButton
+              style={styles.buttonLogIn}
+              title="LOG IN"
+              onPress={() => navigation.navigate("login")}
+            />
+            <CustomButton
+              style={styles.buttonSignUp}
+              title="SIGN UP"
+              onPress={() => navigation.navigate("sign")}
+            />
+            <TouchableOpacity>
+              <Text style={styles.supportText}>Need support?</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.mainTitleContainer}>
-          <Text style={styles.titleText}>Henry Bank</Text>
-        </View>
-        <View style={styles.mainButtonsContainer}>
-          <Text style={styles.welcomeText}>Welcome!</Text>
-          <CustomButton
-            style={styles.buttonLogIn}
-            title="LOG IN"
-            onPress={() => navigation.navigate("login")}
-          />
-          <CustomButton
-            style={styles.buttonSignUp}
-            title="SIGN UP"
-            onPress={() => navigation.navigate("sign")}
-          />
-          <TouchableOpacity>
-            <Text style={styles.supportText}>Need support?</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      )}
     </SafeAreaView>
   );
 }
