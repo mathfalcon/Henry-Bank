@@ -6,6 +6,7 @@ require("./services/user");
 require("./services/auth");
 require("./services/register");
 require("./services/transaction");
+require("./services/contact");
 
 const { conn } = require("./db.js");
 
