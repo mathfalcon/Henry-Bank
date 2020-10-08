@@ -3,10 +3,9 @@ const sgMail = require('@sendgrid/mail');
 const User = require('../models/User');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-
 const register = async (name, email, token, host) => {
     const msg = {
-        from: 'bankhenry7@gmail.com',
+        from: 'no-reply@henrybank.com',
         to: email,
         subject: 'Henry Bank - Verify email',
         text: `
@@ -23,16 +22,16 @@ const register = async (name, email, token, host) => {
     try {
         await sgMail.send(msg);
         console.log('Email sent');
-        // res.send({
-        //     success: true,
-        //     message: `Thanks for registering. Please check your email to verify your account.`,
-        // });
+        res.send({
+            success: true,
+            message: `Thanks for registering. Please check your email to verify your account.`,
+        });
     } catch (error) {
         console.log(error);
-        // res.send({
-        //     success: false,
-        //     message: `Something went wrong. Please contact us for assistance.`,
-        // });
+        res.send({
+            success: false,
+            message: `Something went wrong. Please contact us for assistance.`,
+        });
     }
 };
 

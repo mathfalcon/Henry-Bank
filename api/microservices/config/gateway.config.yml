@@ -1,6 +1,6 @@
 http:
   port: 8080
-  hostname: 192.168.1.2
+  hostname: 192.168.0.116
 https:
   port: 8080
   hostname: localhost
@@ -11,17 +11,23 @@ apiEndpoints:
   # User's routes
   user: 
     methods: 'GET,POST,PUT' 
-    host: 192.168.1.2
+    host: 192.168.0.116
     paths: ['/users/','/users/*']
   auth: 
     methods: 'GET,POST,PUT'
-    host: 192.168.1.2
+    host: 192.168.0.116
     paths: '/auth/*'
+  register: 
+    methods: 'GET,POST,PUT'
+    host: 192.168.0.116
+    paths: '/register/*'
 serviceEndpoints:
   userService:
-    url: 'http://192.168.1.2:3000'
+    url: 'http://192.168.0.116:3000'
   authService:
-    url: 'http://192.168.1.2:3001'
+    url: 'http://192.168.0.116:3001'
+  registerService:
+    url: 'http://192.168.0.116:3002'
 policies:
   - basic-auth
   - cors
@@ -47,4 +53,13 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: authService
+              changeOrigin: true
+              authPipeline:
+  registerPipeline:  
+    apiEndpoints:
+      - register
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: registerService
               changeOrigin: true
