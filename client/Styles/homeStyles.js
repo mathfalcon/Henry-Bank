@@ -30,7 +30,7 @@ export default StyleSheet.create({
       },
       titleText: {
         color: "white",
-        alignSelf: "center",
+        textAlign: "center",
         fontSize: 35,
         letterSpacing: 5.5,
       },
@@ -53,13 +53,13 @@ export default StyleSheet.create({
       welcomeText: {
         color: "white",
         padding: 10,
-        opacity: 0.4,
+        opacity: 0.7,
         fontSize: 27,
       },
       supportText: {
         color: "white",
         padding: 10,
-        opacity: 0.3,
+        opacity: 0.5,
         fontSize: 15,
       },
   });
