@@ -20,5 +20,12 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         unique: true,
       },
+      birth: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+      },
+      phone: {
+        type: DataTypes.STRING,
+      },
     });
 };
