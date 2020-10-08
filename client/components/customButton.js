@@ -12,6 +12,9 @@ function CustomButton(props) {
     padding,
     margin,
     letterSpacing,
+    width,
+    fontSize,
+    height
   } = props.style;
   
   const style = StyleSheet.create({
@@ -21,12 +24,12 @@ function CustomButton(props) {
       borderColor: borderColor || null,
       padding: padding || 10,
       margin: margin || null,
-      
+      width: width || null,
     },
     text: {
       color: color || "black",
       elevation: 15,
-      fontSize: 22,
+      fontSize: fontSize || 22,
       alignSelf: "center",
       letterSpacing: letterSpacing || 1,
     },

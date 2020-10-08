@@ -3,8 +3,10 @@ const { User, Account } = require("../db.js");
 const server = express();
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
-const cors = require("cors");
 const morgan = require("morgan");
+const sgMail = require("@sendgrid/mail");
+const crypto = require("crypto");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 ////////////////
 // MIDDLEWARES /
@@ -38,7 +40,8 @@ server.get("/users/:id", (req, res, next) => {
 // Route for posting a new user 
 server.post("/users/create", (req, res, next) => {
   const { email, password, passcode, docType, docNumber, name, surname, birth, phone, street, streetNumber, locality, state, country, role } = req.body;
-  User.create({ email, password, passcode, docType, docNumber, name, surname, birth, phone, street, streetNumber, locality, state, country, role })
+  const emailToken = crypto.randomBytes(64).toString('hex');
+  User.create({ email, password, passcode, docType, docNumber, name, surname, birth, phone, street, streetNumber, locality, state, country, role, emailToken })
     .then(userCreated => {
       Account.create({ userId: userCreated.id }).then(accCreated => res.send({ success: true, message: "User and Account Created: ", userCreated, accCreated }))
     })
@@ -46,6 +49,7 @@ server.post("/users/create", (req, res, next) => {
       console.log(err)
       res.send({ success: false, message: "Something went wrong: ", err })
     });
+
 });
 
 ///////////////
