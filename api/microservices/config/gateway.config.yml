@@ -25,6 +25,10 @@ apiEndpoints:
     methods: 'GET,POST,PUT,PATCH,DELETE' 
     host: 192.168.1.2
     paths: '/transaction/*'
+  contact: 
+    methods: 'GET,POST,PUT,PATCH,DELETE' 
+    host: 192.168.1.2
+    paths: ['/contacts/','/contacts/*']
 serviceEndpoints:
   userService:
     url: 'http://192.168.1.2:3000'
@@ -34,6 +38,8 @@ serviceEndpoints:
     url: 'http://192.168.1.2:3002'
   transactionService:
     url: 'http://192.168.1.2:3003'
+  contactService:
+    url: 'http://192.168.1.2:3004'
 policies:
   - basic-auth
   - cors
@@ -75,4 +81,10 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: transactionService
+              changeOrigin: true
+      - contact
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: contactService
               changeOrigin: true
