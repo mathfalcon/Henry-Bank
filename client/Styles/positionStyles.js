@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import { Row } from "native-base";
 
 export default StyleSheet.create({
   container: {
@@ -39,7 +38,6 @@ export default StyleSheet.create({
     paddingTop: 75,
     backgroundColor: 'whitesmoke'
   },
-
   menuOp: {
     flex: 1,
   },

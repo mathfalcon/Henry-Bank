@@ -20,8 +20,18 @@ import CustomButton from "./customButton";
 import axios from "axios";
 import { api } from "./Constants/constants";
 import { getUserLogged } from "../redux/actions/authActions";
+import * as Font from 'expo-font';
+
 
 export default Position = ({ navigation }) => {
+  const [fontLoaded, setFontLoaded]= useState(false)
+useEffect(() => {
+  if (!fontLoaded){
+    Font.loadAsync({
+      BreeSerifRegular: require('../assets/fonts/BreeSerif-Regular.ttf'),
+    })
+  }
+})
   const dispatch = useDispatch();
 
   const handleLogOut = async () => {
