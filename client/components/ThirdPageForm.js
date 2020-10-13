@@ -73,7 +73,7 @@ export default ThirdPageForm = ({ route, navigation }) => {
         role: 'client',
       }
 
-      // console.log('accountInfo',accountInfo);
+      console.log('accountInfo',accountInfo);
 
       try {
         const response = await axios.post(`${api}/users/create`, accountInfo);
