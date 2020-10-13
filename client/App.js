@@ -5,9 +5,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { getUserLogged } from "./redux/actions/authActions";
 import store from "./redux/store";
-// import Index from "./components";
+import Index from "./components";
 import * as Font from 'expo-font';
-import CreditCard from './components/MyCards';
 
 const Stack = createStackNavigator();
 
@@ -22,7 +21,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <CreditCard />
+      <Index />
     </Provider>
   );
 }
