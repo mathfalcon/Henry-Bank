@@ -33,6 +33,26 @@ server.get("/users/:id", (req, res, next) => {
     .catch((err) => res.status(400).send({ success: false, message: "Something went wrong: ", err }));
 });
 
+//Email verification route
+server.get("/users/verification/verify-email", async (req, res, next) => {
+  console.log('holaaa')
+  try {
+    const user = await User.findOne({ where: { emailToken: req.query.token}  });
+    if(!user) {
+      res.send({ success: false, message: "Token is invalid. Please contact us for assistance."});
+      return res.redirect('/');
+    }
+    user.emailToken = null;
+    user.isVerified = true;
+    await user.save();
+    res.send({ success: true, message: `Welcome to Henry Bank ${user.name}. Now you can start using your account`});
+  } catch (error) {
+    console.log(error);
+    res.send({ success: false, message: "Something went wrong. Please contact us for assistance.", error })
+    res.redirect('/');
+  }
+});
+
 ////////////////
 // ROUTES /POST/
 ////////////////

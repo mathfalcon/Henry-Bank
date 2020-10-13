@@ -103,7 +103,7 @@ useEffect(() => {
         <Transaction />
       </View> */}
           <View style={styles.menuOp}>
-            <MenuOperation />
+            <MenuOperation navigation={navigation}/>
           </View>
         </Container>
       ) : (
