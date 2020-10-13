@@ -82,6 +82,8 @@ pipelines:
           - action:
               serviceEndpoint: transactionService
               changeOrigin: true
+  contactPipeline:
+    apiEndpoints:
       - contact
     policies:
       - proxy:

@@ -49,27 +49,28 @@ export default SecondPageForm = ({ route, navigation }) => {
 
     onSubmit: async (values) => {
       //Send values to database
-      try {
-        dispatch(getLocation( values.country, values.state, values.locality, values.street, values.streetNumber ));    
-        let locationInfo = responseLocation.data[0].display_name.split(',');
-        console.log(locationInfo);
+      navigation.navigate("third", {personalInfo, values})
+      // try {
+      //   dispatch(getLocation( values.country, values.state, values.locality, values.street, values.streetNumber ));    
+      //   let locationInfo = responseLocation.data[0].display_name.split(',');
+      //   console.log(locationInfo);
     
-        if ( responseLocation.status === 200 ) {          
-          Alert.alert(
-            "Confirm Location",
-            `Address: ${locationInfo[1]} ${locationInfo[0]}\nCity: ${locationInfo[4]}\nState: ${locationInfo[7]}\nCountry: ${locationInfo[9]}`,
-            [
-              {
-                text: "Enter Again",
-                // onPress: () => console.log("Cancel Pressed"),
-                style: "cancel"
-              },
-              { text: "That's Ok", onPress: () => navigation.navigate("third", {personalInfo, locationInfo}) }
-            ],
-            { cancelable: false }
-          );
-        }
-      } catch (err){ console.log(err)}
+      //   if ( responseLocation.status === 200 ) {          
+      //     Alert.alert(
+      //       "Confirm Location",
+      //       `Address: ${locationInfo[1]} ${locationInfo[0]}\nCity: ${locationInfo[4]}\nState: ${locationInfo[7]}\nCountry: ${locationInfo[9]}`,
+      //       [
+      //         {
+      //           text: "Enter Again",
+      //           // onPress: () => console.log("Cancel Pressed"),
+      //           style: "cancel"
+      //         },
+      //         { text: "That's Ok", onPress: () => navigation.navigate("third", {personalInfo, locationInfo}) }
+      //       ],
+      //       { cancelable: false }
+      //     );
+      //   }
+      // } catch (err){ console.log(err)}
     
     },
     validate: (values) => {
