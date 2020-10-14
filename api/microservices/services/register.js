@@ -22,7 +22,7 @@ server.get('/register', function (req, res) {
 
 server.post('/register', async function (req, res) {
 const { name, email, token } = req.body.user;
-const hots = req.headers.host;
+const host = req.headers.host;
 
     const msg = {
         from: 'bankhenry7@gmail.com',

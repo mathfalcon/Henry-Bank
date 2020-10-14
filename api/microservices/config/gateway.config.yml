@@ -24,7 +24,7 @@ apiEndpoints:
   transaction: 
     methods: 'GET,POST,PUT,PATCH,DELETE' 
     host: 192.168.1.2
-    paths: '/transaction/*'
+    paths: '/transactions/*'
   contact: 
     methods: 'GET,POST,PUT,PATCH,DELETE' 
     host: 192.168.1.2
@@ -82,6 +82,8 @@ pipelines:
           - action:
               serviceEndpoint: transactionService
               changeOrigin: true
+  contactPipeline:
+    apiEndpoints:
       - contact
     policies:
       - proxy:

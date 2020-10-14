@@ -123,7 +123,7 @@ server.post("/auth/reset_password", async (req, res, next) => {
     if (!user) {
       return res.status(404).send({ success: false, message: "User not found" });
     }
-    const newPassword = crypto.randomBytes(4).toString('hex');
+    const newPassword = crypto.randomBytes(8).toString('hex');
     user.password = newPassword;
     await user.save();
     const msg = {

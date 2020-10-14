@@ -10,6 +10,8 @@ import SignupForm from "./SignupForm";
 import ForgotPass from "./ForgotPass";
 import Position from "./Position";
 import Contacts from "./Contacts";
+import AccountHistory from "./AccountHistory";
+import SendMoney from "./SendMoney";
 // import CardPosition from "./components/CardPosition";
 // import MenuOperation from "./components/MenuOperation";
 // import Transaction from "./components/Transaction";
@@ -33,6 +35,7 @@ export default function Index() {
           <Stack.Screen name="sign" component={SignupForm} />
           <Stack.Screen name="forgotPass" component={ForgotPass} />
           <Stack.Screen name="contacts" component={Contacts} />
+          <Stack.Screen name="sendMoney" component={SendMoney} />
           
           {/* <Stack.Screen name="cardPosition" component={CardPosition} />
           <Stack.Screen name="menuOp" component={MenuOperation} />
