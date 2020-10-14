@@ -25,7 +25,8 @@ export default RechargeMoney = () => {
               </Card> */}
               <Card style={styles.cardQr}>
                 <QRCode
-                  value="http://shouldconfirmrecharge.qr"
+                  size={250}
+                  value="https://www.facebook.com"
                   logo={logo}
                   logoBorderRadius="3"
                   logoSize="30"
@@ -54,9 +55,9 @@ const styles = StyleSheet.create({
   },
   cardQr: {
     alignItems: "center",
-    backgroundColor: "#ffff57",
-    height: 110,
-    width: 110,
+    backgroundColor: "yellow",
+    height: 260,
+    width: 260,
     alignSelf: "center",
     justifyContent: "center",
   },

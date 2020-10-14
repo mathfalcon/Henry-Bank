@@ -91,10 +91,10 @@ useEffect(() => {
                 <Text style={styles.sendMoneyText}>SEND MONEY</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => console.log("pressed")}
+                onPress={() => navigation.navigate('recharge')}
                 style={styles.sendMoneyButton}
               >
-                <Text style={styles.sendMoneyText}>REQUEST MONEY</Text>
+                <Text style={styles.sendMoneyText}>RECHARGE MONEY</Text>
               </TouchableOpacity>
             </View>
           </View>
