@@ -19,9 +19,10 @@ import {
   Body,
   Right,
   Title,
+  View,
 } from "native-base";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Alert } from "react-native";
+import { Alert, Image } from "react-native";
 
 export default FirstPageForm = ({ navigation }) => {
   const [initialState, setInitialState] = useState(true);
@@ -49,7 +50,7 @@ export default FirstPageForm = ({ navigation }) => {
       surname: "",
       docType: "",
       docNumber: "",
-      birth: "",
+      birth: "None",
       phone: "",
       email: "",
     },
@@ -75,7 +76,7 @@ export default FirstPageForm = ({ navigation }) => {
       if (!/^(?=.*\d)[0-9]{8,10}$/.test(values.docNumber))
         errors.docNumber = "Must be a valid document number";
       if (values.phone.length <= 10)
-        errors.phone = "Must be a valid phone number";
+        errors.phone = "Must be a valid phone number, include country/area code";
       if (!values.birth || !mayority(values.birth))
         errors.birth = "Must be over 18 years old";
       if (
@@ -104,29 +105,37 @@ export default FirstPageForm = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView>
-      <KeyboardAwareScrollView>
-        <Container>
-          <Header>
-            <Left>
+    <Container style={styles.container}>
+      <SafeAreaView>
+        <KeyboardAwareScrollView>
+          <Header transparent style={styles.header}>
+            <Left style={{ flex: 1 }}>
               <Button transparent onPress={() => navigation.goBack()}>
-                <Icon name="arrow-back" />
+                <Icon style={{ color: "black" }} name="arrow-back" />
               </Button>
             </Left>
-            <Body>
-              <Title style={{ alignSelf: "center" }}>PERSONAL INFO</Title>
+            <Body style={{ flex: 3 }}>
+              <Title style={styles.headerTitle}>STEP 1/3</Title>
             </Body>
-            <Right>
-              <Button transparent onPress={confirmCancel}>
-                <Text>Cancel</Text>
+            <Right style={{ flex: 1.5 }}>
+              <Button style={{ flex: 1 }} transparent onPress={confirmCancel}>
+                <Text style={styles.headerText}>Cancel</Text>
               </Button>
             </Right>
           </Header>
 
-          <Form style={{ paddingHorizontal: 20 }}>
+          <Form style={styles.form}>
+            <View style={styles.logoView}>
+              <Image
+                source={require("../assets/henryLogoBlack.jpg")}
+                style={styles.logoImg}
+              />
+              <Text style={styles.logoViewText}>Personal Information</Text>
+            </View>
             <Item
               floatingLabel
               error={touched.name && errors.name ? true : false}
+              style={styles.formItem}
             >
               <Label>Name</Label>
               <Input
@@ -145,7 +154,6 @@ export default FirstPageForm = ({ navigation }) => {
                   })
                 }
                 value={values.name}
-                // style={{marginVertical: -5}}
                 // placeholderTextColor={focus.name ? 'red' : 'blue'}
                 // placeHolderTextStyle={}
                 // placeHolderText={{marginVertical:100}}
@@ -168,6 +176,7 @@ export default FirstPageForm = ({ navigation }) => {
             </Text>
 
             <Item
+              style={styles.formItem}
               floatingLabel
               error={touched.surname && errors.surname ? true : false}
             >
@@ -207,24 +216,18 @@ export default FirstPageForm = ({ navigation }) => {
               {touched.surname && errors.surname}
             </Text>
 
-            <Item>
-              <Picker
-                onValueChange={(value) => {
-                  if (value !== 0) setFieldValue("docType", value);
-                }}
+            <Item style={styles.formItem}>
+            <Picker
+                onValueChange={(value) => {if (value !== 0) setFieldValue("docType", value)}}
                 selectedValue={values.docType}
-                style={{ marginVertical: -10 }}
               >
-                <Picker.Item
-                  label="Please select a document type..."
-                  value="0"
-                />
+                <Picker.Item label='Please select a document type...' value='0' />
                 <Picker.Item label="DNI" value="dni" />
                 <Picker.Item label="Passport" value="passport" />
               </Picker>
             </Item>
-
             <Item
+              style={styles.formItem}
               floatingLabel
               error={touched.docNumber && errors.docNumber ? true : false}
             >
@@ -264,9 +267,10 @@ export default FirstPageForm = ({ navigation }) => {
             </Text>
 
             <Item
-              style={{ marginTop: 10, marginBottom: 0 }}
+              style={styles.formItem}
               error={touched.birth && errors.birth ? true : false}
             >
+              <Text>Selected date:</Text>
               <DatePicker
                 defaultDate={new Date(2020, 6, 6)}
                 maximumDate={new Date(2020, 6, 6)}
@@ -275,7 +279,7 @@ export default FirstPageForm = ({ navigation }) => {
                 modalTransparent={false}
                 animationType={"fade"}
                 androidMode={"default"}
-                placeHolderText="Select birthdate"
+                placeHolderText="Touch here to select a date.."
                 textStyle={{ color: "black" }}
                 placeHolderTextStyle={{ color: "#d3d3d3" }}
                 onDateChange={(date) =>
@@ -283,7 +287,6 @@ export default FirstPageForm = ({ navigation }) => {
                 }
                 disabled={false}
               />
-              <Text>Date: {values.birth}</Text>
             </Item>
             <Text
               style={{
@@ -296,6 +299,7 @@ export default FirstPageForm = ({ navigation }) => {
             </Text>
 
             <Item
+              style={styles.formItem}
               floatingLabel
               error={touched.phone && errors.phone ? true : false}
             >
@@ -335,6 +339,7 @@ export default FirstPageForm = ({ navigation }) => {
             </Text>
 
             <Item
+              style={styles.formItem}
               floatingLabel
               error={touched.email && errors.email ? true : false}
             >
@@ -367,7 +372,6 @@ export default FirstPageForm = ({ navigation }) => {
             >
               {touched.email && errors.email}
             </Text>
-
             <Button
               onPress={handleSubmit}
               disabled={
@@ -384,11 +388,11 @@ export default FirstPageForm = ({ navigation }) => {
                   : styles.buttonDisabled
               }
             >
-              <Text>CONTINUAR</Text>
+              <Text>NEXT</Text>
             </Button>
           </Form>
-        </Container>
-      </KeyboardAwareScrollView>
-    </SafeAreaView>
+        </KeyboardAwareScrollView>
+      </SafeAreaView>
+    </Container>
   );
 };
