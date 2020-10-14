@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 // import { getUserLogged } from "./redux/actions/authActions";
 import store from "./redux/store";
+// import Index from "./components";
+import * as Font from 'expo-font';
 import Index from "./components";
-import * as Font from "expo-font";
 
 export default function App() {
   useEffect(() => {
