@@ -21,7 +21,7 @@ module.exports = (sequelize) => {
       },
       password: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         set(value) {
           const rSalt = this.randomSalt();
           this.setDataValue("salt", rSalt);
@@ -36,14 +36,17 @@ module.exports = (sequelize) => {
         allowNull: false,
         set(value) {
           const rSalt = this.randomSalt();
-          this.setDataValue("salt", rSalt);
+          this.setDataValue("passcodeSalt", rSalt);
           this.setDataValue(
             "passcode",
-            crypto.createHmac("sha1", this.salt).update(value).digest("hex")
+            crypto.createHmac("sha1", this.passcodeSalt).update(value).digest("hex")
           );
         },
       },
       salt: {
+        type: DataTypes.STRING,
+      },
+      passcodeSalt: {
         type: DataTypes.STRING,
       },
       docType: {
@@ -95,7 +98,10 @@ module.exports = (sequelize) => {
       isVerified: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
-      }
+      },
+      resetToken: {
+        type: DataTypes.STRING,
+      },
     },
     {
       paranoid: true,
