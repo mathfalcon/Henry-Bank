@@ -77,5 +77,26 @@ const isNotVerified = async (req, res, next) => {
     }
 };
 
+// const msg = {
+//     template_id: SENDGRID_TEMPLATE_ID,
+//     from: {
+//       email: SENDGRID_SENDER_EMAIL,
+//       name: SENDGRID_SENDER_NAME,
+//     },
+//     personalizations: [
+//       {
+//         to: [
+//           {
+//             email: order[0].user.email,
+//           },
+//         ],
+//         dynamic_template_data: {
+//           order: order[0].products,
+//           subject: `Tu orden con ID ${order[0].id} está en camino`,
+//         },
+//       },
+//     ],
+//   };
+
 
 module.exports = { register, verifyEmail, isNotVerified };

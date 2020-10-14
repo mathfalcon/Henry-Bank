@@ -67,7 +67,7 @@ server.post("/users/create", (req, res, next) => {
         subject: 'Henry Bank - Verify email',
         text: `
             Hello ${userCreated.name}, thanks for registering on our virtual Bank.
-            Please copy and paste the address below to verify your account.
+            Please copy and paste in your browser the address below to verify your account.
             http://${req.headers.host}/verify-email?token=${userCreated.emailToken}
         `,
         html: `
@@ -98,6 +98,25 @@ server.put("/users/update/:id", (req, res, next) => {
     .then(user => { user.update({ email, password, passcode, docType, docNumber, name, surname, birth, phone, street, streetNumber, locality, state, country, role }) })
     .then((updatedUser) => res.send({ success: true, message: "Updated User: ", updatedUser }))
     .catch((err) => res.status(400).send({ success: false, message: "Something went wrong: ", err }));
+});
+
+// Reset password
+server.put("/users/reset_password", async (req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { resetToken: req.query.token}  });
+    if(!user) {
+      res.send({ success: false, message: "Token is invalid. Please contact us for assistance."});
+      return res.redirect('/');
+    }
+    user.password = req.body.password;
+    user.resetToken = null;
+    await user.save();
+    res.send({ success: true, message: `${user.name}, your password has been changed successfully`});
+  } catch (error) {
+    console.log(error);
+    res.send({ success: false, message: "Something went wrong. Please contact us for assistance.", error })
+    res.redirect('/');
+  }
 });
 
 /////////////////
