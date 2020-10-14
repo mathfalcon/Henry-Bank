@@ -22,7 +22,6 @@ server.get("/transactions", (req, res, next) => {
         .then((transactions) => { res.send({ success: true, message: "transactions list: ", transactions }) })
         .catch((err) => res.status(400).send({ success: false, message: "Something went wrong: ", err }));
 });
-
 // Route for getting user income
 server.get("/transactions/income/:userId", (req, res, next) => {
     Account.findOne({ where: { userId: req.params.userId } })
@@ -58,11 +57,24 @@ server.get("/transactions/outcome/:userId", (req, res, next) => {
 ////////////////
 
 // Route for posting a 'created' transaction
-server.post("/transaction/:sender/to/:receiver", (req, res, next) => {
+server.post("/transactions/:sender/to/:receiver", (req, res, next) => {
     const { amount, message } = req.body;
-    Transaction.create({ sender: req.params.sender, receiver: req.params.receiver, amount, message, state: 'created' })
-        .then(transactionCreated => { res.send({ success: true, message: "Transaction Created: ", transactionCreated }) })
-        .catch((err) => res.status(400).send({ success: false, message: "Something went wrong: ", err }));
+    Promise.all([
+        Account.findByPk(req.params.sender), // Search for the account that sends the money
+        Account.findByPk(req.params.receiver) // Search for the account that receives the money
+    ])
+        .then(acc => {
+            (Number(acc[0].balance) >= amount) ? // It verifies that has sufficient funds
+                Promise.all([
+                    acc[0].update({ balance: Number(acc[0].balance) - amount }),  // extract the money from sender account
+                    acc[1].update({ balance: Number(acc[1].balance) + amount })   // deposit the money into receiver account
+                ]).then((accUpd) => {
+                    Transaction.create({ sender: req.params.sender, receiver: req.params.receiver, amount, message, state: 'complete' })
+                        .then(transactionCreated => { res.send({ success: true, message: "Transaction Completed: ", transactionCreated, sender: accUpd[0], receiver: accUpd[1] }) })
+                        .catch((err) => res.status(400).send({ success: false, message: "Something went wrong: ", err }));
+                }) :
+                res.status(400).send({ success: false, message: "insufficient funds" })
+        });
 });
 
 /////////////////
@@ -70,20 +82,20 @@ server.post("/transaction/:sender/to/:receiver", (req, res, next) => {
 /////////////////
 
 // Route for changing the state of a transaction
-server.patch("/transaction/:id/inProcess", (req, res, next) => {
+server.patch("/transactions/:id/inProcess", (req, res, next) => {
     Transaction.findByPk(req.params.id) // let's find if the transaction exists
         .then(transaction => {
             Account.findByPk(transaction.sender) // Search for the account that sends the money
                 .then(account => {
                     res.send({ success: true, message: "response: ", account })
 
-                    // (Number(account.balance) >= transaction.amount) ? // It verifies that has sufficient funds
-                    //   account.update({ balance: Number(account.balance) - transaction.amount })  // takes away the money from his account
-                    //     .then((accUpdated) => {
-                    //       transaction.update({ state: "inProcess" })
-                    //         .then(transaction => res.send({ success: true, message: "Transaction inProcess : ", transaction, accUpdated }))
-                    //     }) :
-                    //   res.status(400).send({ success: false, message: "insufficient funds" })
+                        (Number(account.balance) >= transaction.amount) ? // It verifies that has sufficient funds
+                        account.update({ balance: Number(account.balance) - transaction.amount })  // takes away the money from his account
+                            .then((accUpdated) => {
+                                transaction.update({ state: "inProcess" })
+                                    .then(transaction => res.send({ success: true, message: "Transaction inProcess : ", transaction, accUpdated }))
+                            }) :
+                        res.status(400).send({ success: false, message: "insufficient funds" })
                 })
         })
         .catch((err) => res.status(400).send({ success: false, message: "Something went wrong: ", err }));
