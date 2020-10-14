@@ -3,13 +3,13 @@ import { Container, Header, Content, List, ListItem, Text, Left, Right, Icon, Da
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
-import { getAccountHistory } from "../redux/actions/accountAction";
+import { getAccountHistory } from "../redux/actions/accountActions";
 import styles from "../Styles/historyStyles.js";
 
 export default AccountHistory = () => {
 
     const dispatch = useDispatch();
-    // const accountHistory = useSelector((state) => state.accountHistory);
+    // const accountHistory = useSelector((state) => state.accountInfo);
 
 // ver como diferenciar envios y cargas / saldo positivo y saldo negativo
     const accountHistory = [

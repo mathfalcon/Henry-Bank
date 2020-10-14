@@ -119,7 +119,12 @@ export default Contacts = ({ navigation }) => {
 
   const renderHiddenItem = (data, rowMap) => (
     <View style={styles.rowBack}>
-      <Text>...Hi</Text>
+      <TouchableOpacity        
+        onPress={() => navigation.navigate('sendMoney', data.item.key)}
+      >
+        <Text>Send Money</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnLeft]}
         onPress={() => closeRow(rowMap, data.item.key)}
