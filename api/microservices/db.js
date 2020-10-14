@@ -70,6 +70,14 @@ User.prototype.checkPassword = function (password) {
       .digest("hex") === this.password
   )
 };
+User.prototype.checkPasscode = function (passcode) {
+  return (
+    crypto
+      .createHmac("sha1", this.salt)
+      .update(passcode)
+      .digest("hex") === this.passcode
+  )
+};
 User.prototype.randomSalt = function () {
   return crypto.randomBytes(20).toString('hex');
 }

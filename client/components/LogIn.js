@@ -20,6 +20,8 @@ import axios from "axios";
 import { api } from "./Constants/constants";
 import styles from "../Styles/logInStyles";
 
+
+
 export default SignupForm = ({ navigation }) => {
   const {
     values,
@@ -41,7 +43,6 @@ export default SignupForm = ({ navigation }) => {
           email: values.user,
           password: values.password,
         });
-        console.log(response.data);
         response.data.success
           ? Alert.alert(
               "Success",
@@ -56,7 +57,7 @@ export default SignupForm = ({ navigation }) => {
             )
           : Alert.alert(
               "Error",
-              response.data.message,
+              response.data.message || response.data.info.message,
               [
                 {
                   text: "Understood",

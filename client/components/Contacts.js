@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-// import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getContactList, addContact, deleteContact, modifyContact } from "../redux/actions/contactsActions";
 import {
   TouchableOpacity,
   TouchableHighlight,
@@ -27,7 +28,6 @@ import {
 // import { SafeAreaView } from "react-native-safe-area-context";
 import { SwipeListView } from "react-native-swipe-list-view";
 import styles from "../Styles/contactsStyles";
-import MenuOperation from "./MenuOperation";
 
 export default Contacts = ({ navigation }) => {
   const [input, setInput] = useState({
@@ -39,49 +39,57 @@ export default Contacts = ({ navigation }) => {
     email: false,
   });
   const [listData, setListData] = useState();
-  const [modifyContact, setModifyContact] = useState(false);
+  const [modify, setModify] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
-  useEffect(
-    () =>
-      setListData(
-        Array(1)
-          .fill("")
-          .map((_, i) => ({
-            title: `Contacts`,
-            data: [
-              { name: "Simon Mignolet", email: "mignolet@gmail.com" },
-              { name: "Nathaniel Clyne", email: "clyne@gmail.com" },
-              { name: "Dejan Lovren", email: "lovren@gmail.com" },
-              { name: "Mama Sakho", email: "sakho@gmail.com" },
-              { name: "Alberto Moreno", email: "moreno@gmail.com" },
-              { name: "Emre Can", email: "can@gmail.com" },
-              { name: "Joe Allen", email: "allen@gmail.com" },
-              { name: "Phil Coutinho", email: "coutinho@gmail.com" },
-            ].map((i) => ({
-              key: `${i.email}`,
-              text: `${i.name}`,
-            })),
-          }))
-      ),
-    []
-  );
+  // const contacts = useSelector((state) => state.contacts);
+  const dispatch = useDispatch();  
+
+  const contacts = [
+    { name: "Simon Mignolet", email: "mignolet@gmail.com" },
+    { name: "Nathaniel Clyne", email: "clyne@gmail.com" },
+    { name: "Dejan Lovren", email: "lovren@gmail.com" },
+    { name: "Mama Sakho", email: "sakho@gmail.com" },
+    { name: "Alberto Moreno", email: "moreno@gmail.com" },
+    { name: "Emre Can", email: "can@gmail.com" },
+    { name: "Joe Allen", email: "allen@gmail.com" },
+    { name: "Phil Coutinho", email: "coutinho@gmail.com" },
+  ]
+  
+  useEffect(() => {
+    dispatch(getContactList());
+    setListData(
+      Array(1)
+        .fill("")
+        .map((_, i) => ({
+          title: `Contacts`,
+          data: contacts.map((i) => ({
+            key: `${i.email}`,
+            text: `${i.name}`,
+          })),
+        }))
+    )
+  }, []);
 
   const closeRow = (rowMap, rowKey) => {
     setInput({
       ...input,
       email: rowKey,
     });
-    setModifyContact(true);
+    setModify(true);
     setModalVisible(true);
-    console.log("rowKeymodify", rowKey);
+    // console.log("rowKeymodify", rowKey);
     if (rowMap[rowKey]) {
       rowMap[rowKey].closeRow();
     }
   };
 
   const deleteRow = (rowMap, rowKey) => {
-    console.log("rowKeydelete", rowKey);
+    // accion para borrar el contacto -- se le pasa el mail del contacto
+    // console.log("rowKeydelete", rowKey);    
+    dispatch(deleteContact(rowKey));
+    dispatch(getContactList());
+
     // closeRow(rowMap, rowKey);
     // const [section] = rowKey.split('.');
     // const newData = [...listData];
@@ -93,12 +101,12 @@ export default Contacts = ({ navigation }) => {
   };
 
   const onRowDidOpen = (rowKey) => {
-    console.log("This row opened", rowKey);
+    // console.log("This row opened", rowKey);
   };
 
   const renderItem = (data) => (
     <TouchableHighlight
-      onPress={() => console.log("You touched me")}
+      // onPress={() => console.log("You touched me")}
       style={styles.rowFront}
       underlayColor={"#AAA"}
     >
@@ -111,7 +119,12 @@ export default Contacts = ({ navigation }) => {
 
   const renderHiddenItem = (data, rowMap) => (
     <View style={styles.rowBack}>
-      <Text>...Hi</Text>
+      <TouchableOpacity        
+        onPress={() => navigation.navigate('sendMoney', data.item.key)}
+      >
+        <Text>Send Money</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnLeft]}
         onPress={() => closeRow(rowMap, data.item.key)}
@@ -136,7 +149,7 @@ export default Contacts = ({ navigation }) => {
     });
   };
 
-  const addContact = () => {
+  const handleContact = () => {
     const regex_email = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
     if (!input.name.trim()) return setError({ ...error, name: true });
     if (!input.email.trim() || !regex_email.test(input.email))
@@ -147,8 +160,14 @@ export default Contacts = ({ navigation }) => {
     });
 
     if (!error.name && !error.email) {
+      if( modify ) {
+        dispatch(modifyContact(input.name, input.email));
+      } else {
+        dispatch(addContact(input.name, input.email));
+      }
       Alert.alert("Se agrego el nuevo contacto");
-      setModifyContact(false);
+      dispatch(getContactList());
+      setModify(false);
       setModalVisible(!modalVisible);
       setInput({
         name: "",
@@ -214,7 +233,7 @@ export default Contacts = ({ navigation }) => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>
-              {!modifyContact ? "Add New Contact" : "Modify Contact Name"}
+              {!modify ? "Add New Contact" : "Modify Contact Name"}
             </Text>
             <Content>
               <Form>
@@ -233,7 +252,7 @@ export default Contacts = ({ navigation }) => {
                 <Item floatingLabel last>
                   <Label>Email</Label>
                   <Input
-                    disabled={modifyContact}
+                    disabled={modify}
                     name="email"
                     value={input.email}
                     onChangeText={(text) => handleChange("email", text)}
@@ -252,7 +271,7 @@ export default Contacts = ({ navigation }) => {
                         email: "",
                       });
                       setError(false);
-                      setModifyContact(false);
+                      setModify(false);
                       setModalVisible(!modalVisible);
                     }}
                   >
@@ -260,10 +279,10 @@ export default Contacts = ({ navigation }) => {
                   </TouchableHighlight>
                   <TouchableHighlight
                     style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-                    onPress={addContact}
+                    onPress={handleContact}
                   >
                     <Text style={styles.textStyle}>
-                      {!modifyContact ? "ADD" : "MODIFY"}
+                      {!modify ? "ADD" : "MODIFY"}
                     </Text>
                   </TouchableHighlight>
                 </View>

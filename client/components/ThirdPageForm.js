@@ -4,11 +4,11 @@ import { useFormik } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 // import Icon from 'react-native-vector-icons/FontAwesome5';
 import styles from "../Styles/signInStyles.js";
-import {  
+import {
   Text,
   Label,
-  Form,  
-  Item,  
+  Form,
+  Item,
   Input,
   Icon,
   Button,
@@ -22,16 +22,15 @@ import {
 import { CheckBox } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Alert } from "react-native";
+import { Alert, Image, View } from "react-native";
 import axios from "axios";
 import { api } from "./Constants/constants";
 
 export default ThirdPageForm = ({ route, navigation }) => {
-
   const personalInfo = route.params.personalInfo;
   const locationInfo = route.params.values;
 
-  const [ initialState, setInitialState ] = useState(true);
+  const [initialState, setInitialState] = useState(true);
   const [showPass, setShowPass] = useState(false);
   const [showconfirmPass, setShowconfirmPass] = useState(false);
   const [showPasscode, setShowPasscode] = useState(false);
@@ -46,15 +45,14 @@ export default ThirdPageForm = ({ route, navigation }) => {
     touched,
     handleBlur,
   } = useFormik({
-    initialValues: {      
+    initialValues: {
       password: "",
       confirmPassword: "",
       passcode: "",
       role: "client",
     },
 
-    onSubmit: async (values) => {      
-
+    onSubmit: async (values) => {
       const accountInfo = {
         email: personalInfo.email,
         password: values.password,
@@ -70,32 +68,29 @@ export default ThirdPageForm = ({ route, navigation }) => {
         locality: locationInfo.locality,
         state: locationInfo.state,
         country: locationInfo.country,
-        role: 'client',
-      }
-
-      console.log('accountInfo',accountInfo);
+        role: "client",
+      };
 
       try {
         const response = await axios.post(`${api}/users/create`, accountInfo);
         response.data.success
           ? Alert.alert(
-            "Complete",
-            'Your account has been created successfully',
-            [
-              {
-                text: "Understood",
-                onPress: () => navigation.navigate("login")
-              },
-            ],
-            { cancelable: false }
-          )
+              "Complete",
+              "Your account has been created successfully",
+              [
+                {
+                  text: "Understood",
+                  onPress: () => navigation.navigate("login"),
+                },
+              ],
+              { cancelable: false }
+            )
           : Alert.alert(
               "Error",
               response.data.message,
               [
                 {
                   text: "Understood",
-
                 },
               ],
               { cancelable: false }
@@ -113,11 +108,10 @@ export default ThirdPageForm = ({ route, navigation }) => {
         );
       }
     },
-    
-    validate: (values) => {
 
-    setInitialState(false);
-    const errors = {};    
+    validate: (values) => {
+      setInitialState(false);
+      const errors = {};
       if (!/^(?=.*\d)(?=.*[A-Za-z])[A-Za-z0-9]{5,20}$/.test(values.password))
         errors.password = "Must contain: 5-20 digits, A-Z and a-z.";
       if (values.confirmPassword !== values.password || !values.confirmPassword)
@@ -126,8 +120,8 @@ export default ThirdPageForm = ({ route, navigation }) => {
       return errors;
     },
   });
-  
-  const confirmCancel = () =>{
+
+  const confirmCancel = () => {
     Alert.alert(
       "Cancel Registration",
       "Really want to cancel?",
@@ -135,126 +129,161 @@ export default ThirdPageForm = ({ route, navigation }) => {
         {
           text: "Yes, I'll do it later",
           onPress: () => navigation.navigate("home"),
-          style: "cancel"
+          style: "cancel",
         },
-        { text: "No, I want to continue", onPress: () => console.log("") }        
+        { text: "No, I want to continue", onPress: () => console.log("") },
       ],
       { cancelable: false }
     );
-  }
-  
+  };
+
   return (
-    <SafeAreaView>
-      <KeyboardAwareScrollView>
-                
-      <Container>
-          <Header>
-          <Left>
+    <Container style={styles.container}>
+      <SafeAreaView>
+        <KeyboardAwareScrollView>
+          <Header transparent style={styles.header}>
+            <Left>
               <Button transparent onPress={() => navigation.goBack()}>
-                <Icon name='arrow-back' />
+                <Icon style={{ color: "black" }} name="arrow-back" />
               </Button>
             </Left>
             <Body>
-            <Title style={{alignSelf:'center'}}>SECURITY INFO</Title>
+              <Title style={styles.headerText}>STEP 3/3</Title>
             </Body>
             <Right>
               <Button transparent onPress={confirmCancel}>
-                <Text>Cancel</Text>
+                <Text style={styles.headerText}>Cancel</Text>
               </Button>
             </Right>
-          </Header>  
+          </Header>
 
-          <Form style={{ paddingHorizontal: 20, paddingVertical: 15 }}>
-          
-          <Item floatingLabel error={ touched.password && errors.password ? true : false}>
-          <Label>Password</Label>
-            <Input
-              secureTextEntry={!showPass}
-              // placeholder="Password"
-              onBlur={handleBlur("password")}
-              name="password"
-              onChangeText={(text) => setFieldValue("password", text)}
-              value={values.password}
-            />
-            <Icon
-                name={showPass ? 'eye' : 'eye-slash'}
-                style={{color:"grey", fontSize:15}}
-                type= "FontAwesome5"
-                onPress={() => setShowPass(!showPass)}
-          />
-          </Item>
-          <Text style={{marginBottom: -20, alignSelf:'center', color: "#e06d6d" }}>
-            {touched.password && errors.password}
-          </Text>
-          
-          <Item floatingLabel error={ touched.confirmPassword && errors.confirmPassword ? true : false}>
-          <Label>Confirm Password</Label>
-            <Input
-              secureTextEntry={!showconfirmPass}
-              // placeholder="Confirm Password"
-              onBlur={handleBlur("confirmPassword")}
-              name="confirmPassword"
-              onChangeText={(text) => setFieldValue("confirmPassword", text)}
-              value={values.confirmPassword}
-            />
-            <Icon
-                name={showconfirmPass ? 'eye' : 'eye-slash'}
-                style={{color:"grey", fontSize:15}}
-                type= "FontAwesome5"                
-                onPress={() => setShowconfirmPass(!showconfirmPass)}
-            />
-          </Item>
-          <Text style={{marginBottom: -20, alignSelf:'center', color: "#e06d6d" }}>
-            {touched.confirmPassword && errors.confirmPassword}
-          </Text>
-
-          <Item floatingLabel error={ touched.passcode && errors.passcode ? true : false}>
-          <Label>Passcode</Label>
-            <Input
-              secureTextEntry={!showPasscode}
-              // placeholder="Passcode"
-              onBlur={handleBlur("passcode")}
-              name="passcode"
-              onChangeText={(text) => setFieldValue("passcode", text)}
-              value={values.passcode}
-            />
-            <Icon
-                name={showPasscode ? 'eye' : 'eye-slash'}
-                style={{color:"grey", fontSize:15}}
-                type= "FontAwesome5"               
-                onPress={() => setShowPasscode(!showPasscode)}
-          />
-          </Item>
-          <Text style={{marginBottom: 0, alignSelf:'center', color: "#e06d6d" }}>
-            {touched.passcode && errors.passcode}
-          </Text>
-
-          <CheckBox
-            center
-            title="I accept the Terms of Use & Privacy Policy"
-            checked={check}
-            onPress={() => setCheck(!check)}
-          />
-          <Button
-            onPress={handleSubmit}
-            disabled={ initialState || !Object.values(errors).length === 0 ? true : false}
-            block            
-            style={ initialState
-                  ?
-                    styles.buttonDisabled
-                  :
-                    Object.values(errors).length === 0
-                    ?
-                      styles.buttonEnabled
-                    :
-                      styles.buttonDisabled
-                  }
+          <Form style={styles.form}>
+            <View style={styles.logoView}>
+              <Image
+                source={require("../assets/henryLogoBlack.jpg")}
+                style={styles.logoImg}
+              />
+              <Text style={styles.logoViewText}>Security Details</Text>
+            </View>
+            <Item
+              style={styles.formItem}
+              floatingLabel
+              error={touched.password && errors.password ? true : false}
             >
-            <Text>CREATE ACCOUNT</Text>
-          </Button>
-        </Form>
-        </Container>
-      </KeyboardAwareScrollView>
-    </SafeAreaView>
+              <Label>Password</Label>
+              <Input
+                secureTextEntry={!showPass}
+                // placeholder="Password"
+                onBlur={handleBlur("password")}
+                name="password"
+                onChangeText={(text) => setFieldValue("password", text)}
+                value={values.password}
+              />
+              <Icon
+                name={showPass ? "eye" : "eye-slash"}
+                style={{ color: "grey", fontSize: 15 }}
+                type="FontAwesome5"
+                onPress={() => setShowPass(!showPass)}
+              />
+            </Item>
+            <Text
+              style={{
+                marginBottom: -20,
+                alignSelf: "center",
+                color: "#e06d6d",
+              }}
+            >
+              {touched.password && errors.password}
+            </Text>
+
+            <Item
+              style={styles.formItem}
+              floatingLabel
+              error={
+                touched.confirmPassword && errors.confirmPassword ? true : false
+              }
+            >
+              <Label>Confirm Password</Label>
+              <Input
+                secureTextEntry={!showconfirmPass}
+                // placeholder="Confirm Password"
+                onBlur={handleBlur("confirmPassword")}
+                name="confirmPassword"
+                onChangeText={(text) => setFieldValue("confirmPassword", text)}
+                value={values.confirmPassword}
+              />
+              <Icon
+                name={showconfirmPass ? "eye" : "eye-slash"}
+                style={{ color: "grey", fontSize: 15 }}
+                type="FontAwesome5"
+                onPress={() => setShowconfirmPass(!showconfirmPass)}
+              />
+            </Item>
+            <Text
+              style={{
+                marginBottom: -20,
+                alignSelf: "center",
+                color: "#e06d6d",
+              }}
+            >
+              {touched.confirmPassword && errors.confirmPassword}
+            </Text>
+
+            <Item
+              style={styles.formItem}
+              floatingLabel
+              error={touched.passcode && errors.passcode ? true : false}
+            >
+              <Label>Passcode</Label>
+              <Input
+                secureTextEntry={!showPasscode}
+                // placeholder="Passcode"
+                onBlur={handleBlur("passcode")}
+                name="passcode"
+                onChangeText={(text) => setFieldValue("passcode", text)}
+                value={values.passcode}
+              />
+              <Icon
+                name={showPasscode ? "eye" : "eye-slash"}
+                style={{ color: "grey", fontSize: 15 }}
+                type="FontAwesome5"
+                onPress={() => setShowPasscode(!showPasscode)}
+              />
+            </Item>
+            <Text
+              style={{ marginBottom: 0, alignSelf: "center", color: "#e06d6d" }}
+            >
+              {touched.passcode && errors.passcode}
+            </Text>
+
+            <CheckBox
+              center
+              title="I accept the Terms of Use & Privacy Policy"
+              checked={check}
+              onPress={() => setCheck(!check)}
+            />
+            <Button
+              dark
+              onPress={handleSubmit}
+              disabled={
+                initialState || !Object.values(errors).length === 0
+                  ? true
+                  : false
+              }
+              block
+              style={
+                initialState
+                  ? styles.buttonDisabled
+                  : Object.values(errors).length === 0
+                  ? styles.buttonEnabled
+                  : styles.buttonDisabled
+              }
+            >
+              <Text>CREATE ACCOUNT</Text>
+            </Button>
+          </Form>
+        </KeyboardAwareScrollView>
+      </SafeAreaView>
+    </Container>
   );
 };

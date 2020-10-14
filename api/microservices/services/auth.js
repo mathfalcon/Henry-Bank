@@ -123,19 +123,20 @@ server.post("/auth/reset_password", async (req, res, next) => {
     if (!user) {
       return res.status(404).send({ success: false, message: "User not found" });
     }
-    const newPassword = crypto.randomBytes(4).toString('hex');
-    user.password = newPassword;
+    const newResetToken = crypto.randomBytes(64).toString('hex');
+    user.resetToken = newResetToken;
     await user.save();
     const msg = {
       from: 'bankhenry7@gmail.com',
       to: user.email,
       subject: 'Henry Bank - Reset Password',
       text: `
-          Hello ${user.name}, your new password is: ${newPassword}. Please log into your account and change it.
+          Hello ${user.name}, please copy and paste in your browser the address below to change your password: 
+          http://${req.headers.host}/users/reset_password?token=${newResetToken}
       `,
       html: `
           <h1>Hello ${user.name},</h1>
-          <p>Your new password is: <strong> ${newPassword} </strong>. Please log into your account and change it.</p>
+          <a href="http://${req.headers.host}/users/reset_password?token=${newResetToken}">Please click here to reset your password</a>
       `
     }
     await sgMail.send(msg);

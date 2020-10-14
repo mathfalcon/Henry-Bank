@@ -33,8 +33,20 @@ module.exports = (sequelize) => {
       },
       passcode: {
         type: DataTypes.STRING,
+        allowNull: false,
+        set(value) {
+          const rSalt = this.randomSalt();
+          this.setDataValue("passcodeSalt", rSalt);
+          this.setDataValue(
+            "passcode",
+            crypto.createHmac("sha1", this.passcodeSalt).update(value).digest("hex")
+          );
+        },
       },
       salt: {
+        type: DataTypes.STRING,
+      },
+      passcodeSalt: {
         type: DataTypes.STRING,
       },
       docType: {
@@ -86,7 +98,10 @@ module.exports = (sequelize) => {
       isVerified: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
-      }
+      },
+      resetToken: {
+        type: DataTypes.STRING,
+      },
     },
     {
       paranoid: true,
