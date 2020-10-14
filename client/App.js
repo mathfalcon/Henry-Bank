@@ -11,14 +11,11 @@ export default function App() {
       await Font.loadAsync({
         Roboto: require("native-base/Fonts/Roboto.ttf"),
         Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
-        Microgramma: require("./assets/fonts/Microgramma.ttf"),
       }))();
   }, []);
 
-  Font.useFonts({
-    Microgramma: require("./assets/fonts/Microgramma.ttf"),
-  });
-  
+
+
   return (
     <Provider store={store}>
       <Index />

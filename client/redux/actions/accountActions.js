@@ -24,7 +24,7 @@ export const verifyFunds = ( accountSender ) => {
   };
 };
 
-export const sendMoney = ( accountSender, accountReceiver ) => {
+export const sendMoneyAction = ( accountSender, accountReceiver ) => {
   return function (dispatch) {
     axios
     // cambiar por la ruta para verificar el saldo de la cuenta

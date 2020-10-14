@@ -97,8 +97,8 @@ server.post("/users/create", (req, res, next) => {
         `
       }
       sgMail.send(msg);
+      console.log('Email Sent')
       Account.create({ userId: userCreated.id }).then(accCreated => res.send({ success: true, message: "Thanks for registering. Please check your email to verify your account.", userCreated, accCreated}))
-      Account.create({ userId: userCreated.id }).then(accCreated => res.send({ success: true, message: "User and Account Created: ", userCreated, accCreated }))
     })
     .catch((err) => {
       console.log(err)

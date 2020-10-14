@@ -11,13 +11,13 @@ import ForgotPass from "./ForgotPass";
 import Position from "./Position";
 import Contacts from "./Contacts";
 import AccountHistory from "./AccountHistory";
-import SendMoney from "./SendMoney";
 // import CardPosition from "./components/CardPosition";
 // import MenuOperation from "./components/MenuOperation";
 // import Transaction from "./components/Transaction";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserLogged } from "../redux/actions/authActions";
 import { SafeAreaView } from "react-native-safe-area-context";
+import SendMoney from './SendMoney';
 
 const Stack = createStackNavigator();
 

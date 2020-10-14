@@ -16,7 +16,7 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CheckBox } from "react-native-elements";
-import { verifyFunds, sendMoney } from "../redux/actions/accountActions";
+import { verifyFunds, sendMoneyAction } from "../redux/actions/accountActions";
 import { getContactList } from "../redux/actions/contactsActions";
 import styles from "../Styles/sendMoneyStyles.js";
 import { Alert } from "react-native";

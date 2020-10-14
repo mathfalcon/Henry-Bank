@@ -16,9 +16,16 @@ import { api } from "./Constants/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserLogged } from "../redux/actions/authActions";
 import { StatusBar } from "expo-status-bar";
+import { loadAsync } from "expo-font";
 
 function Home({ navigation }) {
   const userLogged = useSelector((state) => state.auth);
+
+  loadAsync({
+    // Load a font `Microgramma` from a static resource
+    Microgramma: require('../assets/fonts/Microgramma.ttf')
+  });
+  
   return (
     <SafeAreaView style={styles.mainContainer}>
       {userLogged.success ? (
@@ -31,7 +38,7 @@ function Home({ navigation }) {
               width: "100%",
             }}
           >
-            <StatusBar hidden/>
+            <StatusBar hidden></StatusBar>
             <View style={styles.logoContainer}>
               <Image
                 source={require("../assets/henryLogoBlack.jpg")}

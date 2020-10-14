@@ -1,5 +1,8 @@
 import React from "react";
-import { createStackNavigator, CardStyleInterpolators, } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+} from "@react-navigation/stack";
 import FirstPageForm from "./FirstPageForm";
 import SecondPageForm from "./SecondPageForm";
 import ThirdPageForm from "./ThirdPageForm";
@@ -9,29 +12,20 @@ import ThirdPageForm from "./ThirdPageForm";
 const Stack = createStackNavigator();
 
 export default function SignupForm() {
-  return (          
-        <Stack.Navigator
-          headerMode="none"
-          screenOptions={{               
-            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          }}
-        >               
-          <Stack.Screen
-            name="first"
-            component={FirstPageForm}
-          />
+  return (
+    <Stack.Navigator
+      headerMode="none"
+      screenOptions={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }}
+    >
+      <Stack.Screen name="first" component={FirstPageForm} />
 
-        <Stack.Screen
-          name="second"
-          component={SecondPageForm}
-        />
-        
-        <Stack.Screen
-          name="third" 
-          component={ThirdPageForm}
-        />
-        
-        {/* <Stack.Screen
+      <Stack.Screen name="second" component={SecondPageForm} />
+
+      <Stack.Screen name="third" component={ThirdPageForm} />
+
+      {/* <Stack.Screen
           name="takePhoto"
           component={TakePhoto}
           options={{
@@ -52,7 +46,6 @@ export default function SignupForm() {
             },
           }}
         /> */}
-                
-        </Stack.Navigator>      
+    </Stack.Navigator>
   );
 }

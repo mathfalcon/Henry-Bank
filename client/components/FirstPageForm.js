@@ -76,7 +76,8 @@ export default FirstPageForm = ({ navigation }) => {
       if (!/^(?=.*\d)[0-9]{8,10}$/.test(values.docNumber))
         errors.docNumber = "Must be a valid document number";
       if (values.phone.length <= 10)
-        errors.phone = "Must be a valid phone number, include country/area code";
+        errors.phone =
+          "Must be a valid phone number, include country/area code";
       if (!values.birth || !mayority(values.birth))
         errors.birth = "Must be over 18 years old";
       if (
@@ -217,11 +218,16 @@ export default FirstPageForm = ({ navigation }) => {
             </Text>
 
             <Item style={styles.formItem}>
-            <Picker
-                onValueChange={(value) => {if (value !== 0) setFieldValue("docType", value)}}
+              <Picker
+                onValueChange={(value) => {
+                  if (value !== 0) setFieldValue("docType", value);
+                }}
                 selectedValue={values.docType}
               >
-                <Picker.Item label='Please select a document type...' value='0' />
+                <Picker.Item
+                  label="Please select a document type..."
+                  value="0"
+                />
                 <Picker.Item label="DNI" value="dni" />
                 <Picker.Item label="Passport" value="passport" />
               </Picker>
@@ -373,6 +379,7 @@ export default FirstPageForm = ({ navigation }) => {
               {touched.email && errors.email}
             </Text>
             <Button
+              dark
               onPress={handleSubmit}
               disabled={
                 initialState || !Object.values(errors).length === 0
