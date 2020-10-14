@@ -51,6 +51,11 @@ function Home({ navigation }) {
               title="SIGN UP"
               onPress={() => navigation.navigate("sign")}
             />
+            <CustomButton
+              style={styles.buttonSignUp}
+              title="TEST RECHARGE"
+              onPress={() => navigation.navigate("recharge")}
+            />
             <TouchableOpacity>
               <Text style={styles.supportText}>Need support?</Text>
             </TouchableOpacity>
