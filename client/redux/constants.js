@@ -9,3 +9,15 @@ export const resetPass = "RESET_PASS";
 
 // para la validación del domicilio en el signUpFrom
 export const validateAddress = "VALIDATE_ADDRESS";
+
+// historial de cuenta
+export const accountHistory = "ACCOUNT_HISTORY";
+
+// CONTACTS
+export const getContactList = "GET_CONTACT_LIST";
+
+export const addContact = "ADD_CONTACT";
+
+export const deleteContact = "DELETE_CONTACT";
+
+export const modifyContact = "MODIFY_CONTACT";

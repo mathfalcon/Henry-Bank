@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 // import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
@@ -8,6 +9,8 @@ import LogIn from "./LogIn";
 import SignupForm from "./SignupForm";
 import ForgotPass from "./ForgotPass";
 import Position from "./Position";
+import Contacts from "./Contacts";
+import AccountHistory from "./AccountHistory";
 // import CardPosition from "./components/CardPosition";
 // import MenuOperation from "./components/MenuOperation";
 // import Transaction from "./components/Transaction";
@@ -30,6 +33,9 @@ export default function Index() {
           <Stack.Screen name="login" component={LogIn} />
           <Stack.Screen name="sign" component={SignupForm} />
           <Stack.Screen name="forgotPass" component={ForgotPass} />
+          <Stack.Screen name="contacts" component={Contacts} />
+          <Stack.Screen name="account" component={AccountHistory} />
+          
           {/* <Stack.Screen name="cardPosition" component={CardPosition} />
           <Stack.Screen name="menuOp" component={MenuOperation} />
           <Stack.Screen name="transaction" component={Transaction} />           */}

@@ -29,7 +29,7 @@ import { api } from "./Constants/constants";
 export default ThirdPageForm = ({ route, navigation }) => {
 
   const personalInfo = route.params.personalInfo;
-  const locationInfo = route.params.locationInfo;
+  const locationInfo = route.params.values;
 
   const [ initialState, setInitialState ] = useState(true);
   const [showPass, setShowPass] = useState(false);
@@ -65,15 +65,15 @@ export default ThirdPageForm = ({ route, navigation }) => {
         surname: personalInfo.surname,
         birth: personalInfo.birth,
         phone: personalInfo.phone,
-        street: locationInfo[1],
-        streetNumber: locationInfo[0],
-        locality: locationInfo[4],
-        state: locationInfo[7],
-        country: locationInfo[9],
+        street: locationInfo.street,
+        streetNumber: locationInfo.streetNumber,
+        locality: locationInfo.locality,
+        state: locationInfo.state,
+        country: locationInfo.country,
         role: 'client',
       }
 
-      // console.log('accountInfo',accountInfo);
+      console.log('accountInfo',accountInfo);
 
       try {
         const response = await axios.post(`${api}/users/create`, accountInfo);
