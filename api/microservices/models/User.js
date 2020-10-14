@@ -21,7 +21,7 @@ module.exports = (sequelize) => {
       },
       password: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
         set(value) {
           const rSalt = this.randomSalt();
           this.setDataValue("salt", rSalt);
@@ -33,6 +33,15 @@ module.exports = (sequelize) => {
       },
       passcode: {
         type: DataTypes.STRING,
+        allowNull: false,
+        set(value) {
+          const rSalt = this.randomSalt();
+          this.setDataValue("salt", rSalt);
+          this.setDataValue(
+            "passcode",
+            crypto.createHmac("sha1", this.salt).update(value).digest("hex")
+          );
+        },
       },
       salt: {
         type: DataTypes.STRING,
