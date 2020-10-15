@@ -12,7 +12,7 @@ export default MenuOperation = ({navigation}) => {
               <Text style={{ color: 'white' }}>Apps</Text>
             </Button>
             <Button vertical>
-              <Icon name="card" style={{ color: 'white' }}/>
+              <Icon name="card" onPress={() => navigation.navigate('myCards')} style={{ color: 'white' }}/>
               <Text style={{ color: 'white' }}>Cards</Text>
             </Button>
             <Button
