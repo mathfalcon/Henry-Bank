@@ -107,8 +107,8 @@ useEffect(() => {
           </View>
         </Container>
       ) : (
-        <View>
-          <Text style={{color: 'white'}}>Wait for data to reload</Text>
+        <View style={{display: 'flex', flex:1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={{color: 'white'}}>Wait for data to load...</Text>
         </View>
       )}
     </SafeAreaView>

@@ -25,10 +25,7 @@ server.post("/register", async function (req, res) {
   const host = req.headers.host;
 
   const msg = {
-    from: {
-      email: "bankhenry7@gmail.com",
-      name: "Henry Bank",
-    },
+    from: "bankhenry7@gmail.com",
     to: email,
     subject: "Henry Bank - Verify email",
     text: `

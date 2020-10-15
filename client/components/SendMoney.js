@@ -41,8 +41,6 @@ export default SendMoney = ({ navigation, route }) => {
 
     const dispatch = useDispatch();    
     
-    console.log('userLogged.user.account.balance', userLogged.user.account.balance);
-    console.log('userLogged.user.id', userLogged.user.id);    
     
     useEffect(()=>{
       if(route.params){
@@ -58,17 +56,7 @@ export default SendMoney = ({ navigation, route }) => {
         // dispatch(verifyFunds())                
     // , []);
 
-    const contacts = [
-        { name: "Simon Mignolet", email: "mignolet@gmail.com" },
-        { name: "Nathaniel Clyne", email: "clyne@gmail.com" },
-        { name: "Dejan Lovren", email: "lovren@gmail.com" },
-        { name: "Mama Sakho", email: "sakho@gmail.com" },
-        { name: "Alberto Moreno", email: "moreno@gmail.com" },
-        { name: "Emre Can", email: "can@gmail.com" },
-        { name: "Joe Allen", email: "allen@gmail.com" },
-        { name: "Phil Coutinho", email: "coutinho@gmail.com" },
-      ]
-
+    const userContacts = useSelector((state) => state.contacts.contacts);
     const handleSubmit = () => {
         
         if (inputMoney === '' || selectContact === '') return setError(true);    
@@ -115,9 +103,9 @@ export default SendMoney = ({ navigation, route }) => {
                     onValueChange={setSelectContact}
                     itemStyle={styles.pickerItem}                        
                 >                    
-                <Picker.Item label='Select a Contact...' value='' />                    
-                { contacts.map( (e, key) => (                        
-                    <Picker.Item label={e.name} value={e.email} key={key} />                        
+                <Picker.Item label={userContacts.length < 1 ? 'You need at least one contact to send money': 'Select a Contact...'} value='' />                    
+                { userContacts.map( (e, key) => (                        
+                    <Picker.Item label={e.alias} value={e.user.email} key={key} />                        
                 ))}                        
                 </Picker>
             </View>
