@@ -1,43 +1,47 @@
-import * as C from '../constants'
+import * as C from "../constants";
 import axios from "axios";
 import { api } from "../../components/Constants/constants";
 
-export const getContactList = () => {    
+export const getContactList = (id) => {
+  return function (dispatch) {
+    axios(`${api}/contacts/${id}`).then((response) => {
+      dispatch({ type: C.getContactList, payload: response.data });
+    });
+  };
+};
+
+export const addContact = (contactName, contactEmail, userId) => {
   return function (dispatch) {
     axios
-      .post(`${api}/contacts`,userData)
+      .post(`${api}/contacts/create`, {
+        userId,
+        alias: contactName,
+        emailOfContact: contactEmail,
+      })
       .then((response) => {
-        dispatch({ type: C.getContactList, payload: 'response.data' });
+        dispatch({ type: C.addContact, payload: response.data });
       });
   };
 };
 
-export const addContact = (contactName, contactEmail) => {    
-    return function (dispatch) {
-    //   axios
-    //     .post(`${api}/users/create`,userData)
-    //     .then((response) => {
-          dispatch({ type: C.addContact, payload: 'response.data' });
-    //     });
-    };
+export const deleteContact = (id) => {
+  return function (dispatch) {
+    axios
+      .delete(`${api}/contacts/delete/${id}`)
+      .then((response) => {
+        dispatch({ type: C.deleteContact, payload: response.data });
+      })
   };
-
-export const deleteContact = (contactEmail) => {    
-    return function (dispatch) {
-    //     axios
-    //     .post(`${api}/users/create`,userData)
-    //     .then((response) => {
-            dispatch({ type: C.deleteContact, payload: 'response.data' });
-        // });
-    };
 };
 
-export const modifyContact = (contactName, contactEmail) => {    
-    return function (dispatch) {
-    //     axios
-    //     .post(`${api}/users/create`,userData)
-    //     .then((response) => {
-            dispatch({ type: C.modifyContact, payload: 'response.data' });
-        // });
-    };
+export const modifyContact = (contactName, id) => {
+  return function (dispatch) {
+    axios
+      .put(`${api}/contacts/update/${id}`, {
+        alias: contactName,
+      })
+      .then((response) => {
+        dispatch({ type: C.modifyContact, payload: response.data });
+      });
+  };
 };

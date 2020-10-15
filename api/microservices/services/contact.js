@@ -1,5 +1,5 @@
 const express = require("express");
-const { Contact } = require("../db.js");
+const { User, Contact, Account } = require("../db.js");
 const server = express();
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
@@ -20,7 +20,16 @@ server.use(morgan("dev")); // Intializing console logger middleware for HTTP req
 
 // Route for getting all contacts
 server.get("/contacts", (req, res, next) => {
-  Contact.findAll({ include: [{ model: Account }] })
+  Contact.findAll({
+    include: [
+      {
+        model: User,
+        as: "user",
+        attributes: ["email", "id"],
+        include: Account,
+      },
+    ]
+  })
     .then((contacts) => {
       res.send({ success: true, message: "Contacts list: ", contacts });
     })
@@ -31,29 +40,48 @@ server.get("/contacts", (req, res, next) => {
     );
 });
 
-// Route for getting a specific contact
-server.get("/contacts/:id", (req, res, next) => {
-  Contact.findByPk(req.params.id, { include: [{ model: Account }] })
-    .then((contact) => {
-      contact
-        ? res.send({ success: true, message: "Contact: ", contact })
+// Route for getting the contacts of a specific user
+server.get("/contacts/:userId", (req, res, next) => {
+  const { userId } = req.params;
+  Contact.findAll({
+    where: {
+      userId,
+    },
+    include: [
+      {
+        model: User,
+        as: "user",
+        attributes: ["email", "id"],
+        include: Account,
+      },
+    ],
+  })
+    .then((contacts) => {
+      contacts
+        ? res.send({ success: true, message: `Contacts of userID ${userId} `, contacts })
         : res.send({ success: false, message: "Contact not found" });
     })
-    .catch((err) =>
+    .catch((err) => {
+      console.log(err);
       res
         .status(400)
-        .send({ success: false, message: "Something went wrong: ", err })
-    );
+        .send({ success: false, message: "Something went wrong: ", err });
+    });
 });
 
 ////////////////
 // ROUTES /POST/
 ////////////////
 
-// Route for posting a new contact
-server.post("/contacts/create", (req, res, next) => {
-  const { email, name, surname, nickname, phone } = req.body;
-  Contact.create({ email, name, surname, nickname, phone })
+// Route for assigning a new contact
+server.post("/contacts/create", async (req, res, next) => {
+  const { userId, alias, emailOfContact } = req.body;
+
+  const is_contact_of = await User.findOne({
+    where: { email: emailOfContact },
+  });
+
+  Contact.create({ userId, alias, is_contact_of: is_contact_of.id })
     .then((contactCreated) => {
       res.send({ success: true, message: "Contact created: ", contactCreated });
     })
@@ -70,10 +98,10 @@ server.post("/contacts/create", (req, res, next) => {
 
 // Route for updating a contact information
 server.put("/contacts/update/:id", (req, res, next) => {
-  const { email, name, surname, nickname, phone } = req.body;
+  const {alias} = req.body
   Contact.findByPk(req.params.id)
     .then((contact) => {
-      contact.update({ email, name, surname, nickname, phoner });
+      contact.update({alias});
     })
     .then((updatedContact) =>
       res.send({ success: true, message: "Updated contact: ", updatedContact })
@@ -90,8 +118,9 @@ server.put("/contacts/update/:id", (req, res, next) => {
 //////////////////
 
 // Route to delete a contact
-server.delete("/users/:id", (req, res) => {
-  Contact.destroy({ where: { id: req.params.id } })
+server.delete("/contacts/delete/:contactId", (req, res) => {
+  const {contactId} = req.params
+  Contact.destroy({where: {id: contactId}})
     .then((deletedRecord) => {
       if (deletedRecord === 1)
         res.send({ success: true, message: "Contact deleted" });

@@ -6,10 +6,9 @@ const initialState = {
   };
 
   function contactsReducer(state = initialState, action) { 
-      
     switch (action.type) {
       case C.getContactList: {       
-        return { ...state, contacts: action.payload };
+        return { ...state, contacts: action.payload.contacts };
       }  
     
       case C.addContact: {          

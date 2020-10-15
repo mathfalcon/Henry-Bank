@@ -58,7 +58,7 @@ Transaction.belongsTo(User, { as: 'receiver' })
 
 // Friend associations
 Contact.belongsTo(User, { foreignKey: 'userId', constraints: false });
-Contact.belongsTo(User, { foreignKey: 'is_friend_of', constraints: false });
+Contact.belongsTo(User, { foreignKey: 'is_contact_of', constraints: false });
 
 
 // Prototype methods

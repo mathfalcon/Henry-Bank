@@ -107,6 +107,7 @@ server.patch("/transactions/:id/inProcess", (req, res, next) => {
         })
         .catch((err) => res.status(400).send({ success: false, message: "Something went wrong: ", err }));
 });
+
 // Route for patching the amount of money of an account a.k.a 'illicit enrichment'
 server.patch("/transactions/enrich/:userId", (req, res, next) => {
     Account.findOne({ where: { userId: req.params.userId } })
