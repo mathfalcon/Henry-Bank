@@ -181,6 +181,7 @@ export default Contacts = ({ navigation }) => {
       <Header style={styles.header}>
         <Left>
           <Button transparent onPress={() => navigation.navigate("position")}>
+            <Icon name="arrow-back" />
             <Icon style={{ color: "black" }} name="arrow-back" />
             {/* <Text>Back</Text> */}
           </Button>
