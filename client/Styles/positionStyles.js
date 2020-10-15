@@ -40,6 +40,7 @@ export default StyleSheet.create({
   },
   menuOp: {
     flex: 1,
+    top: "2.3%"
   },
   contentButton: {
     marginLeft: "50%",
