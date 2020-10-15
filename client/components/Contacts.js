@@ -57,7 +57,7 @@ export default Contacts = ({ navigation }) => {
   ]
   
   useEffect(() => {
-    dispatch(getContactList());
+    // dispatch(getContactList());
     setListData(
       Array(1)
         .fill("")
@@ -120,7 +120,7 @@ export default Contacts = ({ navigation }) => {
   const renderHiddenItem = (data, rowMap) => (
     <View style={styles.rowBack}>
       <TouchableOpacity        
-        onPress={() => navigation.navigate('sendMoney', data.item.key)}
+        onPress={() => navigation.navigate('sendMoney', {contact: data.item.key, fromContacts: true})}
       >
         <Text>Send Money</Text>
       </TouchableOpacity>
@@ -178,15 +178,15 @@ export default Contacts = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Header>
+      <Header style={styles.header}>
         <Left>
-          <Button transparent onPress={() => navigation.navigate("menuOp")}>
-            <Icon name="arrow-back" />
+          <Button transparent onPress={() => navigation.navigate("position")}>
+            <Icon style={{ color: "black" }} name="arrow-back" />
             {/* <Text>Back</Text> */}
           </Button>
         </Left>
         <Body>
-          <Title>CONTACTS</Title>
+        <Title style={styles.headerTitle}>CONTACTS</Title>
         </Body>
         <Right>
           <Button
@@ -201,7 +201,7 @@ export default Contacts = ({ navigation }) => {
             <Icon
               name="user-plus"
               type="FontAwesome5"
-              // style={{color:"grey", fontSize:18}}
+              style={{ color: "black" }}
               // onPress={() => setShowconfirmPass(!showconfirmPass)}
             />
           </Button>
@@ -264,7 +264,7 @@ export default Contacts = ({ navigation }) => {
 
                 <View style={styles.buttoms}>
                   <TouchableHighlight
-                    style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                    style={{ ...styles.openButton, backgroundColor: "#151515" }}
                     onPress={() => {
                       setInput({
                         name: "",
@@ -278,7 +278,7 @@ export default Contacts = ({ navigation }) => {
                     <Text style={styles.textStyle}>CANCEL</Text>
                   </TouchableHighlight>
                   <TouchableHighlight
-                    style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                    style={{ ...styles.openButton, backgroundColor: '#151515' }}
                     onPress={handleContact}
                   >
                     <Text style={styles.textStyle}>

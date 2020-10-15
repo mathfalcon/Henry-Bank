@@ -4,11 +4,11 @@ import { api } from "../../components/Constants/constants";
 
 export const getContactList = () => {    
   return function (dispatch) {
-//     axios
-//       .post(`${api}/users/create`,userData)
-//       .then((response) => {
+    axios
+      .post(`${api}/contacts`,userData)
+      .then((response) => {
         dispatch({ type: C.getContactList, payload: 'response.data' });
-//       });
+      });
   };
 };
 

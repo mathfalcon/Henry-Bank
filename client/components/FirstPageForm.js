@@ -50,7 +50,7 @@ export default FirstPageForm = ({ navigation }) => {
       surname: "",
       docType: "",
       docNumber: "",
-      birth: "None",
+      birth: "",
       phone: "",
       email: "",
     },
@@ -73,12 +73,14 @@ export default FirstPageForm = ({ navigation }) => {
       if (values.name.length <= 2) errors.name = "Must be a valid name";
       if (values.surname.length <= 2)
         errors.surname = "Must be a valid surname";
+      if (values.docType === "")
+        errors.docType = "Select a document type";
       if (!/^(?=.*\d)[0-9]{8,10}$/.test(values.docNumber))
         errors.docNumber = "Must be a valid document number";
       if (values.phone.length <= 10)
         errors.phone =
           "Must be a valid phone number, include country/area code";
-      if (!values.birth || !mayority(values.birth))
+      if (values.birth === "" || !mayority(values.birth))
         errors.birth = "Must be over 18 years old";
       if (
         !values.email.trim() ||
@@ -226,12 +228,22 @@ export default FirstPageForm = ({ navigation }) => {
               >
                 <Picker.Item
                   label="Please select a document type..."
-                  value="0"
+                  value=""
                 />
                 <Picker.Item label="DNI" value="dni" />
                 <Picker.Item label="Passport" value="passport" />
               </Picker>
             </Item>
+            <Text
+              style={{
+                marginBottom: -20,
+                alignSelf: "center",
+                color: "#e06d6d",
+              }}
+            >
+              {touched.docType && errors.docType}
+            </Text>
+
             <Item
               style={styles.formItem}
               floatingLabel

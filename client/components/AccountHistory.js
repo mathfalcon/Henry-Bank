@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAccountHistory } from "../redux/actions/accountActions";
 import styles from "../Styles/historyStyles.js";
 
-export default AccountHistory = () => {
+export default AccountHistory = ({ navigation }) => {
 
     const dispatch = useDispatch();
     // const accountHistory = useSelector((state) => state.accountInfo);
@@ -40,14 +40,14 @@ export default AccountHistory = () => {
             <KeyboardAwareScrollView>
 
                 <Container>
-                    <Header>
+                    <Header style={styles.header}>
                     <Left>
-                        <Button transparent onPress={() => navigation.goBack()}>
-                        <Icon name='arrow-back' />
+                        <Button transparent onPress={() => navigation.navigate('position')}>
+                        <Icon style={{ color: "black" }} name='arrow-back' />
                         </Button>
                     </Left>
                     <Body>
-                        <Title>ACCOUNT HISTORIAL</Title>
+                    <Title style={styles.headerTitle}>ACCOUNT MOVEMENTS</Title>
                     </Body>
                     <Right />              
                     </Header>
