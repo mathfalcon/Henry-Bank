@@ -1,13 +1,13 @@
 import React from "react";
-import { View, StyleSheet, Image, Text } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { CardView } from "react-native-credit-card-input";
 import ClientCard from "./ClientCard";
 import MenuCards from "./MenuCards";
 
-function CreditCard() {
+function MyCards() {
   return (
     <View style={styles.container}>
-      <View style={styles.backMenu}>
+      <View style={styles.blackMenu}>
         <Text style={styles.title}>My Cards</Text>
       <View style={styles.menu}>
         <MenuCards/>
@@ -27,15 +27,8 @@ function CreditCard() {
           imageBack={require("../assets/cardBackOk.png")}
         />
       </View>
-
-
-      <ClientCard/>
-      {/* <Image
-        style={styles.img}
-        source={require('../assets/bgSectionCard.jpg')}
-        /> */}
+        <ClientCard/>
     </View>
-
   );
 }
 
@@ -46,16 +39,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#FBD43B",
     flex: 1,
   },
-  img: {
-    height: "120%", 
-    zIndex: 0,
-  },
   card: {
     zIndex: 2,
-    bottom: "10%"
   },
-  backMenu: {
-    bottom: "16%",
+  blackMenu: {
+    bottom: "1.2%",
     width:500,
     height: 160,
     backgroundColor: "black",
@@ -73,4 +61,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreditCard;
+export default MyCards;

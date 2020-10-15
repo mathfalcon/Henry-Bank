@@ -55,7 +55,6 @@ useEffect(() => {
               <Avatar
                 size="large"
                 icon={{ color: "black", name: "user", type: "font-awesome" }}
-                // onPress={() => console.log("Works!")}
                 activeOpacity={0.7}
                 containerStyle={{
                   backgroundColor: "#ffff6d",

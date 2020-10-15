@@ -11,7 +11,6 @@ function MenuCards() {
               <Icon name="download" style={{ color: 'white' }} />
               <Text style={{ color: 'white' }}>recharge</Text>
             </Button>
-   
             <Button vertical >
               <Icon active name="send" style={{ color: 'white' }} />
               <Text style={{ color: 'white' }}>Send</Text>
