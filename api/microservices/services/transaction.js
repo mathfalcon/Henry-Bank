@@ -1,5 +1,5 @@
 const express = require("express");
-const { Account, Transaction } = require("../db.js");
+const { Account, Transaction, User } = require("../db.js");
 const server = express();
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
@@ -58,12 +58,19 @@ server.get("/transactions/outcome/:userId", (req, res, next) => {
 
 // Route for posting a 'created' transaction
 server.post("/transactions/:sender/to/:receiver", (req, res, next) => {
-    const { amount, message } = req.body;
+    const { amount, message, passcode } = req.body;
     Promise.all([
         Account.findByPk(req.params.sender), // Search for the account that sends the money
-        Account.findByPk(req.params.receiver) // Search for the account that receives the money
+        Account.findByPk(req.params.receiver), // Search for the account that receives the money
+        User.findByPk(req.params.sender)
     ])
         .then(acc => {
+            if (!acc[2].checkPasscode(passcode)) {
+                res.send({
+                  success: false,
+                  message: "The provided actual passcode is incorrect",
+                });
+            } 
             (Number(acc[0].balance) >= amount) ? // It verifies that has sufficient funds
                 Promise.all([
                     acc[0].update({ balance: Number(acc[0].balance) - amount }),  // extract the money from sender account

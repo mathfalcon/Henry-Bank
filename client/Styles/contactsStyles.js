@@ -3,9 +3,18 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
 
    container: {
-       backgroundColor: 'white',
-       flex: 1,
+    backgroundColor: "whitesmoke",
+      flex: 1,
    },
+   header: {
+    backgroundColor: '#ffff57',
+    display: 'flex'
+  },
+  headerTitle:{
+    color:'black',
+    alignSelf: 'center',
+    width: '100%',
+  },
    backTextWhite: {
        color: '#FFF',
    },
@@ -45,7 +54,8 @@ export default StyleSheet.create({
        fontSize:12,
        color:'white',
        alignSelf:'flex-end',
-       marginRight:5,       
+       marginRight:5,
+       color: "black",    
     },
 
     centeredView: {
@@ -57,7 +67,7 @@ export default StyleSheet.create({
       modalView: {                
         height: 300,
         width: 300,
-        backgroundColor: "white",
+        backgroundColor: "whitesmoke",
         borderRadius: 20,
         padding: 25,        
         shadowColor: "#000",
@@ -71,10 +81,10 @@ export default StyleSheet.create({
       },
       buttoms:{              
         flexDirection: 'row',
-        flex: 1,             
+        flex: 1,                  
       },
       openButton: {
-        backgroundColor: "#F194FF",
+        color:'black',
         flex: .5,
         margin: 5,
         marginTop:15,
@@ -84,6 +94,7 @@ export default StyleSheet.create({
       },
       textStyle: {
         color: "white",
+        color: '#ffff57',
         fontWeight: "bold",
         textAlign: "center",       
       },

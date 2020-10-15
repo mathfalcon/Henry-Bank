@@ -15,7 +15,11 @@ export default MenuOperation = ({navigation}) => {
               <Icon name="camera" />
               <Text>Camera</Text>
             </Button>
-            <Button vertical onPress={() => navigation.navigate('accountHistory')} active style={{backgroundColor:'#ffff6d'}}>
+            <Button
+              vertical
+              active
+              style={{backgroundColor:'#ffff6d'}} 
+              onPress={() => navigation.navigate('accountHistory')}>
               <Icon style={{color:'black'}} active type='FontAwesome' name="dollar" />
               <Text style={{color:'black'}}>History</Text>
             </Button>

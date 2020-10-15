@@ -40,14 +40,14 @@ export default AccountHistory = ({ navigation }) => {
             <KeyboardAwareScrollView>
 
                 <Container>
-                    <Header>
+                    <Header style={styles.header}>
                     <Left>
-                        <Button transparent onPress={() => navigation.navigate("position")}>
-                        <Icon name='arrow-back' />
+                        <Button transparent onPress={() => navigation.navigate('position')}>
+                        <Icon style={{ color: "black" }} name='arrow-back' />
                         </Button>
                     </Left>
                     <Body>
-                        <Title>ACCOUNT HISTORIAL</Title>
+                    <Title style={styles.headerTitle}>ACCOUNT MOVEMENTS</Title>
                     </Body>
                     <Right />              
                     </Header>

@@ -24,11 +24,10 @@ export const verifyFunds = ( accountSender ) => {
   };
 };
 
-export const sendMoneyAction = ( accountSender, accountReceiver ) => {
+export const sendMoney = ( accountSender, accountReceiver ) => {
   return function (dispatch) {
-    axios
-    // cambiar por la ruta para verificar el saldo de la cuenta
-    //   .post(`${api}/users/create`,userData)
+    axios      
+      .post(`${api}/transactions/${accountSender}/to/${accountReceiver}`)
       .then((response) => {
         dispatch({ type: C.sendMoney, payload: response.data });
       });

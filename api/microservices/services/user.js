@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const sgMail = require("@sendgrid/mail");
 const crypto = require("crypto");
+const path = require('path');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 ////////////////
@@ -15,6 +16,11 @@ server.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 server.use(bodyParser.json({ limit: "50mb" }));
 server.use(cookieParser());
 server.use(morgan("dev")); // Intializing console logger middleware for HTTP requests.
+// view engine setup
+server.set('views', path.join(__dirname, '../views'));
+server.set('view engine', 'ejs');
+// render HTML files
+server.engine('html', require('ejs').renderFile);
 
 ///////////////
 // ROUTES /GET/
@@ -33,40 +39,20 @@ server.get("/users/:id", (req, res, next) => {
     .catch((err) => res.status(400).send({ success: false, message: "Something went wrong: ", err }));
 });
 //Email verification route
-server.get("/verify-email", async (req, res, next) => {
-  try {
-    const user = await User.findOne({ where: { emailToken: req.query.token}  });
-    if(!user) {
-      res.send({ success: false, message: "Token is invalid. Please contact us for assistance."});
-      return res.redirect('/');
-    }
-    user.emailToken = null;
-    user.isVerified = true;
-    await user.save();
-    res.send({ success: true, message: `Welcome to Henry Bank ${user.name}. Now you can start using your account`});
-  } catch (error) {
-    console.log(error);
-    res.send({ success: false, message: "Something went wrong. Please contact us for assistance.", error })
-    res.redirect('/');
-  }
-});
-
-//Email verification route
 server.get("/users/verification/verify-email", async (req, res, next) => {
-  console.log('holaaa')
   try {
     const user = await User.findOne({ where: { emailToken: req.query.token}  });
     if(!user) {
-      res.send({ success: false, message: "Token is invalid. Please contact us for assistance."});
+      res.render('errorToken.html');
       return res.redirect('/');
     }
     user.emailToken = null;
     user.isVerified = true;
     await user.save();
-    res.send({ success: true, message: `Welcome to Henry Bank ${user.name}. Now you can start using your account`});
+    res.render('emailVerification.html', {name: user.name});
   } catch (error) {
     console.log(error);
-    res.send({ success: false, message: "Something went wrong. Please contact us for assistance.", error })
+    res.render('error.html');
     res.redirect('/');
   }
 });
@@ -81,21 +67,27 @@ server.post("/users/create", (req, res, next) => {
   const emailToken = crypto.randomBytes(64).toString('hex');
   User.create({ email, password, passcode, docType, docNumber, name, surname, birth, phone, street, streetNumber, locality, state, country, role, emailToken })
     .then(userCreated => {
-      const msg = {
-        from: 'bankhenry7@gmail.com',
-        to: userCreated.email,
-        subject: 'Henry Bank - Verify email',
-        text: `
-            Hello ${userCreated.name}, thanks for registering on our virtual Bank.
-            Please copy and paste in your browser the address below to verify your account.
-            http://${req.headers.host}/verify-email?token=${userCreated.emailToken}
-        `,
-        html: `
-            <h1>Hello ${userCreated.name},</h1>
-            <p>Thanks for registering on our virtual Bank.</p>
-            <a href="http://${req.headers.host}/verify-email?token=${userCreated.emailToken}">Click here to verify your account</a>
-        `
-      }
+    const msg = {
+        template_id: process.env.SENDGRID_TEMPLATE_ID,
+        from: {
+          email: process.env.SENDGRID_SENDER_EMAIL,
+          name: process.env.SENDGRID_SENDER_NAME,
+        },
+        personalizations: [
+          {
+            to: [
+              {
+                email: userCreated.email,
+              },
+            ],
+            dynamic_template_data: {
+              host: req.headers.host,
+              token: userCreated.emailToken,
+              subject: "Henry Bank - Verify email"
+            },
+          },
+        ],
+      };
       sgMail.send(msg);
       console.log('Email Sent')
       Account.create({ userId: userCreated.id }).then(accCreated => res.send({ success: true, message: "Thanks for registering. Please check your email to verify your account.", userCreated, accCreated}))

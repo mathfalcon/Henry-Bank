@@ -3,7 +3,7 @@ import * as C from "../constants";
 const initialState = {
     accountHistory: [],
     funds:"",
-    responseSent:""
+    responseSent:{}
 };
 
 function accountReducer(state = initialState, action) {  
