@@ -9,8 +9,8 @@ module.exports = (sequelize) => {
     },
     type: {
         type: DataTypes.ENUM,
-        defaultValue: 'argPeso',
-        values: ['usDollar', 'argPeso']
+        defaultValue: 'AR$',
+        values: ['USD', 'AR$']
     }
   });
 };

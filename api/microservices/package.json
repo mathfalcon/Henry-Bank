@@ -22,6 +22,7 @@
     "passport": "^0.4.1",
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
+    "path": "^0.12.7",
     "pg": "^8.3.3",
     "sequelize": "^6.3.5"
   },
