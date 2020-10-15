@@ -116,7 +116,7 @@ export default ThirdPageForm = ({ route, navigation }) => {
         errors.password = "Must contain: 5-20 digits, A-Z and a-z.";
       if (values.confirmPassword !== values.password || !values.confirmPassword)
         errors.confirmPassword = "Must the same password.";
-      if (!values.passcode) errors.passcode = "Must be a valid passcode.";
+      if (!values.passcode) errors.passcode = "Enter a 4 digit passcode.";
       return errors;
     },
   });
@@ -238,6 +238,8 @@ export default ThirdPageForm = ({ route, navigation }) => {
               <Input
                 secureTextEntry={!showPasscode}
                 // placeholder="Passcode"
+                keyboardType="numeric"
+                maxLength={4}
                 onBlur={handleBlur("passcode")}
                 name="passcode"
                 onChangeText={(text) => setFieldValue("passcode", text)}

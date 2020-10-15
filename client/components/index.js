@@ -38,6 +38,8 @@ export default function Index() {
         <Stack.Screen name="forgotPass" component={ForgotPass} />
         <Stack.Screen name="contacts" component={Contacts} />
         <Stack.Screen name="recharge" component={RechargeMoney} />
+        <Stack.Screen name="sendMoney" component={SendMoney} />
+        <Stack.Screen name="accountHistory" component={AccountHistory} />
         {/* <Stack.Screen name="cardPosition" component={CardPosition} />
           <Stack.Screen name="menuOp" component={MenuOperation} />
           <Stack.Screen name="transaction" component={Transaction} />           */}

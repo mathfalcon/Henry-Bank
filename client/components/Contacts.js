@@ -180,7 +180,7 @@ export default Contacts = ({ navigation }) => {
     <View style={styles.container}>
       <Header>
         <Left>
-          <Button transparent onPress={() => navigation.navigate("menuOp")}>
+          <Button transparent onPress={() => navigation.navigate("position")}>
             <Icon name="arrow-back" />
             {/* <Text>Back</Text> */}
           </Button>

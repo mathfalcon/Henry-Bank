@@ -85,7 +85,7 @@ useEffect(() => {
             </View>
             <View style={styles.buttonsView}>
               <TouchableOpacity
-                onPress={() => console.log("pressed")}
+                onPress={() => navigation.navigate('sendMoney')}
                 style={styles.sendMoneyButton}
               >
                 <Text style={styles.sendMoneyText}>SEND MONEY</Text>

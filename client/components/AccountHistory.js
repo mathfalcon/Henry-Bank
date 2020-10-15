@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAccountHistory } from "../redux/actions/accountActions";
 import styles from "../Styles/historyStyles.js";
 
-export default AccountHistory = () => {
+export default AccountHistory = ({ navigation }) => {
 
     const dispatch = useDispatch();
     // const accountHistory = useSelector((state) => state.accountInfo);
@@ -42,7 +42,7 @@ export default AccountHistory = () => {
                 <Container>
                     <Header>
                     <Left>
-                        <Button transparent onPress={() => navigation.goBack()}>
+                        <Button transparent onPress={() => navigation.navigate("position")}>
                         <Icon name='arrow-back' />
                         </Button>
                     </Left>
