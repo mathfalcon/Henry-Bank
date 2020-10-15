@@ -25,7 +25,7 @@ import { Alert, Image, View } from "react-native";
 export default SecondPageForm = ({ route, navigation }) => {
   const [initialState, setInitialState] = useState(true);
   const { responseLocation } = useSelector((state) => state.users);
-  const personalInfo = route.params;
+  const personalInfo = route.params;  
 
   const dispatch = useDispatch();
 

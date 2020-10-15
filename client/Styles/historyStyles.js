@@ -4,7 +4,17 @@ export default StyleSheet.create({
     container:{
         display: 'flex',
         flexDirection: 'column',
+        backgroundColor: "whitesmoke",
         paddingVertical: 12,
+    },    
+    header: {
+        backgroundColor: '#ffff57',
+        display: 'flex'
+    },
+    headerTitle:{
+        color:'black',
+        alignSelf: 'center',
+        width: '100%',
     },
     textFilter:{
         alignSelf:'center',

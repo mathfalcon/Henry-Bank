@@ -8,6 +8,15 @@ export default StyleSheet.create({
         backgroundColor: "black",        
         padding: 15,
     },
+    header: {
+        backgroundColor: '#ffff57',
+        display: 'flex'
+      },
+      headerTitle:{
+        color:'black',
+        alignSelf: 'center',
+        width: '100%',
+      },
     card: {
         flex: 8,
         padding:5, 
@@ -15,7 +24,7 @@ export default StyleSheet.create({
     },
     title: {
         flex:1,
-        color: "white",
+        color: '#ffff57',
         fontSize: 35,      
         fontWeight: "bold",        
         alignSelf:'center',
@@ -25,6 +34,7 @@ export default StyleSheet.create({
         flex:1,
         backgroundColor:"white",
         margin:4,
+        marginTop:10,
         borderRadius:12,
     },
     pickerItem:{ 

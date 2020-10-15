@@ -11,13 +11,19 @@ import {
     Card,
     CardItem,
     Picker,   
+    Icon,
+    Header,
+    Left,  
+    Right,
+    Title,
 } from 'native-base';
 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CheckBox } from "react-native-elements";
-import { verifyFunds, sendMoneyAction } from "../redux/actions/accountActions";
+import { sendMoney } from "../redux/actions/accountActions";
 import { getContactList } from "../redux/actions/contactsActions";
+// import { getUserLogged } from "../redux/actions/authActions";
 import styles from "../Styles/sendMoneyStyles.js";
 import { Alert } from "react-native";
 
@@ -30,20 +36,26 @@ export default SendMoney = ({ navigation, route }) => {
     const [fromContacts, setFromContacts]  =  useState(false);   
 
     // const contacts = useSelector((state) => state.contacts);
-    // const { funds, responseSent } = useSelector((state) => state.accountInfo);
+    const { responseSent } = useSelector((state) => state.accountInfo);
+    const userLogged = useSelector((state) => state.auth);
 
-    // const contactMail = route.params;
-    // if ( contactMail ){
-    //     console.log(contactMail);
-    //     setSelectContact(contactMail);
-    //     setFromContacts(true);
-    // }
+    const dispatch = useDispatch();    
     
-    const dispatch = useDispatch();
+    console.log('userLogged.user.account.balance', userLogged.user.account.balance);
+    console.log('userLogged.user.id', userLogged.user.id);    
+    
+    useEffect(()=>{
+      if(route.params){
+        // console.log('from contact!')
+        setSelectContact(route.params.contact)
+        setFromContacts(true)
+      }
+    }, [])
 
     // useEffect(() => 
-    //     dispatch(getContactList()),
-    //     dispatch(verifyFunds())
+        // dispatch(getUserLogged())
+        // dispatch(getContactList())
+        // dispatch(verifyFunds())                
     // , []);
 
     const contacts = [
@@ -59,14 +71,21 @@ export default SendMoney = ({ navigation, route }) => {
 
     const handleSubmit = () => {
         
-        if (inputMoney === '' || selectContact === '') return setError(true);
+        if (inputMoney === '' || selectContact === '') return setError(true);    
         
         setError(false);
-        if ( inputMoney > funds ) return Alert.alert('Do not have funds enough')
-        // dispatch(sendMoney())
+        if ( inputMoney > userLogged.user.account.balance ) return Alert.alert('Do not have funds enough')
 
-        // responseSent ? true
-        if ( true ) Alert.alert('Transaction done!')
+        // dispatch(sendMoney( userLogged.user.id, selectContact.id ))
+        
+        if (responseSent.success === true) {
+            Alert.alert(`${responseSent.message}`);            
+        } else if ( responseSent.success === false) {
+            Alert.alert(`${responseSent.message}`);
+          } else {
+            Alert.alert("Su transaccion esta siendo procesada");
+        }        
+
         setInputMoney("");
         setSelectContact("");
     }
@@ -74,22 +93,34 @@ export default SendMoney = ({ navigation, route }) => {
     return (
       <SafeAreaView style={styles.container}>
         <KeyboardAwareScrollView>
-          <Text style={styles.title}>Send Money</Text>
+          {/* <Text style={styles.title}>Send Money</Text> */}
+          <Header style={styles.header}>
+            <Left>
+              <Button transparent onPress={() => navigation.navigate("position")}>
+                <Icon style={{ color: "black" }} name="arrow-back" />
+                {/* <Text>Back</Text> */}
+              </Button>
+            </Left>
+            <Body>
+            <Title style={styles.headerTitle}>SEND MONEY</Title>
+            </Body>
+            <Right />        
+          </Header>
 
-                <View style={styles.picker}>
-                    <Picker
-                        mode="dropdown"
-                        disabled={fromContacts}                                           
-                        selectedValue={selectContact}
-                        onValueChange={setSelectContact}
-                        itemStyle={styles.pickerItem}                        
-                    >                    
-                    <Picker.Item label='Select a Contact...' value='' />                    
-                    { contacts.map( (e, key) => (                        
-                        <Picker.Item label={e.name} value={e.email} key={key} />                        
-                    ))}                        
-                    </Picker>
-                </View>
+            <View style={styles.picker}>
+                <Picker
+                    mode="dropdown"
+                    enabled={!fromContacts}                                        
+                    selectedValue={selectContact}
+                    onValueChange={setSelectContact}
+                    itemStyle={styles.pickerItem}                        
+                >                    
+                <Picker.Item label='Select a Contact...' value='' />                    
+                { contacts.map( (e, key) => (                        
+                    <Picker.Item label={e.name} value={e.email} key={key} />                        
+                ))}                        
+                </Picker>
+            </View>
 
           <Card style={styles.card}>
             <CardItem>
