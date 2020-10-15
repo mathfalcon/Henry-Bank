@@ -8,12 +8,12 @@ export default MenuOperation = ({navigation}) => {
         <Footer>
           <FooterTab style={{backgroundColor: '#151515'}}>
             <Button vertical>
-              <Icon name="apps" />
-              <Text>Apps</Text>
+              <Icon name="apps" style={{ color: 'white' }} />
+              <Text style={{ color: 'white' }}>Apps</Text>
             </Button>
             <Button vertical>
-              <Icon name="camera" />
-              <Text>Camera</Text>
+              <Icon name="card" style={{ color: 'white' }}/>
+              <Text style={{ color: 'white' }}>Cards</Text>
             </Button>
             <Button
               vertical
@@ -24,10 +24,11 @@ export default MenuOperation = ({navigation}) => {
               <Text style={{color:'black'}}>History</Text>
             </Button>
             <Button vertical onPress={() => navigation.navigate('contacts')}>
-              <Icon type='FontAwesome' name="users" />
-              <Text>Contacts</Text>
+              <Icon type='FontAwesome' name="users" style={{ color: 'white' }} />
+              <Text style={{ color: 'white' }}>Contacts</Text>
             </Button>
           </FooterTab>
         </Footer>
    );
 }
+

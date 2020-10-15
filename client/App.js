@@ -4,7 +4,7 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import store from "./redux/store";
 // import Index from "./components";
 import * as Font from 'expo-font';
-import Index from "./components";
+import Index from "./components/index";
 
 export default function App() {
   useEffect(() => {
