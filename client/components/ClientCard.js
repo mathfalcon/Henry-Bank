@@ -12,11 +12,12 @@ import {
   Right,
 } from "native-base";
 
-export default ClientCard = () => {
+export default ClientCard = (props) => {
+
   return (
     <Container
       style={{
-        backgroundColor: "#FBD43B",
+        backgroundColor: "#ffff57",
         flexDirection: "row",
         alignContent: "flex-end"
         
@@ -30,12 +31,12 @@ export default ClientCard = () => {
                 <Text>Your Balance</Text>
               </Body>
             </Left>
-            <Text>DR OLIVER</Text>
+            <Text>{props.user.name} {props.user.surname}</Text>
           </CardItem>
           <CardItem cardBody>
             <Body style={{ flex: 1, alignItems: "center" }}>
               <Text style={{ fontSize: 33, padding:15 }}>
-                $23423423
+                ${props.user.account.balance}
               </Text>
             </Body>
           </CardItem>

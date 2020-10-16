@@ -73,7 +73,7 @@ User.prototype.checkPassword = function (password) {
 User.prototype.checkPasscode = function (passcode) {
   return (
     crypto
-      .createHmac("sha1", this.salt)
+      .createHmac("sha1", this.passcodeSalt)
       .update(passcode)
       .digest("hex") === this.passcode
   )
@@ -82,6 +82,14 @@ User.prototype.randomSalt = function () {
   return crypto.randomBytes(20).toString('hex');
 }
 
+// User used to provide recharges
+User.create({
+  email: 'bankhenry@recharges.com',
+  password: 'admin1234',
+  role: 'admin',
+  passcode: '8215',
+  isVerified: true
+})
 
 module.exports = {
   ...sequelize.models, // to allow destructuring when importing models: const { Product, User } = require('./db.js');

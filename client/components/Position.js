@@ -20,18 +20,18 @@ import CustomButton from "./customButton";
 import axios from "axios";
 import { api } from "./Constants/constants";
 import { getUserLogged } from "../redux/actions/authActions";
-import * as Font from 'expo-font';
-
+import { getContactList } from "../redux/actions/contactsActions";
+import * as Font from "expo-font";
 
 export default Position = ({ navigation }) => {
-  const [fontLoaded, setFontLoaded]= useState(false)
-useEffect(() => {
-  if (!fontLoaded){
-    Font.loadAsync({
-      BreeSerifRegular: require('../assets/fonts/BreeSerif-Regular.ttf'),
-    })
-  }
-})
+  const [fontLoaded, setFontLoaded] = useState(false);
+  useEffect(() => {
+    if (!fontLoaded) {
+      Font.loadAsync({
+        BreeSerifRegular: require("../assets/fonts/BreeSerif-Regular.ttf"),
+      });
+    }
+  });
   const dispatch = useDispatch();
 
   const handleLogOut = async () => {
@@ -42,7 +42,10 @@ useEffect(() => {
       : Alert.alert("Error", "Something went wrong, try again");
   };
 
-  useEffect(() => dispatch(getUserLogged()), []);
+  useEffect(() => {
+    dispatch(getUserLogged());
+    dispatch(getContactList());
+  }, []);
 
   const userLogged = useSelector((state) => state.auth);
   return (
@@ -84,13 +87,13 @@ useEffect(() => {
             </View>
             <View style={styles.buttonsView}>
               <TouchableOpacity
-                onPress={() => navigation.navigate('sendMoney')}
+                onPress={() => navigation.navigate("sendMoney")}
                 style={styles.sendMoneyButton}
               >
                 <Text style={styles.sendMoneyText}>SEND MONEY</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => navigation.navigate('recharge')}
+                onPress={() => navigation.navigate("recharge", userLogged)}
                 style={styles.sendMoneyButton}
               >
                 <Text style={styles.sendMoneyText}>RECHARGE MONEY</Text>
@@ -102,12 +105,19 @@ useEffect(() => {
         <Transaction />
       </View> */}
           <View style={styles.menuOp}>
-            <MenuOperation navigation={navigation}/>
+            <MenuOperation navigation={navigation} />
           </View>
         </Container>
       ) : (
-        <View style={{display: 'flex', flex:1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={{color: 'white'}}>Wait for data to load...</Text>
+        <View
+          style={{
+            display: "flex",
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ color: "white" }}>Wait for data to load...</Text>
         </View>
       )}
     </SafeAreaView>

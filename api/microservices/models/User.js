@@ -55,42 +55,42 @@ module.exports = (sequelize) => {
       },
       docNumber: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       name: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       surname: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       birth: {
         type: DataTypes.DATEONLY,
-        allowNull: false,
+        allowNull: true,
       },
       phone: {
         type: DataTypes.STRING,
       },
       street: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       streetNumber: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       locality: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       state: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       country: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       emailToken: {
         type: DataTypes.STRING,

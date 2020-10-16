@@ -51,7 +51,9 @@ export default Contacts = ({ navigation }) => {
   const dispatch = useDispatch();
   const userLogged = useSelector((state) => state.auth.user);
   const userContacts = useSelector((state) => state.contacts.contacts);
-
+  useEffect(() => {
+    dispatch(getContactList(userLogged.id));
+  }, []);
   useEffect(() => {
     setListData(
       Array(1)
@@ -65,10 +67,6 @@ export default Contacts = ({ navigation }) => {
           })),
         }))
     );
-  }, []);
-
-  useEffect(() => {
-    dispatch(getContactList(userLogged.id));
   }, []);
 
   const closeRow = (rowMap, rowKey, id) => {
@@ -114,6 +112,7 @@ export default Contacts = ({ navigation }) => {
         onPress={() =>
           navigation.navigate("sendMoney", {
             contact: data.item.key,
+            userId: data.item.value,
             fromContacts: true,
           })
         }
@@ -171,9 +170,7 @@ export default Contacts = ({ navigation }) => {
       <Header style={styles.header}>
         <Left>
           <Button transparent onPress={() => navigation.navigate("position")}>
-            <Icon name="arrow-back" />
             <Icon style={{ color: "black" }} name="arrow-back" />
-            {/* <Text>Back</Text> */}
           </Button>
         </Left>
         <Body>
