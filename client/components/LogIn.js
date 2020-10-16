@@ -7,6 +7,7 @@ import {
   Form,
   Label,
   Item,
+  Icon,
   Input,
   Picker,
   Button,
@@ -20,9 +21,8 @@ import axios from "axios";
 import { api } from "./Constants/constants";
 import styles from "../Styles/logInStyles";
 
-
-
 export default SignupForm = ({ navigation }) => {
+  const [showPass, setShowPass] = useState(false);
   const {
     values,
     isSubmitting,
@@ -80,7 +80,7 @@ export default SignupForm = ({ navigation }) => {
     },
     validate: (values) => {
       const errors = {};
-      if (values.user.length <= 2) errors.user = "The user is invalid";
+      if (values.user.length <= 2) errors.user = "The email is invalid";
       if (values.password.length <= 2)
         errors.password = "You must enter the password";
       return errors;
@@ -111,12 +111,18 @@ export default SignupForm = ({ navigation }) => {
 
           <Item error={errors.password ? true : false}>
             <Input
-              secureTextEntry={true}
+              secureTextEntry={!showPass}
               placeholder="Password"
               onBlur={handleBlur("password")}
               name="password"
               onChangeText={(text) => setFieldValue("password", text)}
               value={values.password}
+            />
+            <Icon
+              name={showPass ? "eye" : "eye-slash"}
+              style={{ color: "grey", fontSize: 15 }}
+              type="FontAwesome5"
+              onPress={() => setShowPass(!showPass)}
             />
           </Item>
           <Text style={{ marginLeft: 18, color: "#e06d6d", marginBottom: 20 }}>
