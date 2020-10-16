@@ -6,7 +6,6 @@ module.exports = (sequelize) => {
     amount: {
         type: DataTypes.DECIMAL,
         allowNull: false,
-        validate: { min: 0.0 },
     },
     message: {
         type: DataTypes.STRING,
