@@ -18,7 +18,22 @@ server.use(morgan("dev")); // Intializing console logger middleware for HTTP req
 ///////////////
 // Route for getting all transactions
 server.get("/transactions", (req, res, next) => {
-  Transaction.findAll({ include: [{ model: Account }] })
+  Transaction.findAll({
+    include: [
+      {
+        model: User,
+        as: "sender",
+        attributes: ["id", "email", "name", "surname"],
+        include: Account,
+      },
+      {
+        model: User,
+        as: "receiver",
+        attributes: ["id", "email", "name", "surname"],
+        include: Account,
+      },
+    ],
+  })
     .then((transactions) => {
       res.send({ success: true, message: "transactions list: ", transactions });
     })
