@@ -4,6 +4,8 @@ const server = express();
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SEND_API_KEY);
 
 ////////////////
 // MIDDLEWARES /
@@ -90,6 +92,27 @@ server.get("/transactions/outcome/:userId", (req, res, next) => {
         .send({ success: false, message: "Something went wrong: ", err })
     );
 });
+// Route for getting user transactions from a specific date to present
+server.get("/transactions/history/:/userId/:startDate/:toDate", (req, res, next) => {
+  Transaction.findAll({ 
+    where: { 
+    createdAt: { 
+      $gt: req.params.startDate,
+      $lt: req.params.toDate
+    },   
+    senderId: req.params.userId,
+    receiverId: req.params.userId
+  }})
+  .then((transactions) => {
+    transactions.reduce((total, trans) => trans.state === "complete" ? total + trans.amount : total, 0);
+  res.send({ transactions, total });
+  })
+  .catch((err) =>
+      res
+        .status(400)
+        .send({ success: false, message: "Something went wrong: ", err })
+    );
+});
 
 ////////////////
 // ROUTES /POST/
@@ -103,6 +126,7 @@ server.post("/transactions/:sender/to/:receiver", (req, res, next) => {
     Account.findOne({ where: { userId: req.params.sender } }), // Search for the account that sends the money
     Account.findOne({ where: { userId: req.params.receiver } }), // Search for the account that receives the money
     User.findByPk(req.params.sender),
+    User.findByPk(req.params.receiver)
   ]).then((acc) => {
     if (!acc[2].checkPasscode(passcode)) {
       res.send({
@@ -123,6 +147,47 @@ server.post("/transactions/:sender/to/:receiver", (req, res, next) => {
               state: "complete",
             })
               .then((transactionCreated) => {
+                const msg = {
+                  template_id: process.env.SENGRID_TEMPLATE_ID_TRANSACTION,
+                  "from": {
+                    "email": process.env.SENGRID_SENDER_EMAIL,
+                    "name": process.env.SENDGRID_SENDER_NAME,
+                  },
+                  "personalizations": [
+                    {
+                      "to": [
+                        {
+                          "email": accu[3].email,
+                        },
+                      ],
+                      "dynamic_template_data": {
+                        "senderAcc": acc[0].type,
+                        "receiverAcc": acc[1].type,
+                        "senderName": acc[0].name,
+                        "receiverName": acc[1].name,
+                        "amount": req.body.amount,
+                        "message": req.body.message
+                      }
+                    }
+                  ]
+                };
+                sgMail
+                .send(msg)
+                .then((data) => console.log("Email sent successfully"))
+                .catch((error) => {
+                  // Log friendly error
+                  console.error(error);
+
+                  if(error.response) {
+                    // Extract error msg
+                    const { message, code, response } = error;
+
+                    // Extract response msg
+                    const { headers, body } = response;
+
+                    console.error(body);
+                  }
+                });
                 res.send({
                   success: true,
                   message: "Transaction Completed: ",
