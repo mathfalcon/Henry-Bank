@@ -5,9 +5,9 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const crypto = require("crypto");
 const path = require("path");
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 ////////////////
 // MIDDLEWARES /
@@ -115,22 +115,21 @@ server.post("/users/create", (req, res, next) => {
   })
     .then((userCreated) => {
       const msg = {
-        template_id: process.env.SENDGRID_TEMPLATE_ID,
-        from: {
-          email: process.env.SENDGRID_SENDER_EMAIL,
-          name: process.env.SENDGRID_SENDER_NAME,
+        "template_id": process.env.SENDGRID_TEMPLATE_ID,
+        "from": {
+          "email": process.env.SENDGRID_SENDER_EMAIL,
+          "name": process.env.SENDGRID_SENDER_NAME,
         },
-        personalizations: [
+        "personalizations": [
           {
-            to: [
+            "to": [
               {
-                email: userCreated.email,
+                "email": userCreated.email,
               },
             ],
-            dynamic_template_data: {
-              host: req.headers.host,
-              token: userCreated.emailToken,
-              subject: "Henry Bank - Verify email",
+            "dynamic_template_data": {
+              "host": req.headers.host,
+              "token": userCreated.emailToken,
             },
           },
         ],
