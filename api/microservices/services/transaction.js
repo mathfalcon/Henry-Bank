@@ -116,8 +116,8 @@ server.post("/transactions/:sender/to/:receiver", (req, res, next) => {
             acc[1].update({ balance: Number(acc[1].balance) + Number(amount) }), // deposit the money into receiver account
           ]).then((accUpd) => {
             Transaction.create({
-              sender: req.params.sender,
-              receiver: req.params.receiver,
+              senderId: req.params.sender,
+              receiverId: req.params.receiver,
               amount,
               message,
               state: "complete",
