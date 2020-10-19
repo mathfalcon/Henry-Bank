@@ -161,13 +161,12 @@ server.post("/transactions/:sender/to/:receiver", (req, res, next) => {
                         },
                       ],
                       "dynamic_template_data": {
-                        "senderAcc": acc[0],
-                        "receiverAcc": acc[1],
-                        "senderName": acc[0],
+                        "senderAcc": acc[0].type,
+                        "receiverAcc": acc[1].type,
+                        "senderName": acc[0].name,
                         "receiverName": acc[1].name,
                         "amount": req.body.amount,
-                        "message": req.body.message,
-                        "transaction": transactionCreated, 
+                        "message": req.body.message
                       }
                     }
                   ]
