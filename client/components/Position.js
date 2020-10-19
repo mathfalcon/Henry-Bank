@@ -4,15 +4,10 @@ import { TouchableOpacity, SafeAreaView, Alert, StatusBar } from "react-native";
 import { Avatar } from "react-native-elements";
 import CardPosition from "./CardPosition";
 import MenuOperation from "./MenuOperation";
-import Transaction from "./Transaction";
+
 import {
   View,
   Text,
-  Form,
-  Label,
-  Item,
-  Input,
-  Button,
   Container,
 } from "native-base";
 import styles from "../Styles/positionStyles";
@@ -32,14 +27,15 @@ export default Position = ({ navigation }) => {
       });
     }
   });
-  const dispatch = useDispatch();
+  const dispatch = useDispatch();  
 
   const handleLogOut = async () => {
     const response = await axios(`${api}/auth/logout`);
     dispatch(getUserLogged());
     response.data.success
-      ? navigation.navigate("home")
-      : Alert.alert("Error", "Something went wrong, try again");
+      // ? navigation.navigate("home")
+      ? console.log('Signed Out')
+      : Alert.alert("Error", "Something went wrong, try again");          
   };
 
   useEffect(() => {
