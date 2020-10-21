@@ -16,7 +16,7 @@ function CustomButton(props) {
     fontSize,
     height
   } = props.style;
-  
+
   const style = StyleSheet.create({
     container: {
       backgroundColor: backgroundColor || null,

@@ -8,13 +8,13 @@ const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const crypto = require("crypto");
 const path = require("path");
-const moment = require("moment")
+const moment = require("moment");
 
 ////////////////
 // FUNCTIONS ///
 ////////////////
-function genCC(cc = String(Math.floor(Math.random() * (9 - 1)) + 1), n = 16,) {
-  while (cc.length < n) cc += Math.floor(Math.random() * 9)
+function genCC(cc = String(Math.floor(Math.random() * (9 - 1)) + 1), n = 16) {
+  while (cc.length < n) cc += Math.floor(Math.random() * 9);
   return cc;
 }
 
@@ -124,21 +124,21 @@ server.post("/users/create", (req, res, next) => {
   })
     .then((userCreated) => {
       const msg = {
-        "template_id": process.env.SENDGRID_TEMPLATE_ID,
-        "from": {
-          "email": process.env.SENDGRID_SENDER_EMAIL,
-          "name": process.env.SENDGRID_SENDER_NAME,
+        template_id: process.env.SENDGRID_TEMPLATE_ID,
+        from: {
+          email: process.env.SENDGRID_SENDER_EMAIL,
+          name: process.env.SENDGRID_SENDER_NAME,
         },
-        "personalizations": [
+        personalizations: [
           {
-            "to": [
+            to: [
               {
-                "email": userCreated.email,
+                email: userCreated.email,
               },
             ],
-            "dynamic_template_data": {
-              "host": req.headers.host,
-              "token": userCreated.emailToken,
+            dynamic_template_data: {
+              host: req.headers.host,
+              token: userCreated.emailToken,
             },
           },
         ],
@@ -161,8 +161,16 @@ server.post("/users/create", (req, res, next) => {
           }
         });
       Account.create({ userId: userCreated.id })
-        .then((accCreated) =>
-          Card.create({ accountId: accCreated.id, number: genCC(), cvv: genCC("", 3), expiration_date:moment().add(3, 'years').calendar() })
+        .then((accCreated) => {
+          console.log("llegue hasta aca");
+          Card.create({
+            accountId: accCreated.id,
+            number: genCC(),
+            cvv: genCC("", 3),
+            expiration_date: moment().add(3, "years").calendar(),
+          })
+            .catch((err) => console.log(err))
+
             .then((cardCreated) =>
               res.send({
                 success: true,
@@ -170,23 +178,24 @@ server.post("/users/create", (req, res, next) => {
                   "Thanks for registering. Please check your email to verify your account.",
                 userCreated,
                 cardCreated,
-                accCreated
+                accCreated,
               })
             )
             .catch((err) => {
-              console.log(err);
               res.send({
                 success: false,
-                message: "Something went wrong in card creation. Please contact us for assistance.",
+                message:
+                  "Something went wrong in card creation. Please contact us for assistance.",
                 err,
               });
-            })
-        )
+            });
+        })
         .catch((err) => {
           console.log(err);
           res.send({
             success: false,
-            message: "Something went wrong in account creation. Please contact us for assistance.",
+            message:
+              "Something went wrong in account creation. Please contact us for assistance.",
             err,
           });
         });
@@ -195,7 +204,8 @@ server.post("/users/create", (req, res, next) => {
       console.log(err);
       res.send({
         success: false,
-        message: "Something went wrong in user creation. Please contact us for assistance.",
+        message:
+          "Something went wrong in user creation. Please contact us for assistance.",
         err,
       });
     });

@@ -46,7 +46,7 @@ export default ForgotPass = ({ navigation }) => {
           </Text>
           <Text style={styles.title}>Forgot Password</Text>
           <Text style={styles.subtitle}>
-            Enter your email address you're using for your account below and we
+            Enter your email address associated to your account below and we
             will send you a password reset link.
           </Text>
           <Item
