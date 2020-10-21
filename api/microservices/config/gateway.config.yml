@@ -1,6 +1,6 @@
 http:
   port: 8080
-  hostname: 192.168.0.102
+  hostname: 192.168.1.2
 https:
   port: 8080
   hostname: localhost
@@ -11,35 +11,35 @@ apiEndpoints:
   # User's routes
   user: 
     methods: 'GET,POST,PUT,PATCH,DELETE' 
-    host: 192.168.0.102
+    host: 192.168.1.2
     paths: ['/users/','/users/*']
   auth: 
     methods: 'GET,POST,PUT,PATCH,DELETE' 
-    host: 192.168.0.102
+    host: 192.168.1.2
     paths: '/auth/*'
   register: 
     methods: 'GET,POST,PUT,PATCH,DELETE' 
-    host: 192.168.0.102
+    host: 192.168.1.2
     paths: '/register/*'
   transaction: 
     methods: 'GET,POST,PUT,PATCH,DELETE' 
-    host: 192.168.0.102
+    host: 192.168.1.2
     paths: '/transactions/*'
   contact: 
     methods: 'GET,POST,PUT,PATCH,DELETE' 
-    host: 192.168.0.102
+    host: 192.168.1.2
     paths: ['/contacts/','/contacts/*']
 serviceEndpoints:
   userService:
-    url: 'http://192.168.0.102:3000'
+    url: 'http://192.168.1.2:3000'
   authService:
-    url: 'http://192.168.0.102:3001'
+    url: 'http://192.168.1.2:3001'
   registerService:
-    url: 'http://192.168.0.102:3002'
+    url: 'http://192.168.1.2:3002'
   transactionService:
-    url: 'http://192.168.0.102:3003'
+    url: 'http://192.168.1.2:3003'
   contactService:
-    url: 'http://192.168.0.102:3004'
+    url: 'http://192.168.1.2:3004'
 policies:
   - basic-auth
   - cors
