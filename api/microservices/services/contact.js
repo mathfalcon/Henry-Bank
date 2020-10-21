@@ -81,12 +81,12 @@ server.post("/contacts/whatsapp/sendmessage", whatsapp.sendMessage);
 
 // Route for assigning a new contact
 server.post("/contacts/create", async (req, res, next) => {
-  const { userId, alias, emailOfContact, phone } = req.body;
+  const { userId, alias, emailOfContact } = req.body;
 
-  User.findOne({
+  const is_contact_of = await User.findOne({
     where: { email: emailOfContact },
-  }).then((user)=> {
-    if(!user) return whatsapp.sendInvitation;
+  });
+  if(!is_contact_of) return whatsapp.sendInvitation;
   Contact.create({ userId, alias, is_contact_of: is_contact_of.id })
     .then((contactCreated) => {
       res.send({ success: true, message: "Contact created: ", contactCreated });
@@ -96,7 +96,6 @@ server.post("/contacts/create", async (req, res, next) => {
         .status(400)
         .send({ success: false, message: "Something went wrong: ", err })
     );
-  })
 });
 
 ///////////////

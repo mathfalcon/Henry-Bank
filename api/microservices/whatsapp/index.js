@@ -28,11 +28,6 @@ module.exports.sendMessage = async (req, res) => {
         timestamp: new Date()
     }
     client.sendTextMessage(`${req.body.phone}@s.whatsapp.net`, req.body.body, options)
-    // client.sendTextMessage(
-    //     `${req.body.phone}@s.whatsapp.net`,
-    //     `Hello, you have recieved an invitation to Henry Bank from ${userId}`,
-    //     options
-    //     )
     res.send({
         success: true,
         message:
