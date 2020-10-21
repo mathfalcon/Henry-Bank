@@ -44,6 +44,17 @@ export default StyleSheet.create({
         marginLeft:10,        
         lineHeight: 20
     },
-    divider:{        
+    filterButtom: {
+        alignSelf:"center",
+        backgroundColor: "#151515",
+        height: 35,
+        width: 125,
+        justifyContent: "center",
+      },
+      filterText: {
+       alignSelf: "center",
+       color: "whitesmoke",
     },
+    divider:{        
+    },    
 })

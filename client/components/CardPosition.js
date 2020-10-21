@@ -12,8 +12,8 @@ import {
   Right,
 } from "native-base";
 
-export default CardPosition = (props) => {
-  console.log(props.user);
+export default CardPosition = ({ navigation, userLogged }) => {
+  
   return (
     <Container
       style={{
@@ -29,13 +29,13 @@ export default CardPosition = (props) => {
               <Body>
                 <Text>Account Balance</Text>
               </Body>
-            </Left>
-            <Text>Account movements</Text>
+            </Left>            
+            <Text onPress={() => navigation.navigate('accountHistory', userLogged)}>Account movements</Text>
           </CardItem>
           <CardItem cardBody>
             <Body style={{ flex: 1, alignItems: "center" }}>
               <Text style={{ fontSize: 33, padding:15 }}>
-                ${props.user.user.account.balance}
+                ${userLogged.user.account.balance}
               </Text>
             </Body>
           </CardItem>

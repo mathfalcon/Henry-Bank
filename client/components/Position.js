@@ -79,7 +79,10 @@ export default Position = ({ navigation }) => {
 
           <View style={styles.cardPosition}>
             <View style={{ flex: 3 }}>
-              <CardPosition user={userLogged} />
+              <CardPosition
+                userLogged={userLogged}
+                navigation={navigation}
+                />
             </View>
             <View style={styles.buttonsView}>
               <TouchableOpacity

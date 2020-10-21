@@ -107,7 +107,7 @@ export default ThirdPageForm = ({ route, navigation }) => {
       } catch (err) {
         Alert.alert(
           "Error",
-          err,
+          "Any of the info submitted is wrong",
           [
             {
               text: "Understood",

@@ -19,7 +19,8 @@ export default MenuOperation = ({navigation}) => {
               vertical
               active
               style={{backgroundColor:'#ffff6d'}} 
-              onPress={() => navigation.navigate('accountHistory')}>
+              onPress={() => navigation.navigate('accountHistory')}
+            >
               <Icon style={{color:'black'}} active type='FontAwesome' name="dollar" />
               <Text style={{color:'black'}}>History</Text>
             </Button>
