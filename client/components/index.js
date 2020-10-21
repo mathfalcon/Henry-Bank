@@ -27,10 +27,9 @@ import SeeStats from "./Admin/SeeStats";
 
 const LoggedFalseStack = createStackNavigator();
 const LoggedTrueStack = createStackNavigator();
-const AdminStack = createStackNavigator();
 
 export default function Index() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const userLogged = useSelector((state) => state.auth);
   console.log("userLoggedRole", userLogged.user.role);
 
@@ -55,42 +54,27 @@ export default function Index() {
                 component={ResetPassword}
               />
             </LoggedFalseStack.Navigator>
-          </>
-        ) : userLogged.user.role === "client" ? (
-          <>
-            <LoggedTrueStack.Navigator headerMode="none">
-              <LoggedTrueStack.Screen name="position" component={Position} />
-              <LoggedTrueStack.Screen name="contacts" component={Contacts} />
-              <LoggedTrueStack.Screen name="myCards" component={MyCards} />
-              <LoggedTrueStack.Screen
-                name="recharge"
-                component={RechargeMoney}
-              />
-              <LoggedTrueStack.Screen name="sendMoney" component={SendMoney} />
-              <LoggedTrueStack.Screen
-                name="accountHistory"
-                component={AccountHistory}
-              />
-            </LoggedTrueStack.Navigator>
-          </>
-        ) : (
-          <>
-            <AdminStack.Navigator headerMode="none">
-              <AdminStack.Screen name="adminPanel" component={AdminPanel} />
-              <AdminStack.Screen name="manageUsers" component={ManageUsers} />
-              <AdminStack.Screen
-                name="manageAccounts"
-                component={ManageAccounts}
-              />
-              <AdminStack.Screen
-                name="manageTransactions"
-                component={ManageTransactions}
-              />
-              <AdminStack.Screen name="seeStats" component={SeeStats} />
-            </AdminStack.Navigator>
-          </>
-        )
-      }
+            </>
+            )
+          :
+            (
+              <>
+              <LoggedTrueStack.Navigator headerMode="none">
+                <LoggedTrueStack.Screen name="position" component={Position} />
+                <LoggedTrueStack.Screen name="contacts" component={Contacts} />        
+                <LoggedTrueStack.Screen name="myCards" component={MyCards} />        
+                <LoggedTrueStack.Screen name="recharge" component={RechargeMoney} />
+                <LoggedTrueStack.Screen name="sendMoney" component={SendMoney} />
+                <LoggedTrueStack.Screen name="accountHistory" component={AccountHistory} />
+                <LoggedTrueStack.Screen name="adminPanel" component={AdminPanel} />
+                <LoggedTrueStack.Screen name="manageUsers" component={ManageUsers} />
+                <LoggedTrueStack.Screen name="manageAccounts" component={ManageAccounts} />
+                <LoggedTrueStack.Screen name="manageTransactions" component={ManageTransactions} />
+                <LoggedTrueStack.Screen name="seeStats" component={SeeStats} />
+              </LoggedTrueStack.Navigator>
+              </>
+            )
+          }
     </NavigationContainer>
   );
 }

@@ -1,5 +1,5 @@
 const express = require("express");
-const { User, Account } = require("../db.js");
+const { User, Account, Card } = require("../db.js");
 const server = express();
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
@@ -8,6 +8,15 @@ const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const crypto = require("crypto");
 const path = require("path");
+const moment = require("moment")
+
+////////////////
+// FUNCTIONS ///
+////////////////
+function genCC(cc = String(Math.floor(Math.random() * (9 - 1)) + 1), n = 16,) {
+  while (cc.length < n) cc += Math.floor(Math.random() * 9)
+  return cc;
+}
 
 ////////////////
 // MIDDLEWARES /
@@ -151,21 +160,42 @@ server.post("/users/create", (req, res, next) => {
             console.error(body);
           }
         });
-      Account.create({ userId: userCreated.id }).then((accCreated) =>
-        res.send({
-          success: true,
-          message:
-            "Thanks for registering. Please check your email to verify your account.",
-          userCreated,
-          accCreated,
-        })
-      );
+      Account.create({ userId: userCreated.id })
+        .then((accCreated) =>
+          Card.create({ accountId: accCreated.id, number: genCC(), cvv: genCC("", 3), expiration_date:moment().add(3, 'years').calendar() })
+            .then((cardCreated) =>
+              res.send({
+                success: true,
+                message:
+                  "Thanks for registering. Please check your email to verify your account.",
+                userCreated,
+                cardCreated,
+                accCreated
+              })
+            )
+            .catch((err) => {
+              console.log(err);
+              res.send({
+                success: false,
+                message: "Something went wrong in card creation. Please contact us for assistance.",
+                err,
+              });
+            })
+        )
+        .catch((err) => {
+          console.log(err);
+          res.send({
+            success: false,
+            message: "Something went wrong in account creation. Please contact us for assistance.",
+            err,
+          });
+        });
     })
     .catch((err) => {
       console.log(err);
       res.send({
         success: false,
-        message: "Something went wrong. Please contact us for assistance.",
+        message: "Something went wrong in user creation. Please contact us for assistance.",
         err,
       });
     });
