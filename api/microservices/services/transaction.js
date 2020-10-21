@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SEND_API_KEY);
+const { Op } = require("sequelize");
 
 ////////////////
 // MIDDLEWARES /
@@ -93,25 +94,59 @@ server.get("/transactions/outcome/:userId", (req, res, next) => {
     );
 });
 // Route for getting user transactions from a specific date to present
-server.get("/transactions/history/:/userId/:startDate/:toDate", (req, res, next) => {
+server.get("/transactions/history/:userId/:startDate/:toDate", (req, res, next) => {
+  Promise.all([
   Transaction.findAll({ 
-    where: { 
-    createdAt: { 
-      $gt: req.params.startDate,
-      $lt: req.params.toDate
-    },   
-    senderId: req.params.userId,
+    where: {
+      createdAt: { [Op.and]: [
+       { [Op.gte]: req.params.startDate },
+       { [Op.lte]: req.params.toDate },
+      ]},   
+      senderId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+       { [Op.gte]: req.params.startDate },
+       { [Op.lte]: req.params.toDate },
+    ]},   
     receiverId: req.params.userId
   }})
+  ])
   .then((transactions) => {
-    transactions.reduce((total, trans) => trans.state === "complete" ? total + trans.amount : total, 0);
+    let outcomes = transactions[0].reduce((total, trans) => trans.state === "complete" ? total + trans.amount : total, 0);
+    let incomes = transactions[1].reduce((total, trans) => trans.state === "complete" ? total + trans.amount : total, 0);
+    let total = incomes - outcomes;
   res.send({ transactions, total });
   })
   .catch((err) =>
-      res
-        .status(400)
+      res.status(400)
         .send({ success: false, message: "Something went wrong: ", err })
     );
+});
+// Route to get the balance by month
+server.get("/transactions/history/:userId/:startDate/:toDate", (req, res, next) => {
+  Account.findAll({
+    where: {
+        updatedAt: { [Op.and]: [
+          { [Op.gte]: req.params.startDate },
+          { [Op.lte]: req.params.toDate },
+       ]},
+       userId: req.params.userId   
+    },
+    attributes: [sequilize.fn('date_trunc', 'month', sequilize.col('updatedAt'))
+    ],
+    group: 'month'
+    // order: [ [ 'createdAt', 'DESC' ]],
+  })
+  .then((account) => {
+    // Return an array where you can get account.balance by month
+    res.send({ account });
+  })
+  .catch((err) =>
+  res.status(400)
+    .send({ success: false, message: "Cannot get requiered balances: ", err })
+);
 });
 
 ////////////////
