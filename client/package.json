@@ -8,7 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "@react-native-community/datetimepicker": "3.0.0",
+    "@react-native-community/datetimepicker": "^3.0.4",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/native": "^5.7.5",
     "@react-navigation/stack": "^5.9.2",
@@ -24,6 +24,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.2.tar.gz",
     "react-native-animated-input": "^1.0.1",
     "react-native-axios": "^0.17.1",
+    "react-native-chart-kit": "^6.6.1",
     "react-native-credit-card-display": "^0.2.1",
     "react-native-credit-card-input": "^0.4.1",
     "react-native-elements": "^2.3.2",
