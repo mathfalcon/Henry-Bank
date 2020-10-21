@@ -24,6 +24,7 @@ import ManageUsers from "./Admin/ManageUsers";
 import ManageAccounts from "./Admin/ManageAccounts";
 import ManageTransactions from "./Admin/ManageTransactions";
 import SeeStats from "./Admin/SeeStats";
+import userStats from "./UserStats";
 
 const LoggedFalseStack = createStackNavigator();
 const LoggedTrueStack = createStackNavigator();
@@ -66,11 +67,13 @@ export default function Index() {
                 <LoggedTrueStack.Screen name="recharge" component={RechargeMoney} />
                 <LoggedTrueStack.Screen name="sendMoney" component={SendMoney} />
                 <LoggedTrueStack.Screen name="accountHistory" component={AccountHistory} />
+                <LoggedTrueStack.Screen name="userStats" component={userStats} />
                 <LoggedTrueStack.Screen name="adminPanel" component={AdminPanel} />
                 <LoggedTrueStack.Screen name="manageUsers" component={ManageUsers} />
                 <LoggedTrueStack.Screen name="manageAccounts" component={ManageAccounts} />
                 <LoggedTrueStack.Screen name="manageTransactions" component={ManageTransactions} />
                 <LoggedTrueStack.Screen name="seeStats" component={SeeStats} />
+                
               </LoggedTrueStack.Navigator>
               </>
             )

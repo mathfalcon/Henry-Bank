@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SEND_API_KEY);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const { Op } = require("sequelize");
 
 ////////////////
@@ -251,9 +251,11 @@ server.post("/transactions/:sender/to/:receiver", (req, res, next) => {
 
 // Route for modifying user's account balance (recharge)
 
-server.put("/transactions/account/recharge/:userId", (req, res, next) => {
+server.put("/transactions/account/recharge/:userId", async (req, res, next) => {
   const { userId } = req.params;
   const amount = Number(req.body.amount);
+  const bankUser = await User.findOne({where: {email: 'bankhenry@recharges.com'}})
+
   Account.findOne({ where: { userId } }).then((account) => {
     const currentBalance = account.balance;
     account.balance = Number(currentBalance) + amount;
@@ -264,7 +266,7 @@ server.put("/transactions/account/recharge/:userId", (req, res, next) => {
           amount: amount,
           message: "Account balance recharge.",
           state: "complete",
-          senderId: 1,
+          senderId: bankUser.id,
           receiverId: userId,
         })
           .then((transaction) => {

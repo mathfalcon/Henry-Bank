@@ -99,6 +99,7 @@ Card.prototype.checkNumber = function (number) {
       .digest("hex") === this.number
   )
 };
+
 Card.prototype.checkCvv = function (cvv) {
   return (
     crypto
