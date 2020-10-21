@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { TouchableOpacity, SafeAreaView, Alert, StatusBar } from "react-native";
-import { Avatar } from "react-native-elements";
+import { Avatar, Divider } from "react-native-elements";
 import CardPosition from "./CardPosition";
 import MenuOperation from "./MenuOperation";
 
@@ -65,6 +65,7 @@ export default Position = ({ navigation }) => {
               <Text
                 style={styles.moneySection}
               >{`Hello ${userLogged.user.name} ${userLogged.user.surname}`}</Text>
+
               <CustomButton
                 style={{
                   color: "black",
@@ -74,6 +75,23 @@ export default Position = ({ navigation }) => {
                 title="LOG OUT"
                 onPress={handleLogOut}
               />
+              { userLogged.user.role === 'admin' ?
+                  <>
+                    <Divider style={{ backgroundColor: 'black' }} />
+                    <CustomButton
+                      style={{
+                        color: "black",
+                        backgroundColor: "#ffff6d",
+                        fontSize: 18,
+                      }}
+                      title="ADMIN PANEL"
+                      onPress={() => navigation.navigate("adminPanel")}
+                    />
+                  </>
+                :
+                    null
+              }
+
             </View>
           </View>
 

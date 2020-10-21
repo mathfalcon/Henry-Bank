@@ -282,11 +282,3 @@ export default Contacts = ({ navigation }) => {
     </View>
   );
 };
-
-// Se debe incluir las siguientes funcionalidades:
-
-// Asociar Contacto: dar de alta un nuevo contacto cargando su nombre y mail: Validar que el nuevo contacto es cliente de Henry Bank por su mail.
-
-// Modificar Contacto: poder cambiar el nombre solamente del contacto.
-
-// Eliminar Contacto: dar de baja en contacto.
