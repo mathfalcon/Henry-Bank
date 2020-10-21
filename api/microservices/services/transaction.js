@@ -125,7 +125,7 @@ server.get("/transactions/history/:userId/:startDate/:toDate", (req, res, next) 
     );
 });
 // Route to get the balance by month
-server.get("/transactions/history/:userId/:startDate/:toDate", (req, res, next) => {
+server.get("/transactions/history/monthly/:userId/:startDate/:toDate", (req, res, next) => {
   Transaction.findAll({
     where: {
         createAt: { [Op.and]: [
