@@ -80,13 +80,14 @@ server.post("/contacts/whatsapp/connect", whatsapp.connectApi);
 server.post("/contacts/whatsapp/sendmessage", whatsapp.sendMessage);
 
 // Route for assigning a new contact
-server.post("/contacts/create/:name", async (req, res, next) => {
+server.post("/contacts/create", async (req, res, next) => {
   const { userId, alias, emailOfContact, phone } = req.body;
 
   const is_contact_of = await User.findOne({
     where: { email: emailOfContact },
   });
-  if(!is_contact_of) return whatsapp.sendInvitation(req, res, phone, req.params.name);
+  const user = await User.findByPk(userId);
+  if(!is_contact_of) return whatsapp.sendInvitation(req, res, phone, user.name);
   Contact.create({ userId, alias, is_contact_of: is_contact_of.id })
     .then((contactCreated) => {
       res.send({ success: true, message: "Contact created: ", contactCreated });
