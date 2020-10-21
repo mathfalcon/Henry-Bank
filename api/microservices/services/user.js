@@ -115,21 +115,20 @@ server.post("/users/create", (req, res, next) => {
   })
     .then((userCreated) => {
       const msg = {
-        "template_id": process.env.SENDGRID_TEMPLATE_ID,
-        "from": {
-          "email": process.env.SENDGRID_SENDER_EMAIL,
-          "name": process.env.SENDGRID_SENDER_NAME,
+        template_id: process.env.SENDGRID_TEMPLATE_ID,
+        from: {
+          email: process.env.SENDGRID_SENDER_EMAIL
         },
-        "personalizations": [
+        personalizations: [
           {
-            "to": [
+            to: [
               {
-                "email": userCreated.email,
+                email: userCreated.email,
               },
             ],
-            "dynamic_template_data": {
-              "host": req.headers.host,
-              "token": userCreated.emailToken,
+            dynamic_template_data: {
+              host: req.headers.host,
+              token: userCreated.emailToken,
             },
           },
         ],
@@ -140,7 +139,7 @@ server.post("/users/create", (req, res, next) => {
         .catch((error) => {
           // Log friendly error
           console.error(error);
-
+          
           if (error.response) {
             // Extract error msg
             const { message, code, response } = error;

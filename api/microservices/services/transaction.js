@@ -126,18 +126,18 @@ server.get("/transactions/history/:userId/:startDate/:toDate", (req, res, next) 
 });
 // Route to get the balance by month
 server.get("/transactions/history/:userId/:startDate/:toDate", (req, res, next) => {
-  Account.findAll({
+  Transaction.findAll({
     where: {
-        updatedAt: { [Op.and]: [
+        createAt: { [Op.and]: [
           { [Op.gte]: req.params.startDate },
           { [Op.lte]: req.params.toDate },
        ]},
        userId: req.params.userId   
     },
-    attributes: [sequilize.fn('date_trunc', 'month', sequilize.col('updatedAt'))
+    attributes: [ sequilize.fn('date_trunc', 'month', sequilize.col('updatedAt'))
     ],
-    group: 'month'
-    // order: [ [ 'createdAt', 'DESC' ]],
+    group: 'month',
+    order: [ [ 'createdAt', 'DESC' ] ],
   })
   .then((account) => {
     // Return an array where you can get account.balance by month
@@ -180,6 +180,8 @@ server.post("/transactions/:sender/to/:receiver", (req, res, next) => {
               amount,
               message,
               state: "complete",
+              senderBalance: acc[0].balance,
+              receiverBalance: acc[1].balance
             })
               .then((transactionCreated) => {
                 const msg = {
