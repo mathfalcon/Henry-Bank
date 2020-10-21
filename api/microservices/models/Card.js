@@ -4,7 +4,7 @@ const crypto = require("crypto");
 module.exports = (sequelize) => {
   sequelize.define("card", {
     number: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
       set(value) {
         const rSalt = this.randomSalt();
@@ -16,7 +16,7 @@ module.exports = (sequelize) => {
       },
     },
     cvv: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
       set(value) {
         const rSalt = this.randomSalt();
