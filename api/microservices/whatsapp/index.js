@@ -43,14 +43,14 @@ module.exports.sendMessage = async (req, res) => {
     });
 };
 // Module to send whatsapp notification when the user is not in the database
-module.exports.sendInvitation = async (req, res, phone, name) => {
+module.exports.sendInvitation = async (req, res, phone, name, host) => {
     options = {
         quoted: null,
         timestamp: new Date()
     }
     client.sendTextMessage(
         `${phone}@s.whatsapp.net`,
-        `Hello, you have recieved an invitation to Henry Bank from ${name}`,
+        `Hello, you have recieved an invitation to Henry Bank from ${name}, click the link below to register exp://localhost:19000/`,
         options
         )
     res.send({
