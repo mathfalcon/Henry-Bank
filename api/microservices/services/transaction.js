@@ -93,6 +93,224 @@ server.get("/transactions/outcome/:userId", (req, res, next) => {
         .send({ success: false, message: "Something went wrong: ", err })
     );
 });
+
+// Route for getting user transactions from a specific date to another
+server.get("/transactions/history/:userId", (req, res, next) => {
+  const { startDate, toDate } = req.body;
+  Promise.all([
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+       { [Op.gte]: startDate },
+       { [Op.lte]: toDate },
+      ]},   
+      senderId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+       { [Op.gte]: startDate },
+       { [Op.lte]: toDate },
+    ]},   
+    receiverId: req.params.userId
+  }})
+  ])
+  .then((transactions) => {
+    let outcomes = transactions[0].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let incomes = transactions[1].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let total = incomes - outcomes;
+  res.send({ transactions, total });
+  })
+  .catch((err) =>
+      res.status(400)
+        .send({ success: false, message: "Something went wrong: ", err })
+    );
+});
+// Route to get the balance in the last 7 days
+// server.get("/transactions/history/weekly/:userId", (req, res, next) => {
+//   const { startDate, toDate } = req.body;
+//   Transaction.findAll({
+//     where: {
+//         createdAt: {  startDate },
+//         senderId: req.params.userId   
+//     },
+//     // attributes: [ sequilize.fn('date_trunc', 'month', sequilize.col('updatedAt'))
+//     // ],
+//     // group: 'month',
+//     order: [ [ 'createdAt', 'ASC' ] ],
+//   })
+//   .then((account) => {
+//     res.send({ account });
+//   })
+//   .catch((err) =>
+//   res.status(400)
+//     .send({ success: false, message: "Cannot get requiered balances: ", err })
+// );
+// });
+// Route to get the balance in the last 7 days
+server.get("/transactions/history/weekly/:userId", (req, res, next) => {
+  const today = new Date(Date.now());
+  const week = new Date(today - 1000 * 60 * 60 * 24 * 7).toISOString();
+  const week1 = new Date(today - 1000 * 60 * 60 * 24 * 6).toISOString();
+  const week2 = new Date(today - 1000 * 60 * 60 * 24 * 5).toISOString();
+  const week3 = new Date(today - 1000 * 60 * 60 * 24 * 4).toISOString();
+  const week4 = new Date(today - 1000 * 60 * 60 * 24 * 3).toISOString();
+  const week5 = new Date(today - 1000 * 60 * 60 * 24 * 2).toISOString();
+  const week6 = new Date(today - 1000 * 60 * 60 * 24 * 1).toISOString();
+  const week7 = new Date(Date.now()).toISOString();
+
+
+  Promise.all([
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week },
+        { [Op.lt]: week1 },
+      ]},   
+      senderId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week },
+        { [Op.lt]: week1 },
+    ]},   
+      receiverId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week1 },
+        { [Op.lt]: week2 },
+      ]},   
+      senderId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week1 },
+        { [Op.lt]: week2 },
+    ]},   
+      receiverId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week2 },
+        { [Op.lt]: week3 },
+      ]},   
+      senderId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week2 },
+        { [Op.lt]: week3 },
+    ]},   
+      receiverId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week3 },
+        { [Op.lt]: week4 },
+      ]},   
+      senderId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week3 },
+        { [Op.lt]: week4 },
+    ]},   
+      receiverId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week4 },
+        { [Op.lt]: week5 },
+      ]},   
+      senderId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week4 },
+        { [Op.lt]: week5 },
+    ]},   
+      receiverId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week5 },
+        { [Op.lt]: week6 },
+      ]},   
+      senderId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week5 },
+        { [Op.lt]: week6 },
+    ]},   
+      receiverId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week6 },
+        { [Op.lt]: week7 },
+      ]},   
+      senderId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week6 },
+        { [Op.lt]: week7 },
+    ]},   
+      receiverId: req.params.userId
+  }})
+  ])
+  .then((transactions) => {
+    let outcomes1 = transactions[0].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let incomes1 = transactions[1].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let total1 = incomes1 - outcomes1;
+
+    let outcomes2 = transactions[2].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let incomes2 = transactions[3].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let total2 = incomes2 - outcomes2;
+
+    let outcomes3 = transactions[4].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let incomes3 = transactions[5].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let total3 = incomes3 - outcomes3;
+
+    let outcomes4 = transactions[6].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let incomes4 = transactions[7].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let total4 = incomes4 - outcomes4;
+
+    let outcomes5 = transactions[8].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let incomes5 = transactions[9].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let total5 = incomes5 - outcomes5;
+
+    let outcomes6 = transactions[9].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let incomes6 = transactions[10].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let total6 = incomes6 - outcomes6;
+
+    let outcomes7 = transactions[11].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let incomes7 = transactions[12].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let total7 = incomes7 - outcomes7;
+
+  res.send([total1, total2, total3, total4, total5, total6, total7 ]);
+  })
+  .catch((err) =>
+      res.status(400)
+        .send({ success: false, message: "Something went wrong: ", err })
+    );
+});
+
 // Route for getting user transactions from a specific date to present
 server.get(
   "/transactions/history/:userId/:startDate/:toDate",
@@ -175,6 +393,7 @@ server.get(
       );
   }
 );
+
 
 ////////////////
 // ROUTES /POST/
