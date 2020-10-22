@@ -4,9 +4,11 @@ import { api } from "../../components/Constants/constants";
 
 export const getContactList = (id) => {
   return function (dispatch) {
-    axios(`${api}/contacts/${id}`).then((response) => {
+    axios(`${api}/contacts/${id}`)
+    .then((response) => {
       dispatch({ type: C.getContactList, payload: response.data });
-    });
+    })
+    .catch( err => console.log( err ));
   };
 };
 
@@ -20,7 +22,8 @@ export const addContact = (contactName, contactEmail, userId) => {
       })
       .then((response) => {
         dispatch({ type: C.addContact, payload: response.data });
-      });
+      })
+      .catch( err => console.log( err ));
   };
 };
 
@@ -31,6 +34,7 @@ export const deleteContact = (id) => {
       .then((response) => {
         dispatch({ type: C.deleteContact, payload: response.data });
       })
+      .catch( err => console.log( err ));
   };
 };
 
@@ -42,6 +46,7 @@ export const modifyContact = (contactName, id) => {
       })
       .then((response) => {
         dispatch({ type: C.modifyContact, payload: response.data });
-      });
+      })
+      .catch( err => console.log( err ));
   };
 };

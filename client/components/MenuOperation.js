@@ -1,34 +1,82 @@
-import React from 'react';
-import { Container, Header, Content, Footer, FooterTab, Button, Icon, Text } from 'native-base';
+import React, { useState } from "react";
+import {
+  Container,
+  Header,
+  Content,
+  Footer,
+  FooterTab,
+  Button,
+  Icon,
+  Text,
+} from "native-base";
 
+export default MenuOperation = ({ navigation, screen }) => {  
 
-export default MenuOperation = ({ navigation, userLogged }) => {
-  
-    return (      
-        <Footer>
-          <FooterTab style={{backgroundColor: '#151515'}}>
-            <Button vertical>
-              <Icon name="apps" style={{ color: 'white' }} />
-              <Text style={{ color: 'white' }}>Apps</Text>
-            </Button>
-            <Button vertical>
-              <Icon name="card" onPress={() => navigation.navigate('myCards')} style={{ color: 'white' }}/>
-              <Text style={{ color: 'white' }}>Cards</Text>
-            </Button>
-            <Button
-              vertical
-              active
-              style={{backgroundColor:'#ffff6d'}} 
-              onPress={() => navigation.navigate('accountHistory', userLogged)}
-            >
-              <Icon style={{color:'black'}} active type='FontAwesome' name="dollar" />
-              <Text style={{color:'black'}}>History</Text>
-            </Button>
-            <Button vertical onPress={() => navigation.navigate('contacts')}>
-              <Icon type='FontAwesome' name="users" style={{ color: 'white' }} />
-              <Text style={{ color: 'white' }}>Contacts</Text>
-            </Button>
-          </FooterTab>
-        </Footer>
-   );
-}
+console.log('route.params', screen);
+
+  return (
+    <FooterTab style={{ backgroundColor: "#151515" }}>
+
+      <Button
+        vertical
+        onPress={() => navigation.navigate("position")}        
+      >
+      <Icon
+        name="home"
+        type="FontAwesome5"        
+        style={screen !== 'position' ? {color: "white"} : {color: "yellow"}}
+      />
+      <Text style={{ color: "white" }}>HOME</Text>
+      </Button>
+
+      <Button
+        vertical
+        onPress={() => navigation.navigate("userStats")}
+      >
+      <Icon
+        name="chart-bar"
+        type="FontAwesome5"        
+        style={screen !== 'stats' ? {color: "white"} : {color: "yellow"}}
+      />
+      <Text style={{ color: "white" }}>STATS</Text>
+      </Button>
+
+      <Button
+        vertical
+        onPress={() => navigation.navigate("myCards")}
+      >
+      <Icon
+        name="card"                
+        style={screen !== 'cards' ? {color: "white"} : {color: "yellow"}}
+      />
+      <Text style={{ color: "white" }}>Cards</Text>
+      </Button>
+
+      <Button
+        vertical
+        onPress={() => navigation.navigate("accountHistory")}
+      >
+      <Icon
+        style={screen !== 'accounts' ? {color: "white"} : {color: "yellow"}}          
+        type="FontAwesome"
+        name="dollar"
+      />
+      <Text style={{ color: "white" }}>Moves</Text>
+      </Button>
+      
+      <Button
+        vertical
+        onPress={() => navigation.navigate("contacts")}
+      >
+      <Icon        
+        name="users"
+        type="FontAwesome5"
+        style={screen !== 'contacts' ? {color: "white"} : {color: "yellow"}}
+      />
+      <Text style={{ color: "white" }}>Friend</Text>
+      </Button>
+
+    </FooterTab>
+  );
+};
+

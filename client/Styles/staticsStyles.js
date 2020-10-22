@@ -41,5 +41,10 @@ export default StyleSheet.create({
     movements:{
         fontFamily: '',
         textAlign:'center'
-    }
+    },
+    menuOp:{
+        height:50,    
+        backgroundColor:"black",
+        marginTop:277,
+    },
 })

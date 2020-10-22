@@ -315,6 +315,10 @@ export default Contacts = ({ navigation }) => {
           </View>
         </View>
       </Modal>
+
+        <View style={styles.menuOp}>
+            <MenuOperation navigation={navigation} screen={'contacts'} />
+        </View>
     </View>
   );
 };

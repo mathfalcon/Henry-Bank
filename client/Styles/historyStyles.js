@@ -63,7 +63,7 @@ export default StyleSheet.create({
         marginRight: "28%",
     },
     list:{
-                
+        marginBottom:45
     },
     card:{
         flexDirection:'column',
@@ -85,6 +85,11 @@ export default StyleSheet.create({
         left: "20%",
         fontSize: 15,
         fontWeight: "bold",
+    },
+    menuOp:{        
+        height:50,
+        marginTop:-30,        
+        backgroundColor:"black",
     },
     money:{
         width: "140%",

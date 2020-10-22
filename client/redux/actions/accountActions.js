@@ -8,7 +8,8 @@ export const getAccountHistory = ( userId, startDate, toDate ) => {
       .get(`${api}/transactions/history/${userId}/${startDate}/${toDate}`)      
       .then((response) => {
         dispatch({ type: C.accountHistory, payload: response.data });
-      });
+      })
+      .catch( err => console.log( err ));
   };
 };
 
@@ -19,7 +20,8 @@ export const verifyFunds = ( accountSender ) => {
     //   .post(`${api}/users/create`,userData)
       .then((response) => {
         dispatch({ type: C.verifyFunds, payload: response.data });
-      });
+      })
+      .catch( err => console.log( err ));
   };
 };
 
@@ -29,6 +31,7 @@ export const sendMoney = ( accountSender, accountReceiver ) => {
       .post(`${api}/transactions/${accountSender}/to/${accountReceiver}`)
       .then((response) => {
         dispatch({ type: C.sendMoney, payload: response.data });
-      });
+      })
+      .catch( err => console.log( err ));
   };
 };

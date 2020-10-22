@@ -8,7 +8,8 @@ export const getUsers = () => {
       .get(`${api}/users/`)
       .then((response) => {
         dispatch({ type: C.getUsers, payload: response.data });
-      });
+      })
+      .catch( err => console.log( err ));
   };
 };
 
@@ -38,7 +39,8 @@ export const getLocation = ( country, state, locality, street, streetNumber ) =>
       .post( `https://us1.locationiq.com/v1/search.php?key=${ C.API_LOCATION }&q=${ country }%20${ state }%20${ locality }%20${ street }%20${ streetNumber }&format=json`)
       .then((response) => {
         dispatch({ type: C.validateAddress, payload: response });
-      });
+      })
+      .catch( err => console.log( err ));
   };
 };
 

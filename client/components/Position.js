@@ -19,6 +19,7 @@ import { api } from "./Constants/constants";
 import { getUserLogged } from "../redux/actions/authActions";
 import { getContactList } from "../redux/actions/contactsActions";
 import * as Font from "expo-font";
+import { BarChart } from "react-native-chart-kit";
 import AccountMovementsChart from "./AccountsChart";
 
 export default Position = ({ navigation }) => {
@@ -29,7 +30,7 @@ export default Position = ({ navigation }) => {
         BreeSerifRegular: require("../assets/fonts/BreeSerif-Regular.ttf"),
       });
     }
-  });
+  },[]);
   const dispatch = useDispatch();
 
   const handleLogOut = async () => {
@@ -130,10 +131,7 @@ export default Position = ({ navigation }) => {
             </View>
           </View>
           <View style={styles.menuOp}>
-            <MenuOperation 
-            navigation={navigation} 
-            userLogged={userLogged}
-            />
+            <MenuOperation navigation={navigation} screen={'position'} />
           </View>
         </Container>
       ) : (
