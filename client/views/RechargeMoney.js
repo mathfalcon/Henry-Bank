@@ -27,7 +27,10 @@ export default RechargeMoney = ({ route }) => {
       .put(`${api}/transactions/account/recharge/${userLogged.id}`, {
         amount: +amount,
       })
-      .then((data) => dispatch(getUserLogged()));
+      .then((data) => {
+        dispatch(getUserLogged());
+        Alert.alert('Success', 'Your recharge has been sucessfully added to your account\'s balance')
+      });
   };
   return (
     <KeyboardAwareScrollView style={{ backgroundColor: "#ffff57", flex: 1 }}>

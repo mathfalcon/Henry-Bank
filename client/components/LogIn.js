@@ -1,28 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import {
-  View,
-  Text,
-  Form,
-  Label,
-  Item,
-  Icon,
-  Input,
-  Picker,
-  Button,
-  DatePicker,
-} from "native-base";
-import { CheckBox } from "react-native-elements";
+import { Text, Form, Item, Icon, Input } from "native-base";
+
 import CustomButton from "./customButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Alert, Image } from "react-native";
 import axios from "axios";
 import { api } from "./Constants/constants";
+import { getUserLogged } from "../redux/actions/authActions";
 import styles from "../Styles/logInStyles";
 
-export default SignupForm = ({ navigation }) => {
+export default LogInForm = ({ navigation }) => {
   const [showPass, setShowPass] = useState(false);
+
+  const dispatch = useDispatch();
   const {
     values,
     isSubmitting,
@@ -50,7 +43,8 @@ export default SignupForm = ({ navigation }) => {
               [
                 {
                   text: "Understood",
-                  onPress: () => navigation.navigate("position"),
+                  // onPress: () => navigation.navigate("position"),
+                  onPress: () => dispatch(getUserLogged()),
                 },
               ],
               { cancelable: false }
@@ -125,8 +119,17 @@ export default SignupForm = ({ navigation }) => {
               onPress={() => setShowPass(!showPass)}
             />
           </Item>
-          <Text style={{ marginLeft: 18, color: "#e06d6d", marginBottom: 20 }}>
+          <Text style={{ marginLeft: 18, color: "#e06d6d" }}>
             {touched.user && errors.password}
+          </Text>
+          <Text style={{ alignSelf: "center", marginBottom: 20 }}>
+            <Text>Forgot your </Text>
+            <Text
+              style={{ fontWeight: "bold" }}
+              onPress={() => navigation.navigate("forgotPass")}
+            >
+              Password?
+            </Text>
           </Text>
 
           {/* <Button onPress={handleSubmit} block style={{ marginLeft: 15 }}>

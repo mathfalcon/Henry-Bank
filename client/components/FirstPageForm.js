@@ -73,8 +73,7 @@ export default FirstPageForm = ({ navigation }) => {
       if (values.name.length <= 2) errors.name = "Must be a valid name";
       if (values.surname.length <= 2)
         errors.surname = "Must be a valid surname";
-      if (values.docType === "")
-        errors.docType = "Select a document type";
+      if (values.docType === "") errors.docType = "Select a document type";
       if (!/^(?=.*\d)[0-9]{8,10}$/.test(values.docNumber))
         errors.docNumber = "Must be a valid document number";
       if (values.phone.length <= 10)
@@ -157,6 +156,8 @@ export default FirstPageForm = ({ navigation }) => {
                   })
                 }
                 value={values.name}
+                style={{ textTransform: "capitalize" }}
+                autoFocus={true}
                 // placeholderTextColor={focus.name ? 'red' : 'blue'}
                 // placeHolderTextStyle={}
                 // placeHolderText={{marginVertical:100}}
@@ -201,6 +202,7 @@ export default FirstPageForm = ({ navigation }) => {
                   })
                 }
                 value={values.surname}
+                style={{ textTransform: "capitalize" }}
               />
 
               {touched.surname && !errors.surname ? (
@@ -266,6 +268,7 @@ export default FirstPageForm = ({ navigation }) => {
                   })
                 }
                 value={values.docNumber}
+                keyboardType="numeric"
               />
 
               {touched.docNumber && !errors.docNumber ? (
@@ -338,6 +341,7 @@ export default FirstPageForm = ({ navigation }) => {
                 name="phone"
                 onChangeText={handleChange("phone")}
                 value={values.phone}
+                keyboardType="phone-pad"
               />
 
               {touched.phone && !errors.phone ? (
@@ -378,6 +382,7 @@ export default FirstPageForm = ({ navigation }) => {
                   })
                 }
                 value={values.email}
+                keyboardType="email-address"
               />
               {touched.email && !errors.email ? (
                 <Icon style={{ color: "green" }} name="checkmark-circle" />
