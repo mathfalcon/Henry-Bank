@@ -33,6 +33,7 @@ import {
 // import { SafeAreaView } from "react-native-safe-area-context";
 import { SwipeListView } from "react-native-swipe-list-view";
 import styles from "../Styles/contactsStyles";
+import { Avatar } from "react-native-elements";
 
 export default Contacts = ({ navigation }) => {
   const [input, setInput] = useState({
@@ -99,9 +100,44 @@ export default Contacts = ({ navigation }) => {
       style={styles.rowFront}
       underlayColor={"#AAA"}
     >
-      <View style={{ alignSelf: "flex-start", marginLeft: 50 }}>
-        <Text>Contact: {data.item.text}</Text>
-        <Text>Email: {data.item.key}</Text>
+      <View style={{ alignSelf: "flex-start", flexDirection: "row" }}>
+        <View style={{ flex: 0.5 }}>
+          <Avatar
+            size="large"
+            icon={{ color: "black", name: "user", type: "font-awesome" }}
+            activeOpacity={0.7}
+            containerStyle={{
+              backgroundColor: "#ffff6d",
+              alignSelf: "center",
+            }}
+          />
+        </View>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "flex-start",
+          }}
+        >
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Icon
+              name="address-book"
+              onPress={() => navigation.navigate("myCards")}
+              style={{ color: "black", fontSize: 20}}
+              type="FontAwesome5"
+            />
+            <Text style={{paddingHorizontal: 15}}>{data.item.text}</Text>
+          </View>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Icon
+              name="envelope"
+              onPress={() => navigation.navigate("myCards")}
+              style={{ color: "black", fontSize: 17}}
+              type="FontAwesome5"
+            />
+            <Text style={{paddingHorizontal: 15}}>{data.item.key}</Text>
+          </View>
+        </View>
       </View>
     </TouchableHighlight>
   );
@@ -117,13 +153,13 @@ export default Contacts = ({ navigation }) => {
           })
         }
       >
-        <Text>Send Money</Text>
+        <Text style={{ color: "#ffff8b" }}>Send Money</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnLeft]}
         onPress={() => closeRow(rowMap, data.item.key, data.item.value)}
       >
-        <Text style={styles.backTextWhite}>Modify</Text>
+        <Text style={styles.backTextBlack}>Modify</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnRight]}
@@ -202,7 +238,7 @@ export default Contacts = ({ navigation }) => {
         renderItem={renderItem}
         renderHiddenItem={renderHiddenItem}
         // renderSectionHeader={renderSectionHeader}
-        leftOpenValue={75}
+        leftOpenValue={115}
         rightOpenValue={-150}
         previewRowKey={"0"}
         previewOpenValue={-40}
@@ -282,11 +318,3 @@ export default Contacts = ({ navigation }) => {
     </View>
   );
 };
-
-// Se debe incluir las siguientes funcionalidades:
-
-// Asociar Contacto: dar de alta un nuevo contacto cargando su nombre y mail: Validar que el nuevo contacto es cliente de Henry Bank por su mail.
-
-// Modificar Contacto: poder cambiar el nombre solamente del contacto.
-
-// Eliminar Contacto: dar de baja en contacto.

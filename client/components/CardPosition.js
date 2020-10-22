@@ -15,19 +15,10 @@ import {
 export default CardPosition = ({ navigation, userLogged }) => {
   
   return (
-    <Container
-      style={{
-        backgroundColor: "whitesmoke",
-        flex: 1,
-        flexDirection: "row",
-      }}
-    >
-      <Content padder>
         <Card>
           <CardItem header bordered>
-            <Left>
               <Body>
-                <Text>Account Balance</Text>
+                <Text>Account Balance: ${props.user.user.account.balance}</Text>
               </Body>
             </Left>            
             <Text onPress={() => navigation.navigate('accountHistory', userLogged)}>Account movements</Text>
@@ -51,7 +42,5 @@ export default CardPosition = ({ navigation, userLogged }) => {
             </Right>
           </CardItem>
         </Card>
-      </Content>
-    </Container>
   );
 };

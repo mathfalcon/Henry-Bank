@@ -32,4 +32,3 @@ export default MenuOperation = ({ navigation, userLogged }) => {
         </Footer>
    );
 }
-

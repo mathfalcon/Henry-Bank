@@ -4,8 +4,9 @@ const server = express();
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
-const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SEND_API_KEY);
+const sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const { Op } = require("sequelize");
 
 ////////////////
 // MIDDLEWARES /
@@ -92,27 +93,307 @@ server.get("/transactions/outcome/:userId", (req, res, next) => {
         .send({ success: false, message: "Something went wrong: ", err })
     );
 });
-// Route for getting user transactions from a specific date to present
-server.get("/transactions/history/:/userId/:startDate/:toDate", (req, res, next) => {
+
+// Route for getting user transactions from a specific date to another
+server.get("/transactions/history/:userId", (req, res, next) => {
+  const { startDate, toDate } = req.body;
+  Promise.all([
   Transaction.findAll({ 
-    where: { 
-    createdAt: { 
-      $gt: req.params.startDate,
-      $lt: req.params.toDate
-    },   
-    senderId: req.params.userId,
+    where: {
+      createdAt: { [Op.and]: [
+       { [Op.gte]: startDate },
+       { [Op.lte]: toDate },
+      ]},   
+      senderId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+       { [Op.gte]: startDate },
+       { [Op.lte]: toDate },
+    ]},   
     receiverId: req.params.userId
   }})
+  ])
   .then((transactions) => {
-    transactions.reduce((total, trans) => trans.state === "complete" ? total + trans.amount : total, 0);
+    let outcomes = transactions[0].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let incomes = transactions[1].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let total = incomes - outcomes;
   res.send({ transactions, total });
   })
   .catch((err) =>
-      res
-        .status(400)
+      res.status(400)
         .send({ success: false, message: "Something went wrong: ", err })
     );
 });
+// Route to get the balance in the last 7 days
+// server.get("/transactions/history/weekly/:userId", (req, res, next) => {
+//   const { startDate, toDate } = req.body;
+//   Transaction.findAll({
+//     where: {
+//         createdAt: {  startDate },
+//         senderId: req.params.userId   
+//     },
+//     // attributes: [ sequilize.fn('date_trunc', 'month', sequilize.col('updatedAt'))
+//     // ],
+//     // group: 'month',
+//     order: [ [ 'createdAt', 'ASC' ] ],
+//   })
+//   .then((account) => {
+//     res.send({ account });
+//   })
+//   .catch((err) =>
+//   res.status(400)
+//     .send({ success: false, message: "Cannot get requiered balances: ", err })
+// );
+// });
+// Route to get the balance in the last 7 days
+server.get("/transactions/history/weekly/:userId", (req, res, next) => {
+  const today = new Date(Date.now());
+  const week = new Date(today - 1000 * 60 * 60 * 24 * 7).toISOString();
+  const week1 = new Date(today - 1000 * 60 * 60 * 24 * 6).toISOString();
+  const week2 = new Date(today - 1000 * 60 * 60 * 24 * 5).toISOString();
+  const week3 = new Date(today - 1000 * 60 * 60 * 24 * 4).toISOString();
+  const week4 = new Date(today - 1000 * 60 * 60 * 24 * 3).toISOString();
+  const week5 = new Date(today - 1000 * 60 * 60 * 24 * 2).toISOString();
+  const week6 = new Date(today - 1000 * 60 * 60 * 24 * 1).toISOString();
+  const week7 = new Date(Date.now()).toISOString();
+
+
+  Promise.all([
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week },
+        { [Op.lt]: week1 },
+      ]},   
+      senderId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week },
+        { [Op.lt]: week1 },
+    ]},   
+      receiverId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week1 },
+        { [Op.lt]: week2 },
+      ]},   
+      senderId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week1 },
+        { [Op.lt]: week2 },
+    ]},   
+      receiverId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week2 },
+        { [Op.lt]: week3 },
+      ]},   
+      senderId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week2 },
+        { [Op.lt]: week3 },
+    ]},   
+      receiverId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week3 },
+        { [Op.lt]: week4 },
+      ]},   
+      senderId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week3 },
+        { [Op.lt]: week4 },
+    ]},   
+      receiverId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week4 },
+        { [Op.lt]: week5 },
+      ]},   
+      senderId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week4 },
+        { [Op.lt]: week5 },
+    ]},   
+      receiverId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week5 },
+        { [Op.lt]: week6 },
+      ]},   
+      senderId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week5 },
+        { [Op.lt]: week6 },
+    ]},   
+      receiverId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week6 },
+        { [Op.lt]: week7 },
+      ]},   
+      senderId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.and]: [
+        { [Op.gte]: week6 },
+        { [Op.lt]: week7 },
+    ]},   
+      receiverId: req.params.userId
+  }})
+  ])
+  .then((transactions) => {
+    let outcomes1 = transactions[0].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let incomes1 = transactions[1].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let total1 = incomes1 - outcomes1;
+
+    let outcomes2 = transactions[2].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let incomes2 = transactions[3].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let total2 = incomes2 - outcomes2;
+
+    let outcomes3 = transactions[4].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let incomes3 = transactions[5].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let total3 = incomes3 - outcomes3;
+
+    let outcomes4 = transactions[6].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let incomes4 = transactions[7].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let total4 = incomes4 - outcomes4;
+
+    let outcomes5 = transactions[8].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let incomes5 = transactions[9].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let total5 = incomes5 - outcomes5;
+
+    let outcomes6 = transactions[9].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let incomes6 = transactions[10].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let total6 = incomes6 - outcomes6;
+
+    let outcomes7 = transactions[11].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let incomes7 = transactions[12].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+    let total7 = incomes7 - outcomes7;
+
+  res.send([total1, total2, total3, total4, total5, total6, total7 ]);
+  })
+  .catch((err) =>
+      res.status(400)
+        .send({ success: false, message: "Something went wrong: ", err })
+    );
+});
+
+// Route for getting user transactions from a specific date to present
+server.get(
+  "/transactions/history/:userId/:startDate/:toDate",
+  (req, res, next) => {
+    Promise.all([
+      Transaction.findAll({
+        where: {
+          createdAt: {
+            [Op.and]: [
+              { [Op.gte]: req.params.startDate },
+              { [Op.lte]: req.params.toDate },
+            ],
+          },
+          senderId: req.params.userId,
+        },
+      }),
+      Transaction.findAll({
+        where: {
+          createdAt: {
+            [Op.and]: [
+              { [Op.gte]: req.params.startDate },
+              { [Op.lte]: req.params.toDate },
+            ],
+          },
+          receiverId: req.params.userId,
+        },
+      }),
+    ])
+      .then((transactions) => {
+        let outcomes = transactions[0].reduce(
+          (total, trans) =>
+            trans.state === "complete" ? total + trans.amount : total,
+          0
+        );
+        let incomes = transactions[1].reduce(
+          (total, trans) =>
+            trans.state === "complete" ? total + trans.amount : total,
+          0
+        );
+        let total = incomes - outcomes;
+        res.send({ transactions, total });
+      })
+      .catch((err) =>
+        res
+          .status(400)
+          .send({ success: false, message: "Something went wrong: ", err })
+      );
+  }
+);
+// Route to get the balance by month
+server.get(
+  "/transactions/history/:userId/:startDate/:toDate",
+  (req, res, next) => {
+    Account.findAll({
+      where: {
+        updatedAt: {
+          [Op.and]: [
+            { [Op.gte]: req.params.startDate },
+            { [Op.lte]: req.params.toDate },
+          ],
+        },
+        userId: req.params.userId,
+      },
+      attributes: [
+        sequilize.fn("date_trunc", "month", sequilize.col("updatedAt")),
+      ],
+      group: "month",
+      // order: [ [ 'createdAt', 'DESC' ]],
+    })
+      .then((account) => {
+        // Return an array where you can get account.balance by month
+        res.send({ account });
+      })
+      .catch((err) =>
+        res.status(400).send({
+          success: false,
+          message: "Cannot get requiered balances: ",
+          err,
+        })
+      );
+  }
+);
+
 
 ////////////////
 // ROUTES /POST/
@@ -126,89 +407,95 @@ server.post("/transactions/:sender/to/:receiver", (req, res, next) => {
     Account.findOne({ where: { userId: req.params.sender } }), // Search for the account that sends the money
     Account.findOne({ where: { userId: req.params.receiver } }), // Search for the account that receives the money
     User.findByPk(req.params.sender),
-    User.findByPk(req.params.receiver)
-  ]).then((acc) => {
-    if (!acc[2].checkPasscode(passcode)) {
-      res.send({
-        success: false,
-        message: "The provided actual passcode is incorrect",
-      });
-    } else {
-      Number(acc[0].balance) >= amount // It verifies that has sufficient funds
-        ? Promise.all([
-            acc[0].update({ balance: Number(acc[0].balance) - Number(amount) }), // extract the money from sender account
-            acc[1].update({ balance: Number(acc[1].balance) + Number(amount) }), // deposit the money into receiver account
-          ]).then((accUpd) => {
-            Transaction.create({
-              senderId: req.params.sender,
-              receiverId: req.params.receiver,
-              amount,
-              message,
-              state: "complete",
-            })
-              .then((transactionCreated) => {
-                const msg = {
-                  template_id: process.env.SENGRID_TEMPLATE_ID_TRANSACTION,
-                  "from": {
-                    "email": process.env.SENGRID_SENDER_EMAIL,
-                    "name": process.env.SENDGRID_SENDER_NAME,
-                  },
-                  "personalizations": [
-                    {
-                      "to": [
-                        {
-                          "email": accu[3].email,
-                        },
-                      ],
-                      "dynamic_template_data": {
-                        "senderAcc": acc[0].type,
-                        "receiverAcc": acc[1].type,
-                        "senderName": acc[0].name,
-                        "receiverName": acc[1].name,
-                        "amount": req.body.amount,
-                        "message": req.body.message
-                      }
-                    }
-                  ]
-                };
-                sgMail
-                .send(msg)
-                .then((data) => console.log("Email sent successfully"))
-                .catch((error) => {
-                  // Log friendly error
-                  console.error(error);
-
-                  if(error.response) {
-                    // Extract error msg
-                    const { message, code, response } = error;
-
-                    // Extract response msg
-                    const { headers, body } = response;
-
-                    console.error(body);
-                  }
-                });
-                res.send({
-                  success: true,
-                  message: "Transaction Completed: ",
-                  transactionCreated,
-                  sender: accUpd[0],
-                  receiver: accUpd[1],
-                });
+    User.findByPk(req.params.receiver),
+  ])
+    .then((acc) => {
+      if (!acc[2].checkPasscode(passcode)) {
+        res.send({
+          success: false,
+          message: "The provided actual passcode is incorrect",
+        });
+      } else {
+        Number(acc[0].balance) >= amount // It verifies that has sufficient funds
+          ? Promise.all([
+              acc[0].update({
+                balance: Number(acc[0].balance) - Number(amount),
+              }), // extract the money from sender account
+              acc[1].update({
+                balance: Number(acc[1].balance) + Number(amount),
+              }), // deposit the money into receiver account
+            ]).then((accUpd) => {
+              Transaction.create({
+                senderId: req.params.sender,
+                receiverId: req.params.receiver,
+                amount,
+                message,
+                state: "complete",
               })
-              .catch((err) =>
-                res.status(400).send({
-                  success: false,
-                  message: "Something went wrong: ",
-                  err,
+                .then((transactionCreated) => {
+                  const msg = {
+                    template_id: process.env.SENGRID_TEMPLATE_ID_TRANSACTION,
+                    from: {
+                      email: process.env.SENDGRID_SENDER_EMAIL,
+                      name: process.env.SENDGRID_SENDER_NAME,
+                    },
+                    personalizations: [
+                      {
+                        to: [
+                          {
+                            email: acc[3].email,
+                          },
+                        ],
+                        dynamic_template_data: {
+                          senderAcc: acc[0].type,
+                          receiverAcc: acc[1].type,
+                          senderName: `${acc[2].name} ${acc[2].surname}`,
+                          receiverName: `${acc[3].name} ${acc[3].surname}`,
+                          amount: req.body.amount,
+                          message: req.body.message,
+                        },
+                      },
+                    ],
+                  };
+                  sgMail
+                    .send(msg)
+                    .then((data) => console.log("Email sent successfully"))
+                    .catch((error) => {
+                      // Log friendly error
+                      console.error(error);
+
+                      if (error.response) {
+                        // Extract error msg
+                        const { message, code, response } = error;
+
+                        // Extract response msg
+                        const { headers, body } = response;
+
+                        console.error(body);
+                      }
+                    });
+                  res.send({
+                    success: true,
+                    message: "Transaction Completed: ",
+                    transactionCreated,
+                    sender: accUpd[0],
+                    receiver: accUpd[1],
+                  });
                 })
-              );
-          })
-        : res
-            .status(400)
-            .send({ success: false, message: "insufficient funds" });
-    }
-  });
+                .catch((err) =>
+                  res.status(400).send({
+                    success: false,
+                    message: "Something went wrong: ",
+                    err,
+                  })
+                );
+            })
+          : res
+              .status(400)
+              .send({ success: false, message: "insufficient funds" });
+      }
+    })
+    .catch((err) => console.log(err));
 });
 /////////////////
 // ROUTES /PUT/
@@ -216,9 +503,13 @@ server.post("/transactions/:sender/to/:receiver", (req, res, next) => {
 
 // Route for modifying user's account balance (recharge)
 
-server.put("/transactions/account/recharge/:userId", (req, res, next) => {
+server.put("/transactions/account/recharge/:userId", async (req, res, next) => {
   const { userId } = req.params;
   const amount = Number(req.body.amount);
+  const bankUser = await User.findOne({
+    where: { email: "bankhenry@recharges.com" },
+  });
+
   Account.findOne({ where: { userId } }).then((account) => {
     const currentBalance = account.balance;
     account.balance = Number(currentBalance) + amount;
@@ -229,7 +520,7 @@ server.put("/transactions/account/recharge/:userId", (req, res, next) => {
           amount: amount,
           message: "Account balance recharge.",
           state: "complete",
-          senderId: 1,
+          senderId: bankUser.id,
           receiverId: userId,
         })
           .then((transaction) => {
@@ -329,6 +620,78 @@ server.patch("/transactions/enrich/:userId", (req, res, next) => {
         .status(400)
         .send({ success: false, message: "Something went wrong: ", err })
     );
+});
+
+// TESTING
+
+server.post("/transactions/testing", (req, res, next) => {
+  const { amount, message, state, senderId, receiverId, createdAt } = req.body;
+  Transaction.create({
+    amount,
+    message,
+    state,
+    senderId,
+    receiverId,
+    createdAt,
+  }).then((data) => res.send(data));
+});
+
+// Route used to get the last 7 days balance change of the user
+server.get("/transactions/account/graph", (req, res, next) => {
+  const { receiverId } = req.body;
+  const today = new Date();
+  const oneDayAgo = new Date(today);
+  const twoDayAgo = new Date(today);
+  const threeDayAgo = new Date(today);
+  const fourDayAgo = new Date(today);
+  const fiveDayAgo = new Date(today);
+  const sixDayAgo = new Date(today);
+  const weekAgo = new Date(today);
+
+  oneDayAgo.setDate(weekAgo.getDate() - 1);
+  twoDayAgo.setDate(weekAgo.getDate() - 2);
+  threeDayAgo.setDate(weekAgo.getDate() - 3);
+  fourDayAgo.setDate(weekAgo.getDate() - 4);
+  fiveDayAgo.setDate(weekAgo.getDate() - 5);
+  sixDayAgo.setDate(weekAgo.getDate() - 6);
+  weekAgo.setDate(weekAgo.getDate() - 7);
+
+  today.toDateString();
+  weekAgo.toDateString();
+
+  Transaction.findAll({
+    where: {
+      receiverId: receiverId,
+      state: "complete",
+      createdAt: {
+        [Op.gte]: new Date(weekAgo),
+        [Op.lte]: new Date(today),
+      },
+    },
+  }).then((transactions) =>
+    Account.findOne({ where: { userId: receiverId } }).then((account) => {
+      res.send({transactions, account})
+    })
+  );
+});
+
+// Route for getting the transactions by time range of an user
+server.get("/transactions/account/graph/byTime", (req, res, next) => {
+  const { amount, message, state, receiverId, startDate, endDate } = req.body;
+  Transaction.findAll({
+    where: {
+      receiverId: receiverId,
+      state: "complete",
+      createdAt: {
+        [Op.gt]: new Date(startDate),
+        [Op.lt]: new Date(endDate),
+      },
+    },
+  }).then((transactions) =>
+    Account.findOne({ where: { userId: receiverId } }).then((account) =>
+      res.send({ transactions, account })
+    )
+  );
 });
 
 server.listen(3003, () => {

@@ -6,7 +6,6 @@ export default StyleSheet.create({
     backgroundColor: "black",
     flexDirection: "column",
   },
-
   headerSection: {
     flex: 1.5,
     flexDirection: "row",
@@ -18,7 +17,6 @@ export default StyleSheet.create({
     backgroundColor: "#151515",
     width: "100%",
   },
-
   avatarSection: {
     flex: 3,
     flexDirection: "column",
@@ -31,16 +29,14 @@ export default StyleSheet.create({
   },
 
   cardPosition: {
-    flex: 6.5,
+    flex: 7,
     flexDirection: "column",
     width: "100%",
     justifyContent: "space-around",
-    paddingTop: 75,
-    backgroundColor: 'whitesmoke'
+    backgroundColor: '#ffff8b',
   },
   menuOp: {
-    flex: 1,
-    top: "2.3%"
+    flex: 0.8,
   },
   contentButton: {
     marginLeft: "50%",
@@ -52,10 +48,11 @@ export default StyleSheet.create({
     paddingRight: 45,
   },
   buttonsView: {
-    flex: 2,
+    flex: 1,
     flexDirection: "row",
-    backgroundColor: "whitesmoke",
+    backgroundColor: "#ffff8b",
     justifyContent: "space-evenly",
+    flexWrap: 'wrap'
   },
   sendMoneyButton: {
     flexDirection: "row",

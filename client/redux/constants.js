@@ -6,6 +6,9 @@ export const API_LOCATION = '96db2928e9c031';
 export const userCreated = "USER_CREATED";
 export const getUserLogged = 'GET_USER_LOGGED';
 export const resetPass = "RESET_PASS";
+export const getUsers = "GET_USERS";
+export const deleteUser = "DELETE_USER";
+export const promoteUser = "PROMOTE_USER";
 
 // para la validación del domicilio en el signUpFrom
 export const validateAddress = "VALIDATE_ADDRESS";
