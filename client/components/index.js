@@ -6,12 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserLogged } from "../redux/actions/authActions";
 
 /* ------------------------------- COMPONENTS ------------------------------- */
-import AccountHistory from "./AccountHistory";
-import Contacts from "./Contacts";
+// import AccountHistory from "./AccountHistory";
+// import Contacts from "./Contacts";
 import ForgotPass from "./ForgotPass";
 import Home from "./Home";
+import HomePosition from "./HomePosition/HomePosition";
 import LogIn from "./LogIn";
-import MyCards from "./MyCards";
+// import MyCards from "./MyCards";
 import Position from "./Position";
 import RechargeMoney from "../views/RechargeMoney";
 import SendMoney from "./SendMoney";
@@ -24,15 +25,14 @@ import ManageUsers from "./Admin/ManageUsers";
 import ManageAccounts from "./Admin/ManageAccounts";
 import ManageTransactions from "./Admin/ManageTransactions";
 import SeeStats from "./Admin/SeeStats";
-import userStats from "./UserStats";
+// import userStats from "./UserStats";
 
 const LoggedFalseStack = createStackNavigator();
 const LoggedTrueStack = createStackNavigator();
 
 export default function Index() {
   const dispatch = useDispatch()
-  const userLogged = useSelector((state) => state.auth);
-  console.log("userLoggedRole", userLogged.user.role);
+  const userLogged = useSelector((state) => state.auth);  
 
   useEffect(() => dispatch(getUserLogged()), []);
   return (
@@ -60,14 +60,15 @@ export default function Index() {
           :
             (
               <>
-              <LoggedTrueStack.Navigator headerMode="none">
+              <LoggedTrueStack.Navigator headerMode="none">                
+                {/* <LoggedTrueStack.Screen name="contacts" component={Contacts} />        
+                <LoggedTrueStack.Screen name="myCards" component={MyCards} />         */}
+                <LoggedTrueStack.Screen name="homePosition" component={HomePosition} />
                 <LoggedTrueStack.Screen name="position" component={Position} />
-                <LoggedTrueStack.Screen name="contacts" component={Contacts} />        
-                <LoggedTrueStack.Screen name="myCards" component={MyCards} />        
                 <LoggedTrueStack.Screen name="recharge" component={RechargeMoney} />
                 <LoggedTrueStack.Screen name="sendMoney" component={SendMoney} />
-                <LoggedTrueStack.Screen name="accountHistory" component={AccountHistory} />
-                <LoggedTrueStack.Screen name="userStats" component={userStats} />
+                {/* <LoggedTrueStack.Screen name="accountHistory" component={AccountHistory} />
+                <LoggedTrueStack.Screen name="userStats" component={userStats} /> */}
                 <LoggedTrueStack.Screen name="adminPanel" component={AdminPanel} />
                 <LoggedTrueStack.Screen name="manageUsers" component={ManageUsers} />
                 <LoggedTrueStack.Screen name="manageAccounts" component={ManageAccounts} />

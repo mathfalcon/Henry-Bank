@@ -38,7 +38,7 @@ export default StyleSheet.create({
     backgroundColor: '#ffff8b',
   },
   menuOp: {
-    flex: 0.7,
+    flex: 0.8,
   },
   contentButton: {
     marginLeft: "50%",

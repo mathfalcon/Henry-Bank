@@ -5,7 +5,7 @@ import { DatePicker, DateTimePicker } from "native-base";
 import styles from "../Styles/staticsStyles";
 import { BarChart } from "react-native-chart-kit";
 
-export default function userStats() {
+export default function userStats({ navigation }) {
   const showDatepicker = () => {
     showMode("date");
   };
@@ -93,6 +93,10 @@ export default function userStats() {
             }}
           />
         </View>
+      </View>
+
+      <View style={styles.menuOp}>
+            <MenuOperation navigation={navigation} screen={'stats'} />
       </View>
     </View>
   );

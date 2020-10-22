@@ -18,19 +18,36 @@ export default AccountHistory = ({ navigation }) => {
                 money: '$1500',
                 date: '06/10/2020',
                 saldo: '$30000',
+                key: 1,
             },
             {
                 contact: 'contact Name2',
                 money: '-$1000',
                 date: '10/10/2020',
                 saldo: '$29000',
+                key: 2,
             },
             {
                 contact: 'contact Name3',
                 money: '$3000',
                 date: '13/10/2020',
                 saldo: '$32000',
+                key: 3,
             },
+            {
+                contact: 'contact Name3',
+                money: '$3000',
+                date: '13/10/2020',
+                saldo: '$32000',
+                key: 4,
+            },
+            {
+                contact: 'contact Name3',
+                money: '$3000',
+                date: '13/10/2020',
+                saldo: '$32000',
+                key: 5,
+            },            
     ]
 
     // useEffect(() => dispatch(getAccountHistory()), []);
@@ -109,26 +126,29 @@ export default AccountHistory = ({ navigation }) => {
 
                     <List style={styles.list}>
                     {accountHistory.map( e => (
-                        <>
-                        <ListItem itemDivider style={styles.divider} />
-                        <ListItem>
-                        <Left style={styles.card}>
-                            <Text style={styles.item}>Contacto: {e.contact}</Text>
-                            <Text style={styles.item}>Importe: {e.money}</Text>
-                            <Text style={styles.item}>Fecha: {e.date}</Text>
-                            <Text style={styles.item}>Saldo: {e.saldo}</Text>
-                        </Left>
-                        <Right>
-                            <Icon name="arrow-forward" />
-                        </Right>
-                        </ListItem>
-                        </>
+                        <View key={e.key}>
+                            <ListItem itemDivider style={styles.divider} />
+                            <ListItem>
+                            <Left style={styles.card}>
+                                <Text style={styles.item}>Contacto: {e.contact}</Text>
+                                <Text style={styles.item}>Importe: {e.money}</Text>
+                                <Text style={styles.item}>Fecha: {e.date}</Text>
+                                <Text style={styles.item}>Saldo: {e.saldo}</Text>
+                            </Left>
+                            <Right>
+                                <Icon name="arrow-forward" />
+                            </Right>
+                            </ListItem>
+                        </View>
                     ))}
-                    </List>
-                </Content>
+                    </List>                
+                </Content>                
             </Container>
         
         </KeyboardAwareScrollView>
+                <View style={styles.menuOp}>
+                    <MenuOperation navigation={navigation} screen={'accounts'} />
+                </View>
     </SafeAreaView>
     );
 }

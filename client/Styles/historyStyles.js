@@ -33,7 +33,7 @@ export default StyleSheet.create({
         alignSelf:'center',
     },
     list:{
-                
+        marginBottom:45
     },
     card:{
         flexDirection:'column',
@@ -44,6 +44,11 @@ export default StyleSheet.create({
         marginLeft:10,        
         lineHeight: 20
     },
-    divider:{        
-    },
+    menuOp:{        
+        height:50,
+        marginTop:-30,        
+        backgroundColor:"black",
+    }
+    // divider:{        
+    // },
 })
