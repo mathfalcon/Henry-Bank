@@ -6,7 +6,6 @@ export default StyleSheet.create({
     backgroundColor: "black",
     flexDirection: "column",
   },
-
   headerSection: {
     flex: 1.5,
     flexDirection: "row",
@@ -18,7 +17,6 @@ export default StyleSheet.create({
     backgroundColor: "#151515",
     width: "100%",
   },
-
   avatarSection: {
     flex: 3,
     flexDirection: "column",
@@ -38,7 +36,7 @@ export default StyleSheet.create({
     backgroundColor: '#ffff8b',
   },
   menuOp: {
-    flex: 0.7,
+    flex: 0.8,
   },
   contentButton: {
     marginLeft: "50%",

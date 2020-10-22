@@ -11,7 +11,7 @@ import { Avatar, Divider } from "react-native-elements";
 import CardPosition from "./CardPosition";
 import MenuOperation from "./MenuOperation";
 
-import { View, Text, Container, Card } from "native-base";
+import { View, Text, Container, Card, CardItem } from "native-base";
 import styles from "../Styles/positionStyles";
 import CustomButton from "./customButton";
 import axios from "axios";
@@ -19,7 +19,8 @@ import { api } from "./Constants/constants";
 import { getUserLogged } from "../redux/actions/authActions";
 import { getContactList } from "../redux/actions/contactsActions";
 import * as Font from "expo-font";
-import { BarChart } from "react-native-chart-kit";
+import AccountMovementsChart from "./AccountsChart";
+
 export default Position = ({ navigation }) => {
   const [fontLoaded, setFontLoaded] = useState(false);
   useEffect(() => {
@@ -87,46 +88,7 @@ export default Position = ({ navigation }) => {
               </View>
               <View style={{ marginHorizontal: 15 }}>
                 <Card>
-                  <BarChart
-                    data={{
-                      labels: ["Mon", "Tue", "Wed", "Tue", "Fri"],
-                      datasets: [
-                        {
-                          data: [
-                            Math.random() * 100,
-                            Math.random() * 100,
-                            Math.random() * 100,
-                            Math.random() * 100,
-                            Math.random() * 100,
-                            Math.random() * 100,
-                          ],
-                        },
-                      ],
-                    }}
-                    width={Dimensions.get("window").width - 40} // from react-native
-                    height={200}
-                    yAxisLabel="$"
-                    yAxisSuffix="k"
-                    yAxisInterval={1} // optional, defaults to 1
-                    chartConfig={{
-                      backgroundColor: "#ffff57",
-                      backgroundGradientFrom: "whitesmoke",
-                      backgroundGradientTo: "whitesmoke",
-                      decimalPlaces: 2, // optional, defaults to 2dp
-                      color: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
-                      labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                      propsForDots: {
-                        r: "6",
-                        strokeWidth: "2",
-                        stroke: "#ffa726",
-                      },
-                    }}
-                    bezier
-                    style={{
-                      marginVertical: 8,
-                      elevation: 15,
-                    }}
-                  />
+                  <AccountMovementsChart />
                 </Card>
               </View>
             </View>
@@ -146,7 +108,7 @@ export default Position = ({ navigation }) => {
 
               {userLogged.user.role === "admin" ? (
                 <>
-                  <View style={{marginVertical: 10}}>
+                  <View style={{ marginVertical: 10 }}>
                     <CustomButton
                       style={{
                         color: "white",

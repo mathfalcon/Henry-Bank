@@ -37,7 +37,7 @@ export default MenuOperation = ({ navigation }) => {
           type="FontAwesome"
           name="dollar"
         />
-        <Text style={{ color: "black" }}>History</Text>
+        <Text style={{ color: "black" }}>dashboard</Text>
       </Button>
       <Button vertical onPress={() => navigation.navigate("contacts")}>
         <Icon type="FontAwesome" name="users" style={{ color: "white" }} />
