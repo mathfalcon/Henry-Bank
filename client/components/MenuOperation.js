@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Header, Content, Footer, FooterTab, Button, Icon, Text } from 'native-base';
 
 
-export default MenuOperation = ({navigation}) => {
+export default MenuOperation = ({ navigation, userLogged }) => {
   
     return (      
         <Footer>
@@ -19,7 +19,7 @@ export default MenuOperation = ({navigation}) => {
               vertical
               active
               style={{backgroundColor:'#ffff6d'}} 
-              onPress={() => navigation.navigate('accountHistory')}
+              onPress={() => navigation.navigate('accountHistory', userLogged)}
             >
               <Icon style={{color:'black'}} active type='FontAwesome' name="dollar" />
               <Text style={{color:'black'}}>History</Text>

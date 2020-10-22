@@ -104,7 +104,10 @@ export default Position = ({ navigation }) => {
         <Transaction />
       </View> */}
           <View style={styles.menuOp}>
-            <MenuOperation navigation={navigation} />
+            <MenuOperation 
+            navigation={navigation} 
+            userLogged={userLogged}
+            />
           </View>
         </Container>
       ) : (
