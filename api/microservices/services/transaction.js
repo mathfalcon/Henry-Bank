@@ -94,21 +94,22 @@ server.get("/transactions/outcome/:userId", (req, res, next) => {
     );
 });
 // Route for getting user transactions from a specific date to present
-server.get("/transactions/history/:userId/:startDate/:toDate", (req, res, next) => {
+server.get("/transactions/history/:userId", (req, res, next) => {
+  const { startDate, toDate } = req.body;
   Promise.all([
   Transaction.findAll({ 
     where: {
       createdAt: { [Op.and]: [
-       { [Op.gte]: req.params.startDate },
-       { [Op.lte]: req.params.toDate },
+       { [Op.gte]: startDate },
+       { [Op.lte]: toDate },
       ]},   
       senderId: req.params.userId
   }}),
   Transaction.findAll({ 
     where: {
       createdAt: { [Op.and]: [
-       { [Op.gte]: req.params.startDate },
-       { [Op.lte]: req.params.toDate },
+       { [Op.gte]: startDate },
+       { [Op.lte]: toDate },
     ]},   
     receiverId: req.params.userId
   }})
@@ -125,19 +126,20 @@ server.get("/transactions/history/:userId/:startDate/:toDate", (req, res, next) 
     );
 });
 // Route to get the balance by month
-server.get("/transactions/history/monthly/:userId/:startDate/:toDate", (req, res, next) => {
+server.get("/transactions/history/monthly/:userId", (req, res, next) => {
+  const { startDate, toDate } = req.body;
   Transaction.findAll({
     where: {
-        createAt: { [Op.and]: [
-          { [Op.gte]: req.params.startDate },
-          { [Op.lte]: req.params.toDate },
+        createdAt: { [Op.and]: [
+          { [Op.gte]: startDate },
+          { [Op.lte]: toDate },
        ]},
-       userId: req.params.userId   
+       senderId: req.params.userId   
     },
-    attributes: [ sequilize.fn('date_trunc', 'month', sequilize.col('updatedAt'))
-    ],
-    group: 'month',
-    order: [ [ 'createdAt', 'DESC' ] ],
+    // attributes: [ sequilize.fn('date_trunc', 'month', sequilize.col('updatedAt'))
+    // ],
+    // group: 'month',
+    order: [ [ 'createdAt', 'ASC' ] ],
   })
   .then((account) => {
     // Return an array where you can get account.balance by month
@@ -168,83 +170,79 @@ server.post("/transactions/:sender/to/:receiver", (req, res, next) => {
         success: false,
         message: "The provided actual passcode is incorrect",
       });
-    } else {
-      Number(acc[0].balance) >= amount // It verifies that has sufficient funds
-        ? Promise.all([
-            acc[0].update({ balance: Number(acc[0].balance) - Number(amount) }), // extract the money from sender account
-            acc[1].update({ balance: Number(acc[1].balance) + Number(amount) }), // deposit the money into receiver account
-          ]).then((accUpd) => {
-            Transaction.create({
-              senderId: req.params.sender,
-              receiverId: req.params.receiver,
-              amount,
-              message,
-              state: "complete",
-              senderBalance: acc[0].balance,
-              receiverBalance: acc[1].balance
-            })
-              .then((transactionCreated) => {
-                const msg = {
-                  template_id: process.env.SENGRID_TEMPLATE_ID_TRANSACTION,
-                  "from": {
-                    "email": process.env.SENGRID_SENDER_EMAIL,
-                    "name": process.env.SENDGRID_SENDER_NAME,
-                  },
-                  "personalizations": [
-                    {
-                      "to": [
-                        {
-                          "email": accu[3].email,
-                        },
-                      ],
-                      "dynamic_template_data": {
-                        "senderAcc": acc[0].type,
-                        "receiverAcc": acc[1].type,
-                        "senderName": acc[0].name,
-                        "receiverName": acc[1].name,
-                        "amount": req.body.amount,
-                        "message": req.body.message
-                      }
-                    }
-                  ]
-                };
-                sgMail
-                .send(msg)
-                .then((data) => console.log("Email sent successfully"))
-                .catch((error) => {
-                  // Log friendly error
-                  console.error(error);
-
-                  if(error.response) {
-                    // Extract error msg
-                    const { message, code, response } = error;
-
-                    // Extract response msg
-                    const { headers, body } = response;
-
-                    console.error(body);
-                  }
-                });
-                res.send({
-                  success: true,
-                  message: "Transaction Completed: ",
-                  transactionCreated,
-                  sender: accUpd[0],
-                  receiver: accUpd[1],
-                });
-              })
-              .catch((err) =>
-                res.status(400).send({
-                  success: false,
-                  message: "Something went wrong: ",
-                  err,
-                })
-              );
-          })
-        : res
-            .status(400)
-            .send({ success: false, message: "insufficient funds" });
     }
+    Number(acc[0].balance) >= amount // It verifies that has sufficient funds
+      ? Promise.all([
+          acc[0].update({ balance: Number(acc[0].balance) - Number(amount) }), // extract the money from sender account
+          acc[1].update({ balance: Number(acc[1].balance) + Number(amount) }), // deposit the money into receiver account
+        ]).then((accUpd) => {
+          Transaction.create({
+            senderId: req.params.sender,
+            receiverId: req.params.receiver,
+            amount,
+            message,
+            state: "complete",
+            senderBalance: acc[0].balance,
+            receiverBalance: acc[1].balance
+          })
+            .then((transactionCreated) => {
+              const msg = {
+                template_id: process.env.SENGRID_TEMPLATE_ID_TRANSACTION,
+                "from": {
+                  "email": process.env.SENGRID_SENDER_EMAIL,
+                  "name": process.env.SENDGRID_SENDER_NAME,
+                },
+                "personalizations": [
+                  {
+                    "to": [
+                      {
+                        "email": accu[3].email,
+                      },
+                    ],
+                    "dynamic_template_data": {
+                      "senderAcc": acc[0].type,
+                      "receiverAcc": acc[1].type,
+                      "senderName": acc[0].name,
+                      "receiverName": acc[1].name,
+                      "amount": req.body.amount,
+                      "message": req.body.message
+                    }
+                  }
+                ]
+              };
+              sgMail
+              .send(msg)
+              .then((data) => console.log("Email sent successfully"))
+              .catch((error) => {
+                // Log friendly error
+                console.error(error);
+                if(error.response) {
+                  // Extract error msg
+                  const { message, code, response } = error;
+                  // Extract response msg
+                  const { headers, body } = response;
+                  console.error(body);
+                }
+              });
+              res.send({
+                success: true,
+                message: "Transaction Completed: ",
+                transactionCreated,
+                sender: accUpd[0],
+                receiver: accUpd[1],
+              });
+            })
+            .catch((err) =>
+              res.status(400).send({
+                success: false,
+                message: "Something went wrong: ",
+                err,
+              })
+            );
+        })
+      : res
+          .status(400)
+          .send({ success: false, message: "insufficient funds" });
   });
 });
 /////////////////
