@@ -30,7 +30,7 @@ export default Position = ({ navigation }) => {
         BreeSerifRegular: require("../assets/fonts/BreeSerif-Regular.ttf"),
       });
     }
-  },[]);
+  }, []);
   const dispatch = useDispatch();
 
   const handleLogOut = async () => {
@@ -51,6 +51,7 @@ export default Position = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden={true} />
+
       {userLogged.success ? (
         <Container>
           <View style={styles.headerSection}>
@@ -84,54 +85,50 @@ export default Position = ({ navigation }) => {
 
           <View style={styles.cardPosition}>
             <View style={{ flex: 3 }}>
-              <CardPosition
-                userLogged={userLogged}
-                navigation={navigation}
-                />
-            <View style={{ flex: 3, justifyContent: "center" }}>
               <View style={{ marginHorizontal: 15 }}>
-                <CardPosition user={userLogged} />
+                <CardPosition userLogged={userLogged} navigation={navigation} />
               </View>
               <View style={{ marginHorizontal: 15 }}>
                 <Card>
-                  <AccountMovementsChart />
+                  <AccountMovementsChart userLogged={userLogged}/>
                 </Card>
               </View>
-            </View>
-            <View style={styles.buttonsView}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate("sendMoney")}
-                style={styles.sendMoneyButton}
-              >
-                <Text style={styles.sendMoneyText}>SEND MONEY</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => navigation.navigate("recharge", userLogged)}
-                style={styles.sendMoneyButton}
-              >
-                <Text style={styles.sendMoneyText}>RECHARGE MONEY</Text>
-              </TouchableOpacity>
+              <View style={styles.buttonsView}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("sendMoney")}
+                  style={styles.sendMoneyButton}
+                >
+                  <Text style={styles.sendMoneyText}>SEND MONEY</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("recharge", userLogged)}
+                  style={styles.sendMoneyButton}
+                >
+                  <Text style={styles.sendMoneyText}>RECHARGE MONEY</Text>
+                </TouchableOpacity>
 
-              {userLogged.user.role === "admin" ? (
-                <>
-                  <View style={{ marginVertical: 10 }}>
-                    <CustomButton
-                      style={{
-                        color: "white",
-                        backgroundColor: "#151515",
-                        fontSize: 15,
-                        width: 150,
-                      }}
-                      title="ADMIN PANEL"
-                      onPress={() => navigation.navigate("adminPanel")}
-                    />
-                  </View>
-                </>
-              ) : null}
+                {userLogged.user.role === "admin" ? (
+                  <>
+                    <View style={{ marginVertical: 10 }}>
+                      <CustomButton
+                        style={{
+                          color: "white",
+                          backgroundColor: "#151515",
+                          fontSize: 15,
+                          width: 150,
+                        }}
+                        title="ADMIN PANEL"
+                        onPress={() => navigation.navigate("adminPanel")}
+                      />
+                    </View>
+                  </>
+                ) : null}
+              </View>
             </View>
           </View>
+
           <View style={styles.menuOp}>
-            <MenuOperation navigation={navigation} screen={'position'} />
+            <MenuOperation navigation={navigation} screen={"position"} />
           </View>
         </Container>
       ) : (

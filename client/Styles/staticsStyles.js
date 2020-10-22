@@ -45,6 +45,6 @@ export default StyleSheet.create({
     menuOp:{
         height:50,    
         backgroundColor:"black",
-        marginTop:277,
+        marginTop:365,
     },
 })

@@ -26,13 +26,13 @@ export default StyleSheet.create({
         fontSize: 20
     },
     header: {
-        backgroundColor: 'black',
+        backgroundColor: '#151515',
         display: 'flex',
     },
     headerTitle:{
         color:'white',
         alignItems: 'center',
-        left: "60%",
+        left: "10%",
         width: '100%',
     },
     continue: {

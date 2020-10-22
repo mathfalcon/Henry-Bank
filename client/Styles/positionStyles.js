@@ -34,6 +34,7 @@ export default StyleSheet.create({
     width: "100%",
     justifyContent: "space-around",
     backgroundColor: '#ffff8b',
+    paddingTop: 15
   },
   menuOp: {
     flex: 0.8,
@@ -52,6 +53,7 @@ export default StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#ffff8b",
     justifyContent: "space-evenly",
+    alignContent: 'center',
     flexWrap: 'wrap'
   },
   sendMoneyButton: {
