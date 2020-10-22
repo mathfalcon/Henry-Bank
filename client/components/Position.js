@@ -82,6 +82,11 @@ export default Position = ({ navigation }) => {
           </View>
 
           <View style={styles.cardPosition}>
+            <View style={{ flex: 3 }}>
+              <CardPosition
+                userLogged={userLogged}
+                navigation={navigation}
+                />
             <View style={{ flex: 3, justifyContent: "center" }}>
               <View style={{ marginHorizontal: 15 }}>
                 <CardPosition user={userLogged} />
@@ -125,7 +130,10 @@ export default Position = ({ navigation }) => {
             </View>
           </View>
           <View style={styles.menuOp}>
-            <MenuOperation navigation={navigation} />
+            <MenuOperation 
+            navigation={navigation} 
+            userLogged={userLogged}
+            />
           </View>
         </Container>
       ) : (
