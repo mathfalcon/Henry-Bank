@@ -28,9 +28,6 @@ function Home({ navigation }) {
   
   return (
     <SafeAreaView style={styles.mainContainer}>
-      {userLogged.success ? (
-        navigation.navigate("position")
-      ) : (
         <ImageBackground style={{width: '100%', height: '100%'}} source={require('../assets/mainBg.jpg')}>
           <View
             style={{
@@ -66,8 +63,7 @@ function Home({ navigation }) {
               </TouchableOpacity>
             </View>
           </View>
-        </ImageBackground>
-      )}
+        </ImageBackground>      
     </SafeAreaView>
   );
 }
