@@ -2,10 +2,10 @@ import * as C from '../constants'
 import axios from "axios";
 import { api } from "../../components/Constants/constants";
 
-export const getAccountHistory = ( userId, startDate, toDate ) => {  
+export const getAccountHistory = ( userId ) => {  
   return function (dispatch) {
     axios        
-      .get(`${api}/transactions/history/${userId}/${startDate}/${toDate}`)      
+      .get(`${api}/transactions/user/2`)      
       .then((response) => {
         dispatch({ type: C.accountHistory, payload: response.data });
       })

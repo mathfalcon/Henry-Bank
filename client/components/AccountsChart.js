@@ -1,15 +1,47 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Svg, { Text, Rect } from "react-native-svg";
 
-import { Dimensions } from "react-native";
+import { Alert, Dimensions } from "react-native";
 import { Container, View } from "native-base";
 import { LineChart } from "react-native-chart-kit";
+import axios from "axios";
+import { api } from "./Constants/constants";
 
-export default AccountMovementsChart = () => {
+export default AccountMovementsChart = ({ userLogged }) => {
+  const today = new Date();
+  const [pastDaysBalance, setBalance] = useState([]);
+
+  useEffect(() => {
+    getPastDaysBalance();
+  }, []);
+
+  const getPastDaysBalance = () => {
+    axios(
+      `${api}/transactions/history/weekly/${userLogged.user.id}`
+    ).then((response) => console.log(response.data));
+  };
+    const getData = () => {
+    let currentBalance = userLogged.user.account.balance;
+    let toReturn = [];
+    pastDaysBalance.reverse().forEach((e) => {
+      currentBalance -= e;
+      toReturn.push(currentBalance)
+    });
+    console.log(toReturn)
+    return toReturn.reverse()
+  };
   return (
     <LineChart
       data={{
-        labels: ["Mon", "Tue", "Wed", "Tue", "Fri", "Sat", "Sun"],
+        labels: [
+          today.getDate() - 7,
+          today.getDate() - 6,
+          today.getDate() - 5,
+          today.getDate() - 4,
+          today.getDate() - 3,
+          today.getDate() - 2,
+          "Yesterday",
+        ],
         datasets: [
           {
             data: [

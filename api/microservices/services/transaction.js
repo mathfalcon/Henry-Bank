@@ -46,6 +46,34 @@ server.get("/transactions", (req, res, next) => {
         .send({ success: false, message: "Something went wrong: ", err })
     );
 });
+server.get("/transactions/user/:userId", (req, res, next) => {
+  const {userId} = req.params
+  Transaction.findAll({
+    where: {receiverId: userId},
+    include: [
+      {
+        model: User,
+        as: "sender",
+        attributes: ["id", "email", "name", "surname"],
+        include: Account,
+      },
+      {
+        model: User,
+        as: "receiver",
+        attributes: ["id", "email", "name", "surname"],
+        include: Account,
+      },
+    ],
+  })
+    .then((transactions) => {
+      res.send({ success: true, message: "transactions list: ", transactions });
+    })
+    .catch((err) =>
+      res
+        .status(400)
+        .send({ success: false, message: "Something went wrong: ", err })
+    );
+});
 // Route for getting user income
 server.get("/transactions/income/:userId", (req, res, next) => {
   Account.findOne({ where: { userId: req.params.userId } })

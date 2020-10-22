@@ -32,51 +32,20 @@ export default AccountHistory = ({ navigation, route }) => {
 
   // const { accountHistory } = useSelector((state) => state.accountInfo);
   const userLogged = useSelector((state) => state.auth.user);
+
+
   // ver como diferenciar envios y cargas / saldo positivo y saldo negativo
-  const accountHistory = [
-    {
-      email: "alinfierno@gmail.com",
-      contact: "Adolf Hitler",
-      money: "1500",
-      date: "06/10/2020",
-      saldo: "$30000",
-      key: 1,
-    },
-    {
-      email: "desgracia@gmail.com",
-      contact: "Nicolas Maduro",
-      money: "-1000",
-      date: "10/10/2020",
-      saldo: "$29000",
-      key: 2,
-    },
-    {
-      email: "elcartel@gmail.com",
-      contact: "Pablo Escobar",
-      money: "3000",
-      date: "13/10/2020",
-      saldo: "$32000",
-      key: 3,
-    },
-    {
-      email: "muerte@gmail.com",
-      contact: "Mussolini",
-      money: "-1000",
-      date: "08/12/2020",
-      saldo: "$1000",
-      key: 4,
-    },
-  ];
+  const accountHistory = useSelector((state) => state.accountInfo.accountHistory.transactions);
 
   useEffect(() => {
-    const userId = route.params.user.id;
+    const userId = userLogged.id;
     setUserId(userId);
-    const createdAt = new Date(route.params.user.createdAt);
+    const createdAt = new Date(userLogged.createdAt);
     const today = new Date();
     console.log("createdAt", createdAt);
     console.log("today", today);
     console.log("user", userId);
-    // dispatch(getAccountHistory(userId, createdAt, today));
+    dispatch(getAccountHistory(userId));
   }, []);
 
   const setFilter = () => {
@@ -90,20 +59,19 @@ export default AccountHistory = ({ navigation, route }) => {
         {theFilter ? (
           <Container>
             <Header style={styles.header}>
-              <Left>
+              <Left style={{flex: 1}}>
                 <Button
-                  style={{backgroundColor: "black"}}
+                  style={{ backgroundColor: "#151515" }}
                   onPress={() => navigation.navigate("position")}
                 >
                   <Icon style={{ color: "white" }} name="arrow-back" />
                 </Button>
               </Left>
-              <Body>
+              <Body style={{flex: 3}}>
                 <Title style={styles.headerTitle}>
-                  ${userLogged.account.balance}
+                  Current Balance: ${userLogged.account.balance}
                 </Title>
               </Body>
-              <Right />
             </Header>
 
             <Content style={styles.container}>
@@ -113,7 +81,7 @@ export default AccountHistory = ({ navigation, route }) => {
               />
               <View style={styles.headerMovement}>
                 <Left>
-                  <Text>Movements</Text>
+                  <Text>Latest Movements</Text>
                 </Left>
                 <Right>
                   <Button transparent onPress={() => setTheFilter(false)}>
@@ -134,32 +102,110 @@ export default AccountHistory = ({ navigation, route }) => {
                     <>
                       <ListItem itemDivider style={styles.divider} />
                       <ListItem key={e.id}>
-                      <Icon type="AntDesign" name={ e.money > 0 ? "upcircleo" : "downcircleo"} style={{color:'orange'}}/>
-                    <List style={styles.list}>
-                    {accountHistory.map( e => (
-                        <View key={e.key}>
-                            <ListItem itemDivider style={styles.divider} />
-                            <ListItem>
-                            <Left style={styles.card}>
-                                <Text style={styles.item}>Contacto: {e.contact}</Text>
-                                <Text style={styles.item}>Importe: {e.money}</Text>
-                                <Text style={styles.item}>Fecha: {e.date}</Text>
-                                <Text style={styles.item}>Saldo: {e.saldo}</Text>
-                            </Left>
-                            <Right>
-                                <Icon name="arrow-forward" />
-                            </Right>
-                            </ListItem>
-                        </View>
-                    ))}
-                    </List>                
-                </Content>                
-            </Container>
-        
-        </KeyboardAwareScrollView>
-                <View style={styles.menuOp}>
-                    <MenuOperation navigation={navigation} screen={'accounts'} />
-                </View>
+                        <Icon
+                          type="AntDesign"
+                          name={e.money > 0 ? "downcircleo" : "upcircleo"}
+                          style={{ color: "#FBC02D" }}
+                        />
+
+                        <Left style={styles.card}>
+                          <Text style={styles.myName}>{e.sender.name} {e.sender.surname}</Text>
+                          <Text style={styles.item}>{new Date (e.createdAt).toDateString()}</Text>
+                          <Text style={styles.item}>{e.sender.email}</Text>
+                        </Left>
+                        <Right>
+                          <Icon name="arrow-forward" />
+                          <Text
+                            style={
+                              e.amount > 0
+                                ? [styles.money, styles.moneyP]
+                                : [styles.money, styles.moneyN]
+                            }
+                          >
+                            ${e.amount}
+                          </Text>
+                        </Right>
+                      </ListItem>
+                    </>
+                  ))}
+              </List>
+            </Content>
+          </Container>
+        ) : (
+          <Container>
+            <Header style={styles.header}>
+              <Left>
+                <Button
+                  style={{ backgroundColor: "black" }}
+                  onPress={() => setTheFilter(true)}
+                >
+                  <Icon style={{ color: "white" }} name="arrow-back" />
+                </Button>
+              </Left>
+              <Body>
+                <Title style={styles.continue}>Continue</Title>
+              </Body>
+              <Right />
+            </Header>
+
+            <Content style={styles.container2}>
+              <Image
+                style={styles.background}
+                source={require("../assets/RectangleOne.png")}
+              />
+              <Text style={styles.title}>Search Transaction</Text>
+            </Content>
+            {/* Aqui va el corte */}
+
+            <View style={styles.datePicker}>
+              <View style={styles.fromTo}>
+                <Text style={styles.date}>From Date</Text>
+                <DatePicker
+                  defaultDate={new Date()} //Manejar from date y to date
+                  // maximumDate={new Date(2020, 6, 6)}
+                  locale={"en"}
+                  timeZoneOffsetInMinutes={undefined}
+                  modalTransparent={false}
+                  animationType={"fade"}
+                  androidMode={"default"}
+                  placeHolderText="Select From Date"
+                  textStyle={{ color: "black" }}
+                  placeHolderTextStyle={{ color: "black" }}
+                  onDateChange={(date) => setDateFrom(date)}
+                  disabled={false}
+                />
+              </View>
+
+              <View style={styles.fromTo}>
+                <Text style={styles.date}>To Date </Text>
+
+                <DatePicker
+                  placeHolderText="To Date"
+                  defaultDate={new Date()}
+                  minimumDate={new Date(dataFrom)}
+                  // maximumDate={new Date(2020, 6, 6)}
+                  locale={"en"}
+                  timeZoneOffsetInMinutes={undefined}
+                  modalTransparent={false}
+                  animationType={"fade"}
+                  androidMode={"default"}
+                  placeHolderText="Select To Date"
+                  textStyle={{ color: "black" }}
+                  placeHolderTextStyle={{ color: "black" }}
+                  onDateChange={(date) => setDateTo(date)}
+                  disabled={false}
+                />
+              </View>
+            </View>
+            <TouchableOpacity onPress={setFilter} style={styles.filterButtom}>
+              <Text style={styles.filterText}>SET FILTER</Text>
+            </TouchableOpacity>
+          </Container>
+        )}
+      </KeyboardAwareScrollView>
+      <View style={styles.menuOp}>
+        <MenuOperation navigation={navigation} userLogged={userLogged} screen ='accounts' />
+      </View>
     </SafeAreaView>
   );
 };
