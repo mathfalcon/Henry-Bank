@@ -149,7 +149,7 @@ server.post("/users/create", (req, res, next) => {
         .catch((error) => {
           // Log friendly error
           console.error(error);
-
+          
           if (error.response) {
             // Extract error msg
             const { message, code, response } = error;

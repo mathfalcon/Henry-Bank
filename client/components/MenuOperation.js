@@ -79,3 +79,4 @@ console.log('route.params', screen);
     </FooterTab>
   );
 };
+

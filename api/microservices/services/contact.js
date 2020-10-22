@@ -4,6 +4,7 @@ const server = express();
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
+const whatsapp = require('../whatsapp');
 
 ////////////////
 // MIDDLEWARES /
@@ -73,14 +74,19 @@ server.get("/contacts/:userId", (req, res, next) => {
 // ROUTES /POST/
 ////////////////
 
+// Route to connect whatsapp to the server
+server.post("/contacts/whatsapp/connect", whatsapp.connectApi);
+// Route to send whatsapp notifications
+server.post("/contacts/whatsapp/sendmessage", whatsapp.sendMessage);
+
 // Route for assigning a new contact
 server.post("/contacts/create", async (req, res, next) => {
-  const { userId, alias, emailOfContact } = req.body;
+  const { userId, alias, emailOfContact, phone } = req.body;
 
   const is_contact_of = await User.findOne({
     where: { email: emailOfContact },
   });
-
+  if(!is_contact_of) return whatsapp.sendInvitation(req, res, phone, userId);
   Contact.create({ userId, alias, is_contact_of: is_contact_of.id })
     .then((contactCreated) => {
       res.send({ success: true, message: "Contact created: ", contactCreated });
