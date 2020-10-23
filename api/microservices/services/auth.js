@@ -69,15 +69,23 @@ server.use((err, req, res, next) => {
 // Middleware to verified email
 const isNotVerified = async (req, res, next) => {
   try {
-      const user = await User.findOne({ where: { email: req.body.email }});
-      if (user.isVerified) {
-          return next();
-      }
-      res.send({ success: false, message: "Your account has not been verified. Please check your email to verify your account" });
-      return res.redirect('/');
+    const user = await User.findOne({ where: { email: req.body.email } });
+    if (user.isVerified) {
+      return next();
+    }
+    res.send({
+      success: false,
+      message:
+        "Your account has not been verified. Please check your email to verify your account",
+    });
+    return res.redirect("/");
   } catch (error) {
-      console.log(error);
-      res.send({ success: false, message: "Something went wrong. Please contact us for assistance.", error });
+    console.log(error);
+    res.send({
+      success: false,
+      message: "Something went wrong. Please contact us for assistance.",
+      error,
+    });
   }
 };
 
@@ -119,17 +127,19 @@ server.post("/auth/login", isNotVerified, (req, res, next) => {
 // Route for reset password
 server.post("/auth/reset_password", async (req, res, next) => {
   try {
-    const user = await User.findOne({ where: { email: req.body.email }});
+    const user = await User.findOne({ where: { email: req.body.email } });
     if (!user) {
-      return res.status(404).send({ success: false, message: "User not found" });
+      return res
+        .status(404)
+        .send({ success: false, message: "User not found" });
     }
-    const newResetToken = crypto.randomBytes(64).toString('hex');
+    const newResetToken = crypto.randomBytes(64).toString("hex");
     user.resetToken = newResetToken;
     await user.save();
     const msg = {
-      from: 'bankhenry7@gmail.com',
+      from: "bankhenry7@gmail.com",
       to: user.email,
-      subject: 'Henry Bank - Reset Password',
+      subject: "Henry Bank - Reset Password",
       text: `
           Hello ${user.name}, please copy and paste in your browser the address below to change your password: 
           http://${req.headers.host}/users/reset_password?token=${newResetToken}
@@ -137,14 +147,32 @@ server.post("/auth/reset_password", async (req, res, next) => {
       html: `
           <h1>Hello ${user.name},</h1>
           <a href="http://${req.headers.host}/users/reset_password?token=${newResetToken}">Please click here to reset your password</a>
-      `
-    }
+      `,
+    };
     await sgMail.send(msg);
-    res.send({ success: true, message: `Your password has been reset`});
+    res.send({ success: true, message: `Your password has been reset` });
   } catch (e) {
     console.log(e);
     return next(new Error(e));
   }
+});
+
+// Route for checking passcode
+server.post("/auth/check-passcode", async (req, res, next) => {
+  const { passcode, userId } = req.body;
+  User.findByPk(userId).then((user) => {
+    if (user.checkPasscode(passcode)) {
+      return res.status(200).send({
+        success: true,
+        message: "The provided passcode is valid",
+      });
+    } else {
+      return res.status(401).send({
+        success: false,
+        message: "The provided passcode is incorrect",
+      });
+    }
+  });
 });
 
 ////////////////
@@ -175,11 +203,12 @@ server.get("/auth/logout", (req, res, next) => {
   try {
     req.session.destroy();
     req.logOut();
-    res.status(200).send({success: true, message: 'You have logged out successfully'})
-  } catch (err){
-    res.send({success: false, err})
+    res
+      .status(200)
+      .send({ success: true, message: "You have logged out successfully" });
+  } catch (err) {
+    res.send({ success: false, err });
   }
-
 });
 
 //   server.get(
