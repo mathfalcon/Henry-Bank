@@ -73,19 +73,19 @@ export default ThirdPageForm = ({ route, navigation }) => {
 
       try {
         const response = await axios.post(`${api}/users/create`, accountInfo);
-
-        const errorMail = response.data.err.original.constraint;
+        console.log(response.data);
         let errorMsj = "";
-        if (errorMail) {
-          errorMsj = `Already exists an account with email address ${personalInfo.email}`;
-        } else {
-          errorMsj = "Any of the info submitted is wrong";
+        if (response.data.err) {
+          const errorMail = response.data.err.original.constraint || undefined;
+          if (errorMail === "users_email_key") {
+            errorMsj = `Already exists an account with email address ${personalInfo.email}`;
+          }
         }
 
         response.data.success
           ? Alert.alert(
               "Complete",
-              "Your account has been created successfully",
+              response.data.message,
               [
                 {
                   text: "Understood",
@@ -105,6 +105,7 @@ export default ThirdPageForm = ({ route, navigation }) => {
               { cancelable: false }
             );
       } catch (err) {
+        console.log(err);
         Alert.alert(
           "Error",
           "Any of the info submitted is wrong",

@@ -149,7 +149,7 @@ server.post("/users/create", (req, res, next) => {
         .catch((error) => {
           // Log friendly error
           console.error(error);
-          
+
           if (error.response) {
             // Extract error msg
             const { message, code, response } = error;
@@ -162,15 +162,14 @@ server.post("/users/create", (req, res, next) => {
         });
       Account.create({ userId: userCreated.id })
         .then((accCreated) => {
-          console.log("llegue hasta aca");
+          let today = new Date();
+          today.setFullYear(today.getFullYear() + 3);
           Card.create({
             accountId: accCreated.id,
             number: genCC(),
             cvv: genCC("", 3),
-            expiration_date: moment().add(3, "years").calendar(),
+            expiration_date: today,
           })
-            .catch((err) => console.log(err))
-
             .then((cardCreated) =>
               res.send({
                 success: true,
