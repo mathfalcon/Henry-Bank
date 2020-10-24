@@ -66,17 +66,16 @@ server.get("/users/verification/verify-email", async (req, res, next) => {
   try {
     const user = await User.findOne({ where: { emailToken: req.query.token } });
     if (!user) {
-      res.render("errorToken.html");
-      return res.redirect("/");
-    }
+      return res.render("errorToken.ejs");
+    } else {
     user.emailToken = null;
     user.isVerified = true;
     await user.save();
-    res.render("emailVerification.html", { name: user.name });
+    return res.render("emailVerification.ejs", { name: user.name });
+    }
   } catch (error) {
     console.log(error);
-    res.render("error.html");
-    res.redirect("/");
+    res.render("error.ejs");
   }
 });
 
