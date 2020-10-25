@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 // import Icon from 'react-native-vector-icons/FontAwesome5';
-import styles from "../Styles/signInStyles.js";
+import styles from "../../Styles/signInStyles.js";
+
 import {
   Text,
   Label,
@@ -24,11 +25,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Alert, Image, View } from "react-native";
 import axios from "axios";
-import { api } from "./Constants/constants";
+import { api } from "../Constants/constants";
 
-export default ThirdPageForm = ({ route, navigation }) => {
+export default FourthPageForm = ({ route, navigation }) => {
   const personalInfo = route.params.personalInfo;
-  const locationInfo = route.params.values;
+  const locationInfo = route.params.locationInfo;
+  const documentPhoto = route.params.selectedImage.picture.base64;
+  const photo = route.params.photo.base64;
 
   const [initialState, setInitialState] = useState(true);
   const [showPass, setShowPass] = useState(false);
@@ -68,12 +71,13 @@ export default ThirdPageForm = ({ route, navigation }) => {
         locality: locationInfo.locality,
         state: locationInfo.state,
         country: locationInfo.country,
+        documentPhoto: documentPhoto,
+        photo: photo,
         role: "client",
       };
 
       try {
-        const response = await axios.post(`${api}/users/create`, accountInfo);
-        console.log(response.data);
+        const response = await axios.post(`${api}/users/create`, accountInfo);        
         let errorMsj = "";
         if (response.data.err) {
           const errorMail = response.data.err.original.constraint || undefined;
@@ -158,7 +162,7 @@ export default ThirdPageForm = ({ route, navigation }) => {
               </Button>
             </Left>
             <Body>
-              <Title style={styles.headerText}>STEP 3/3</Title>
+              <Title style={styles.headerText}>STEP 4/4</Title>
             </Body>
             <Right>
               <Button transparent onPress={confirmCancel}>
@@ -170,7 +174,7 @@ export default ThirdPageForm = ({ route, navigation }) => {
           <Form style={styles.form}>
             <View style={styles.logoView}>
               <Image
-                source={require("../assets/henryLogoBlack.jpg")}
+                source={require("../../assets/henryLogoBlack.jpg")}
                 style={styles.logoImg}
               />
               <Text style={styles.logoViewText}>Security Details</Text>

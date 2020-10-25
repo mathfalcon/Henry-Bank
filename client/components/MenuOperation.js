@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import VirtualKeyboard from 'react-native-virtual-keyboard';
-import { Modal, View, TouchableHighlight } from "react-native";
+import { Modal, View, TouchableHighlight, Alert } from "react-native";
 import axios from "axios";
 import { api } from "./Constants/constants";
 import styles from "../Styles/keyboardStyles";
@@ -8,7 +8,7 @@ import {
   Container,
   Header,
   Content,
-  Footer, 
+  Footer,   
   Input,
   FooterTab,
   Button,

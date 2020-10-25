@@ -43,10 +43,23 @@ export default StyleSheet.create({
     },
     logoImg: {
       marginTop: 40,
-
       height: 60,
       width: 60,
       alignSelf: "center",
       borderRadius: 10,
-    }
+    },
+    body:{
+      backgroundColor:'whitesmoke',
+      
+    },
+    inputImage:{      
+      maxWidth: 280,
+      alignSelf:'center',
+    },
+    thumbnail: {
+      width: 75,
+      height: 75,
+      alignSelf:'center',
+      resizeMode: "contain"
+    },
   });
