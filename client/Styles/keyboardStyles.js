@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 
 // Aca estan los estilos del teclado
 // client\node_modules\react-native-virtual-keyboard\src\VirtualKeyboard.style.js
@@ -34,18 +34,18 @@ export default StyleSheet.create({
         // justifyContent:'center',        
     },
     textInput: {        
-        // justifyContent:'center',
-        // alignItems:'center',
-        fontSize: 25,
+        borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
+        width: Dimensions.get('window').width * 0.2,
+        height: Dimensions.get('window').width * 0.1,
+        fontSize: 20,
         color:'blue',
-        marginRight: 10,
-        paddingLeft:16,
-        backgroundColor: 'whitesmoke',
-        borderRadius:100,
+        marginRight: 12,
+        paddingLeft:17,
+        backgroundColor: 'whitesmoke',        
     },
     keyboard:{
         flex: 6,
-        marginTop:-10,        
+        marginTop:-25,        
     },
     textStyle: {
         color: "white",        
@@ -56,11 +56,11 @@ export default StyleSheet.create({
         flex:2,
         // flexDirection:'column',
         backgroundColor: "blue",                              
-        marginTop: 50,
+        marginTop: 60,
         width: 200,
         maxHeight:30,
         borderRadius: 5,
-        padding: 10, 
+        padding: 10,
         paddingBottom:35,       
       },
 });
@@ -104,7 +104,7 @@ export default StyleSheet.create({
 // 		marginTop: 15,
 // 	},
 // 	number: {		
-// 		fontSize: 30,
+// 		fontSize: 15,
 // 		color:'white',
 // 		textAlign: 'center',		
 // 	},
@@ -113,17 +113,18 @@ export default StyleSheet.create({
 // 		alignItems: 'center',
 // 		justifyContent: 'center',
 // 		backgroundColor:'blue',
-// 		marginRight:15,
+// 		marginRight:10,
 // 		maxWidth: 75,		
 // 		borderRadius: 100,
 // 		color:'black',
 // 	},
 // 	cell: {		
-// 		flex: 1,		
+// 		flex: 1,	
+// 		borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
+//         width: Dimensions.get('window').width * 0.2,
+//         height: Dimensions.get('window').width * 0.1,	
 // 		justifyContent: 'center',
-// 		backgroundColor:'blue',
-// 		maxWidth: 75,
-// 		marginRight:10,
-// 		borderRadius: 100,
+// 		backgroundColor:'blue',		
+// 		marginRight:10,		
 // 	},
 // });
