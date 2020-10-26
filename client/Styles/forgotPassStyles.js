@@ -2,8 +2,8 @@ import { StyleSheet } from "react-native";
 //
 export default StyleSheet.create({
   container: {
-    marginHorizontal: "10%",
-    marginVertical: "10%",
+    marginHorizontal: "5%",
+    marginVertical: "5%",
     flex: 20,
     backgroundColor: "white",
     alignItems: "center",
@@ -26,10 +26,17 @@ export default StyleSheet.create({
     fontWeight: "normal",
   },
   buttonRequest: {
-    color: "#ffdd3c",
+    color: "white",
     fontSize: 19,
     borderWidth: 0.5,
     borderColor: "gray",
     backgroundColor: "black",
+  },
+  logoImg: {
+    marginTop: 40,
+    height: 60,
+    width: 60,
+    alignSelf: "center",
+    borderRadius: 10,
   },
 });

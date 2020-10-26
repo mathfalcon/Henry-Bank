@@ -2,7 +2,7 @@ import React, { useState } from "react";
 // import { useSelector, useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import styles from "../Styles/signInStyles.js";
+import styles from "../../Styles/signInStyles.js";
 import {
   Text,
   Label,
@@ -117,7 +117,7 @@ export default FirstPageForm = ({ navigation }) => {
               </Button>
             </Left>
             <Body style={{ flex: 3 }}>
-              <Title style={styles.headerTitle}>STEP 1/3</Title>
+              <Title style={styles.headerTitle}>STEP 1/4</Title>
             </Body>
             <Right style={{ flex: 1.5 }}>
               <Button style={{ flex: 1 }} transparent onPress={confirmCancel}>
@@ -129,7 +129,7 @@ export default FirstPageForm = ({ navigation }) => {
           <Form style={styles.form}>
             <View style={styles.logoView}>
               <Image
-                source={require("../assets/henryLogoBlack.jpg")}
+                source={require("../../assets/henryLogoBlack.jpg")}
                 style={styles.logoImg}
               />
               <Text style={styles.logoViewText}>Personal Information</Text>

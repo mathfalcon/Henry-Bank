@@ -35,6 +35,8 @@ import { SwipeListView } from "react-native-swipe-list-view";
 import styles from "../Styles/contactsStyles";
 import { Avatar } from "react-native-elements";
 import PhoneNumberInput from "./PhoneNumberInput";
+import axios from "axios";
+import { api } from "./Constants/constants";
 
 export default Contacts = ({ navigation }) => {
   const [input, setInput] = useState({
@@ -54,10 +56,9 @@ export default Contacts = ({ navigation }) => {
   const dispatch = useDispatch();
   const userLogged = useSelector((state) => state.auth.user);
   const userContacts = useSelector((state) => state.contacts.contacts);
+
   useEffect(() => {
     dispatch(getContactList(userLogged.id));
-  }, []);
-  useEffect(() => {
     setListData(
       Array(1)
         .fill("")
@@ -87,9 +88,12 @@ export default Contacts = ({ navigation }) => {
   };
 
   const deleteRow = async (rowMap, rowKey, id) => {
-    await dispatch(deleteContact(id));
-    dispatch(getContactList(userLogged.id));
-    navigation.navigate("position");
+    const deleteRequest = await axios.delete(`${api}/contacts/delete/${id}`);
+    Alert.alert("Success", deleteRequest.data.message);
+    if (deleteRequest.data.success) {
+      dispatch(getContactList(userLogged.id));
+      navigation.navigate('position')
+    }
   };
 
   const onRowDidOpen = (rowKey) => {
@@ -121,23 +125,23 @@ export default Contacts = ({ navigation }) => {
             alignItems: "flex-start",
           }}
         >
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Icon
               name="address-book"
               onPress={() => navigation.navigate("myCards")}
-              style={{ color: "black", fontSize: 20}}
+              style={{ color: "black", fontSize: 20 }}
               type="FontAwesome5"
             />
-            <Text style={{paddingHorizontal: 15}}>{data.item.text}</Text>
+            <Text style={{ paddingHorizontal: 15 }}>{data.item.text}</Text>
           </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Icon
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Icon
               name="envelope"
               onPress={() => navigation.navigate("myCards")}
-              style={{ color: "black", fontSize: 17}}
+              style={{ color: "black", fontSize: 17 }}
               type="FontAwesome5"
             />
-            <Text style={{paddingHorizontal: 15}}>{data.item.key}</Text>
+            <Text style={{ paddingHorizontal: 15 }}>{data.item.key}</Text>
           </View>
         </View>
       </View>
@@ -196,10 +200,22 @@ export default Contacts = ({ navigation }) => {
         dispatch(modifyContact(input.name, input.id));
       } else {
         dispatch(addContact(input.name, input.email, input.phoneNumber, userLogged.id, userLogged.name));
+=======
+        // axios
+//   .post(`${api}/contacts/create`, {
+//     userId: userLogged.id,
+//     alias: input.name,
+//     emailOfContact: input.email,
+//   })
+//   .then((response) => {
+//     if (response.data.success) {
+//       dispatch(getContactList(userLogged.id));
+//       Alert.alert("Success", response.data.message);
+//       navigation.navigate("position");
+//     }
+//   })
+//   .catch((err) => console.log(err));
       }
-      Alert.alert("Se agrego el nuevo contacto");
-      dispatch(getContactList(userLogged.id));
-      navigation.navigate("position");
     }
   };
 
@@ -336,9 +352,9 @@ export default Contacts = ({ navigation }) => {
         </View>
       </Modal>
 
-        <View style={styles.menuOp}>
-            <MenuOperation navigation={navigation} screen={'contacts'} />
-        </View>
+      <View style={styles.menuOp}>
+        <MenuOperation navigation={navigation} screen={"contacts"} />
+      </View>
     </View>
   );
 };

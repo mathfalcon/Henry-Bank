@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { getLocation } from "../redux/actions/actions.js";
-import styles from "../Styles/signInStyles.js";
+// import { getLocation } from "../../redux/actions/actions.js";
+import styles from "../../Styles/signInStyles.js";
 import {
   Text,
   Label,
@@ -110,8 +110,8 @@ export default SecondPageForm = ({ route, navigation }) => {
                 <Icon style={{ color: "black" }} name="arrow-back" />
               </Button>
             </Left>
-            <Body>
-              <Text style={styles.headerText}>STEP 2/3</Text>
+            <Body>              
+              <Title style={styles.headerTitle}>STEP 2/4</Title>
             </Body>
             <Right>
               <Button transparent onPress={confirmCancel}>
@@ -123,7 +123,7 @@ export default SecondPageForm = ({ route, navigation }) => {
           <Form style={styles.form}>
             <View style={styles.logoView}>
               <Image
-                source={require("../assets/henryLogoBlack.jpg")}
+                source={require("../../assets/henryLogoBlack.jpg")}
                 style={styles.logoImg}
               />
               <Text style={styles.logoViewText}>Location Information</Text>

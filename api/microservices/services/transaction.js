@@ -599,7 +599,10 @@ server.patch("/transactions/enrich/:userId", (req, res, next) => {
 });
 
 // TESTING
-
+// TESTING
+// TESTING
+// TESTING
+// TESTING
 server.post("/transactions/testing", (req, res, next) => {
   const { amount, message, state, senderId, receiverId, createdAt } = req.body;
   Transaction.create({

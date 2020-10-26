@@ -66,17 +66,16 @@ server.get("/users/verification/verify-email", async (req, res, next) => {
   try {
     const user = await User.findOne({ where: { emailToken: req.query.token } });
     if (!user) {
-      res.render("errorToken.html");
-      return res.redirect("/");
+      return res.render("errorToken.ejs");
+    } else {
+      user.emailToken = null;
+      user.isVerified = true;
+      await user.save();
+      return res.render("emailVerification.ejs", { name: user.name });
     }
-    user.emailToken = null;
-    user.isVerified = true;
-    await user.save();
-    res.render("emailVerification.html", { name: user.name });
   } catch (error) {
     console.log(error);
-    res.render("error.html");
-    res.redirect("/");
+    res.render("error.ejs");
   }
 });
 
@@ -149,7 +148,7 @@ server.post("/users/create", (req, res, next) => {
         .catch((error) => {
           // Log friendly error
           console.error(error);
-          
+
           if (error.response) {
             // Extract error msg
             const { message, code, response } = error;
@@ -162,15 +161,14 @@ server.post("/users/create", (req, res, next) => {
         });
       Account.create({ userId: userCreated.id })
         .then((accCreated) => {
-          console.log("llegue hasta aca");
+          let today = new Date();
+          today.setFullYear(today.getFullYear() + 3);
           Card.create({
             accountId: accCreated.id,
             number: genCC(),
             cvv: genCC("", 3),
-            expiration_date: moment().add(3, "years").calendar(),
+            expiration_date: today,
           })
-            .catch((err) => console.log(err))
-
             .then((cardCreated) =>
               res.send({
                 success: true,
@@ -313,6 +311,15 @@ server.patch("/users/promote/:id", (req, res, next) => {
     );
 });
 
+// change passcode
+server.patch("/users/change_passcode", async (req, res, next) => {
+  const { id, oldPasscode, passcode } = req.body;
+  User.update(
+    { passcode: passcode },
+    { where: { id: id, passcode: oldPasscode } }
+  ).then(res.send({ success: true, message: "passcode changed succesfully !" })
+  ).catch((err) => res.status(400).send({ success: false, message: "Something went wrong: ", err }))
+});
 //////////////////
 // ROUTES /DELETE/
 //////////////////

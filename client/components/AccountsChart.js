@@ -18,7 +18,9 @@ export default AccountMovementsChart = ({ userLogged }) => {
   const getPastDaysBalance = () => {
     axios(
       `${api}/transactions/history/weekly/${userLogged.user.id}`
-    ).then((response) => console.log(response.data));
+    )
+    .then((response) => console.log(response.data))
+    .catch( err => console.log( err ))
   };
     const getData = () => {
     let currentBalance = userLogged.user.account.balance;

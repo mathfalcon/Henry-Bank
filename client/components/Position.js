@@ -128,7 +128,7 @@ export default Position = ({ navigation }) => {
           </View>
 
           <View style={styles.menuOp}>
-            <MenuOperation navigation={navigation} screen={"position"} />
+            <MenuOperation navigation={navigation} screen={"position"} userLogged={userLogged} />
           </View>
         </Container>
       ) : (

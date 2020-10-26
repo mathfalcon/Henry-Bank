@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Text, Item, Icon, Input, View, Label } from "native-base";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Alert } from "react-native";
+import { Alert, Image } from "react-native";
 import { api } from "./Constants/constants";
 import styles from "../Styles/forgotPassStyles";
 import CustomButton from "./customButton";
@@ -35,15 +35,10 @@ export default ForgotPass = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView>
         <View>
-          <Text style={{ alignSelf: "center", marginTop: 20 }}>
-            <Text style={{ fontSize: 14 }}>Don't you have an account? </Text>
-            <Text
-              style={{ fontWeight: "bold", fontSize: 14 }}
-              onPress={() => navigation.navigate("sign")}
-            >
-              Sign Up
-            </Text>
-          </Text>
+          <Image
+            source={require("../assets/henryLogoBlack.jpg")}
+            style={styles.logoImg}
+          />
           <Text style={styles.title}>Forgot Password</Text>
           <Text style={styles.subtitle}>
             Enter your email address associated to your account below and we
@@ -65,7 +60,7 @@ export default ForgotPass = ({ navigation }) => {
               type="FontAwesome5"
               style={{
                 fontSize: 20,
-                color: "#ffbf00",
+                color: "#151515",
               }}
             />
             <Label>Email Address</Label>
@@ -97,7 +92,7 @@ export default ForgotPass = ({ navigation }) => {
               checked={check}
               onPress={() => setCheck(!check)}
               containerStyle={{
-                backgroundColor: "#ffbf00",
+                backgroundColor: "#ffff57",
                 borderRadius: 10,
                 width: "70%",
                 alignSelf: "center",
@@ -108,13 +103,22 @@ export default ForgotPass = ({ navigation }) => {
               uncheckedColor="#2b2b2b"
             />
           </View>
-          <Text style={{ alignSelf: "center", marginTop: 100 }}>
+          <Text style={{ alignSelf: "center", marginTop: 30 }}>
             <Text>Back to </Text>
             <Text
               style={{ fontWeight: "bold" }}
               onPress={() => navigation.navigate("login")}
             >
               Log In
+            </Text>
+          </Text>
+          <Text style={{ alignSelf: "center", marginTop: 10 }}>
+            <Text style={{ fontSize: 14 }}>Don't you have an account? </Text>
+            <Text
+              style={{ fontWeight: "bold", fontSize: 14 }}
+              onPress={() => navigation.navigate("sign")}
+            >
+              Sign Up
             </Text>
           </Text>
         </View>
