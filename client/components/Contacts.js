@@ -34,12 +34,14 @@ import {
 import { SwipeListView } from "react-native-swipe-list-view";
 import styles from "../Styles/contactsStyles";
 import { Avatar } from "react-native-elements";
+import PhoneNumberInput from "./PhoneNumberInput";
 
 export default Contacts = ({ navigation }) => {
   const [input, setInput] = useState({
     name: "",
     email: "",
     id: "",
+    phoneNumber: ""
   });
   const [error, setError] = useState({
     name: false,
@@ -193,7 +195,7 @@ export default Contacts = ({ navigation }) => {
       if (modify) {
         dispatch(modifyContact(input.name, input.id));
       } else {
-        dispatch(addContact(input.name, input.email, userLogged.id));
+        dispatch(addContact(input.name, input.email, input.phoneNumber, userLogged.id, userLogged.name));
       }
       Alert.alert("Se agrego el nuevo contacto");
       dispatch(getContactList(userLogged.id));
@@ -273,7 +275,7 @@ export default Contacts = ({ navigation }) => {
                   <Text style={styles.error}>Must fill this field</Text>
                 )}
 
-                <Item floatingLabel last>
+                <Item floatingLabel>
                   <Label>Email</Label>
                   <Input
                     disabled={modify}
@@ -286,6 +288,23 @@ export default Contacts = ({ navigation }) => {
                   <Text style={styles.error}>Enter a valid Email</Text>
                 )}
 
+                <Item floatingLabel last>
+                  <Label>Phone Number</Label>
+                  <Input
+                    name="phoneNumber"
+                    value={input.phoneNumber}
+                    onChangeText={(text) => handleChange("phoneNumber", text)}
+                  />
+                </Item>
+                <PhoneNumberInput 
+                  name="phoneNumber"
+                  value={input.phoneNumber}
+                  onChangeText={(text) => handleChange("phoneNumber", text)}
+                />
+                {error.phoneNumber && (
+                  <Text style={styles.error}>Must fill this field</Text>
+                )}
+
                 <View style={styles.buttoms}>
                   <TouchableHighlight
                     style={{ ...styles.openButton, backgroundColor: "#151515" }}
@@ -293,6 +312,7 @@ export default Contacts = ({ navigation }) => {
                       setInput({
                         name: "",
                         email: "",
+                        phoneNumber: "",
                       });
                       setError(false);
                       setModify(false);

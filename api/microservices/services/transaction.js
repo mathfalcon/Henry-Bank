@@ -134,6 +134,12 @@ server.get("/transactions/history/:userId", (req, res, next) => {
     where: {
       createdAt: { [Op.between]: [ startDate, toDate ] },
       receiverId: req.params.userId
+  }}),
+  Transaction.findAll({ 
+    where: {
+      createdAt: { [Op.between]: [ startDate, toDate ] },
+      senderId: req.params.userId,
+      receiverId: req.params.userId
   }})
   ])
   .then((transactions) => {
