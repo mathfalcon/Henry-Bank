@@ -130,7 +130,7 @@ export default FourthPageForm = ({ route, navigation }) => {
         errors.password = "Must contain: 5-20 digits, A-Z and a-z.";
       if (values.confirmPassword !== values.password || !values.confirmPassword)
         errors.confirmPassword = "Must the same password.";
-      if (!values.passcode) errors.passcode = "Enter a 4 digit passcode.";
+      if (!values.passcode && value.passcode.length < 4) errors.passcode = "Enter a 4 digit passcode.";
       return errors;
     },
   });

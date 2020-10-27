@@ -29,7 +29,7 @@ export default AccountMovementsChart = ({ userLogged }) => {
       currentBalance -= e;
       toReturn.push(currentBalance)
     });
-    console.log(toReturn)
+    
     return toReturn.reverse()
   };
   return (

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Tooltip } from 'react-native-elements';
 import { getUsers, deleteUser, promoteUser } from "../../redux/actions/actions";
 import axios from "axios";
 import { api } from "../Constants/constants";
@@ -17,7 +18,7 @@ import {
   Form,
   Input,
   Label,
-  Content,
+  Content,  
   Button,
   Header,
   Left,
@@ -49,9 +50,10 @@ export default ManageUsers = ({ navigation }) => {
 
   const [listData, setListData] = useState();  
   const [modalVisible, setModalVisible] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const dispatch = useDispatch();
-  const { users }  = useSelector((state) => state.users);
+  const { users }  = useSelector((state) => state.users);  
   
   useEffect(() => {
     dispatch(getUsers());
@@ -193,15 +195,27 @@ export default ManageUsers = ({ navigation }) => {
   const renderHiddenItem = (data, rowMap) => (
     <View style={styles.rowBack}>
       <TouchableOpacity
-        // onPress={() =>
-        //   navigation.navigate("sendMoney", {
-        //     contact: data.item.key,
-        //     userId: data.item.value,
-        //     fromContacts: true,
-        //   })
-        // }
+            // onPress={() =>
+            //   Toast.show({
+            //     text: "Wrong password!",
+            //     buttonText: "Okay",
+            //     position: "top"
+            //   })}
+      >        
+      <Tooltip
+        popover={
+                 <View>
+                    <Text style={{color:'red'}}>CVU:</Text>                    
+                 </View>
+                }
+        containerStyle={{ marginLeft: 5 }}
+        backgroundColor='gray'
+        overlayColor='transparent'
+        height={50}
+        width={350}
       >
-        <Text>See Account</Text>
+        <Text>Account</Text>
+      </Tooltip>        
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -271,18 +285,7 @@ export default ManageUsers = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Header style={styles.header}>
-        <Left>
-          <Button transparent onPress={() => navigation.navigate("adminPanel")}>
-            <Icon style={{ color: "black" }} name="arrow-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title style={styles.headerTitle}>MANAGE USERS</Title>
-        </Body>
-        <Right />
-      </Header>
+    <View style={styles.container}>                  
 
       <SwipeListView
         useSectionList

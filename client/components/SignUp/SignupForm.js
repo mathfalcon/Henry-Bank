@@ -15,6 +15,7 @@ const Stack = createStackNavigator();
 export default function SignupForm() {
   return (
     <Stack.Navigator
+      initialRouteName='first'
       headerMode="none"
       screenOptions={{
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
