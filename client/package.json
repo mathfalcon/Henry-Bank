@@ -15,16 +15,20 @@
     "axios": "^0.20.0",
     "expo": "~39.0.2",
     "expo-camera": "^9.0.0",
+    "expo-face-detector": "~8.3.0",
     "expo-font": "~8.3.0",
+    "expo-image-picker": "~9.1.0",
     "expo-status-bar": "~1.0.2",
     "formik": "^2.1.7",
     "native-base": "^2.13.14",
+    "node-emoji": "^1.10.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.2.tar.gz",
     "react-native-animated-input": "^1.0.1",
     "react-native-axios": "^0.17.1",
     "react-native-chart-kit": "^6.6.1",
+    "react-native-country-picker-modal": "^2.0.0",
     "react-native-credit-card-display": "^0.2.1",
     "react-native-credit-card-input": "^0.4.1",
     "react-native-elements": "^2.3.2",
@@ -45,9 +49,7 @@
     "react-navigation-transitions": "^1.0.12",
     "react-redux": "^7.2.1",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0",
-    "expo-image-picker": "~9.1.0",
-    "expo-face-detector": "~8.3.0"
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0"

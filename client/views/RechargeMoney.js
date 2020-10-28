@@ -19,7 +19,8 @@ import { useDispatch } from "react-redux";
 export default RechargeMoney = ({ route }) => {
   const [amount, setAmount] = useState(0);
   let logo = require("../assets/henryLogoBlack.jpg");
-  const userLogged = route.params.user;
+  const userLogged = route.params.userLogged.user;
+  const navigation = route.params.navigation;
   const dispatch = useDispatch();
 
   const handleRecharge = () => {
@@ -29,7 +30,11 @@ export default RechargeMoney = ({ route }) => {
       })
       .then((data) => {
         dispatch(getUserLogged());
-        Alert.alert('Success', 'Your recharge has been sucessfully added to your account\'s balance')
+        Alert.alert(
+          "Success",
+          "Your recharge has been sucessfully added to your account's balance"
+        );
+        navigation.navigate('position')
       });
   };
   return (

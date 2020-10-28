@@ -42,9 +42,6 @@ export default AccountHistory = ({ navigation, route }) => {
     setUserId(userId);
     const createdAt = new Date(userLogged.createdAt);
     const today = new Date();
-    console.log("createdAt", createdAt);
-    console.log("today", today);
-    console.log("user", userId);
     dispatch(getAccountHistory(userId));
   }, []);
 
@@ -98,18 +95,18 @@ export default AccountHistory = ({ navigation, route }) => {
 
               <List style={styles.list}>
                 {accountHistory &&
-                  accountHistory.map((e) => (
+                  accountHistory.map((e, index) => { 
+                    e.senderId === userLogged.id ? e.amount = -Math.abs(e.amount): null
+                    return (
                     <>
-                      <ListItem itemDivider style={styles.divider} />
                       <ListItem key={e.id}>
                         <Icon
                           type="AntDesign"
-                          name={e.money > 0 ? "downcircleo" : "upcircleo"}
+                          name={e.amount > 0 ? "downcircleo" : "upcircleo"}
                           style={{ color: "#FBC02D" }}
                         />
-
                         <Left style={styles.card}>
-                          <Text style={styles.myName}>{e.sender.name} {e.sender.surname}</Text>
+                          <Text style={styles.myName}>{e.sender.name ? `${e.sender.name} ${e.sender.surname}` :'Account balance recharge'}</Text>
                           <Text style={styles.item}>{new Date (e.createdAt).toDateString()}</Text>
                           <Text style={styles.item}>{e.sender.email}</Text>
                         </Left>
@@ -127,7 +124,7 @@ export default AccountHistory = ({ navigation, route }) => {
                         </Right>
                       </ListItem>
                     </>
-                  ))}
+                  )})}
               </List>
             </Content>
           </Container>
@@ -136,15 +133,12 @@ export default AccountHistory = ({ navigation, route }) => {
             <Header style={styles.header}>
               <Left>
                 <Button
-                  style={{ backgroundColor: "black" }}
+                  style={{ backgroundColor: "#151515" }}
                   onPress={() => setTheFilter(true)}
                 >
                   <Icon style={{ color: "white" }} name="arrow-back" />
                 </Button>
               </Left>
-              <Body>
-                <Title style={styles.continue}>Continue</Title>
-              </Body>
               <Right />
             </Header>
 

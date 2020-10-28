@@ -155,7 +155,7 @@ export default SendMoney = ({ navigation, route }) => {
           </Item>
           <Item>
             <Input
-              placeholder="Passcode"
+              placeholder="Introduce your passcode"
               keyboardType="numeric"
               onChangeText={(value) => setPassCode(value)}
             />

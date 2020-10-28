@@ -43,7 +43,7 @@ export default Contacts = ({ navigation }) => {
     name: "",
     email: "",
     id: "",
-    phoneNumber: ""
+    phoneNumber: "",
   });
   const [error, setError] = useState({
     name: false,
@@ -92,7 +92,7 @@ export default Contacts = ({ navigation }) => {
     Alert.alert("Success", deleteRequest.data.message);
     if (deleteRequest.data.success) {
       dispatch(getContactList(userLogged.id));
-      navigation.navigate('position')
+      navigation.navigate("position");
     }
   };
 
@@ -199,22 +199,38 @@ export default Contacts = ({ navigation }) => {
       if (modify) {
         dispatch(modifyContact(input.name, input.id));
       } else {
-        dispatch(addContact(input.name, input.email, input.phoneNumber, userLogged.id, userLogged.name));
-=======
-        // axios
-//   .post(`${api}/contacts/create`, {
-//     userId: userLogged.id,
-//     alias: input.name,
-//     emailOfContact: input.email,
-//   })
-//   .then((response) => {
-//     if (response.data.success) {
-//       dispatch(getContactList(userLogged.id));
-//       Alert.alert("Success", response.data.message);
-//       navigation.navigate("position");
-//     }
-//   })
-//   .catch((err) => console.log(err));
+        axios
+          .post(`${api}/contacts/create`, {
+            userId: userLogged.id,
+            alias: input.name,
+            emailOfContact: input.email,
+          })
+          .then((response) => {
+            if (response.data.success) {
+              dispatch(getContactList(userLogged.id));
+              Alert.alert("Success", response.data.message);
+              navigation.navigate("position");
+            } else if (response.data.code === "not_client") {
+              Alert.alert("Invite your contact", response.data.message, [
+                {
+                  text: "Maybe later",
+                  onPress: () => navigation.navigate("position"),
+                },
+                {
+                  text: "Sounds good",
+                  onPress: () => {
+                    setModalVisible(!modalVisible);
+                    navigation.navigate("invitation");
+                  },
+                },
+              ]);
+            } else {
+              dispatch(getContactList(userLogged.id));
+              Alert.alert("Failure", response.data.message);
+              navigation.navigate("position");
+            }
+          })
+          .catch((err) => console.log(err));
       }
     }
   };
@@ -304,7 +320,7 @@ export default Contacts = ({ navigation }) => {
                   <Text style={styles.error}>Enter a valid Email</Text>
                 )}
 
-                <Item floatingLabel last>
+                {/* <Item floatingLabel last>
                   <Label>Phone Number</Label>
                   <Input
                     name="phoneNumber"
@@ -319,7 +335,7 @@ export default Contacts = ({ navigation }) => {
                 />
                 {error.phoneNumber && (
                   <Text style={styles.error}>Must fill this field</Text>
-                )}
+                )} */}
 
                 <View style={styles.buttoms}>
                   <TouchableHighlight
