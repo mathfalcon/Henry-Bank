@@ -133,7 +133,7 @@ server.post("/auth/reset_password", async (req, res, next) => {
         .status(404)
         .send({ success: false, message: "User not found" });
     }
-    const newResetToken = crypto.randomBytes(64).toString("hex");
+    const newResetToken = crypto.randomBytes(8).toString("hex");
     user.resetToken = newResetToken;
     await user.save();
     const msg = {
@@ -141,12 +141,12 @@ server.post("/auth/reset_password", async (req, res, next) => {
       to: user.email,
       subject: "Henry Bank - Reset Password",
       text: `
-          Hello ${user.name}, please copy and paste in your browser the address below to change your password: 
-          http://${req.headers.host}/users/reset_password?token=${newResetToken}
+          Hello ${user.name},  
+          Please use this code:${newResetToken} to reset your password.
       `,
       html: `
           <h1>Hello ${user.name},</h1>
-          <a href="http://${req.headers.host}/users/reset_password?token=${newResetToken}">Please click here to reset your password</a>
+          <p>Please use this code:${newResetToken} to reset your password.</p>
       `,
     };
     await sgMail.send(msg);
@@ -233,22 +233,22 @@ server.get("/auth/logout", (req, res, next) => {
 
 // Route for changing password
 server.put("/auth/change-password", (req, res, next) => {
-  const { userId, currentPw, newPw } = req.body;
+  const { newResetToken, currentPw, newPw } = req.body;
 
-  User.findByPk(userId).then((user) => {
-    if (!user.checkPassword(currentPw)) {
-      res.send({
-        success: false,
-        message: "The provided actual password is incorrect",
-      });
-    } else if (user.checkPassword(currentPw)) {
+  User.findOne(newResetToken).then((user) => {
+    // if (!user.checkPassword(currentPw)) {
+    //   res.send({
+    //     success: false,
+    //     message: "The provided actual password is incorrect",
+    //   });
+    // } else if (user.checkPassword(currentPw)) {
       user.password = newPw;
       user.save();
       res.status(200).send({
         success: true,
         message: "The password has been successfully updated",
       });
-    }
+    //}
   });
 });
 
