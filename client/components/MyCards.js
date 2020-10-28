@@ -8,7 +8,6 @@ import CreditCardDisplay from "react-native-credit-card-display";
 
 function MyCards({ navigation }) {
   const userLogged = useSelector((state) => state.auth.user);
-  console.log(userLogged);
   return (
     <View style={styles.container}>
       <View style={styles.blackMenu}>

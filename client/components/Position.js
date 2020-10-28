@@ -48,23 +48,25 @@ export default Position = ({ navigation }) => {
   }, []);
 
   const userLogged = useSelector((state) => state.auth);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden={true} />
-
+      
       {userLogged.success ? (
         <Container>
           <View style={styles.headerSection}>
             <View style={styles.avatarSection}>
               <Avatar
                 size="large"
-                icon={{ color: "black", name: "user", type: "font-awesome" }}
                 activeOpacity={0.7}
                 containerStyle={{
                   backgroundColor: "#ffff6d",
                   alignSelf: "center",
                 }}
+                source={{ uri: `data:image/jpeg;base64,${userLogged.user.documentPhoto}`}}
               />
+          
             </View>
             <View style={styles.nameSection}>
               <Text

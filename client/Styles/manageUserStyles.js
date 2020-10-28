@@ -27,7 +27,7 @@ export default StyleSheet.create({
     borderBottomColor: "black",
     borderBottomWidth: 1,
     justifyContent: "center",
-    height: 100,
+    height: 120,
    },
    rowBack: {
     alignItems: "center",

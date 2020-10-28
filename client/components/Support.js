@@ -29,9 +29,10 @@ export default Support = ({ navigation }) => {
             <Icon style={{ color: "black" }} name="arrow-back" />
           </Button>
         </Left>
-        <Body style={{ flex: 2 }}>
-          <Title style={{ color: "black" }}>Need Support?</Title>
+        <Body style={{ flex: 3 }}>
+          <Title style={{ color: "black" }}>Welcome to Henry Bank</Title>
         </Body>
+        <Right></Right>
       </Header>
       <View
         style={{
@@ -44,24 +45,23 @@ export default Support = ({ navigation }) => {
           style={{
             textAlign: "center",
             fontWeight: "bold",
-            fontSize: 30,
+            fontSize: 20,
             color: "whitesmoke",
           }}
         >
-          What is the problem?
+          How can we help you today?
         </H1>
         <Card
           style={{
-            backgroundColor: "#ffffb7",
-            paddingVertical: 15,
-            borderRadius: 10,
+            backgroundColor: "#151515",
+            borderColor:'#151515',
+            paddingHorizontal: 10
           }}
         >
           <CardItem
             style={{
               justifyContent: "space-between",
-              marginBottom: 10,
-              marginTop: 10,
+              marginVertical:10,
               shadowColor: "#000",
               shadowOffset: {
                 width: 0,
@@ -69,14 +69,13 @@ export default Support = ({ navigation }) => {
               },
               shadowOpacity: 0.25,
               shadowRadius: 3.84,
-
               elevation: 5,
             }}
             button
             onPress={() => navigation.navigate("aboutHenryBank")}
           >
-            <Icon active name="credit-card" type="FontAwesome5" />
-            <Text style={{ marginLeft: 5 }}>
+            <Icon active name="credit-card" type="FontAwesome5" style={{width: 30}}/>
+            <Text style={{ paddingHorizontal: 5 }}>
               <Text style={{ fontWeight: "bold" }}>About Henry Bank{"\n"}</Text>
               <Text>What is henry bank and how does it work</Text>
             </Text>
@@ -101,8 +100,8 @@ export default Support = ({ navigation }) => {
             button
             onPress={() => navigation.navigate("usersAndAccounts")}
           >
-            <Icon active name="user" type="FontAwesome5" />
-            <Text style={{ marginLeft: 5 }}>
+            <Icon active name="user" type="FontAwesome5" style={{width: 30}}/>
+            <Text>
               <Text style={{ fontWeight: "bold" }}>User and Account{"\n"}</Text>
               <Text>Get started with Henry Bank</Text>
             </Text>
@@ -128,7 +127,7 @@ export default Support = ({ navigation }) => {
             onPress={() => navigation.navigate("aboutRechargeMoney")}
           >
             <Icon name="wallet" type="FontAwesome5" />
-            <Text style={{ marginLeft: 5 }}>
+            <Text>
               <Text style={{ fontWeight: "bold" }}>
                 Charge money
                 {"\n"}
@@ -203,6 +202,8 @@ export default Support = ({ navigation }) => {
             alignItems: "center",
             justifyContent: "center",
             alignContent: "center",
+            flexDirection: 'row',
+            flexWrap: 'wrap'
           }}
         >
           <Text style={{ color: "whitesmoke" }}>Do you need more help? </Text>

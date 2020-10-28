@@ -68,7 +68,34 @@ export default ResetPassowrd = ({ navigation }) => {
               type="FontAwesome5"
               style={{
                 fontSize: 20,
-                color: "#ffbf00",
+                color: "#151515",
+              }}
+            />
+            <Label>New Password</Label>
+            <Input
+              onBlur={handleBlur("newPass")}
+              name="newPass"
+              onChangeText={(text) => setFieldValue("newPass", text)}
+              value={values.newPass}
+              keyboardType="email-address"
+            />
+          </Item>
+          <Item
+            error={errors.user ? true : false}
+            style={{
+              marginLeft: 25,
+              marginRight: 25,
+              marginTop: 25,
+            }}
+            floatingLabel
+          >
+            <Icon
+              active
+              name="lock"
+              type="FontAwesome5"
+              style={{
+                fontSize: 20,
+                color: "#151515",
               }}
             />
             <Label>New Password</Label>
@@ -103,7 +130,7 @@ export default ResetPassowrd = ({ navigation }) => {
               type="FontAwesome5"
               style={{
                 fontSize: 20,
-                color: "#ffbf00",
+                color: "#151515",
               }}
             />
             <Label>Confirm New Password</Label>

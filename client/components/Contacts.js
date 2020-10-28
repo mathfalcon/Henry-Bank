@@ -220,6 +220,7 @@ export default Contacts = ({ navigation }) => {
                   text: "Sounds good",
                   onPress: () => {
                     setModalVisible(!modalVisible);
+                    console.log(navigation.navigate)
                     navigation.navigate("invitation");
                   },
                 },
