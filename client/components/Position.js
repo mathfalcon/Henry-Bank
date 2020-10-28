@@ -101,7 +101,7 @@ export default Position = ({ navigation }) => {
                   <Text style={styles.sendMoneyText}>SEND MONEY</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("recharge", userLogged)}
+                  onPress={() => navigation.navigate("recharge", {userLogged, navigation})}
                   style={styles.sendMoneyButton}
                 >
                   <Text style={styles.sendMoneyText}>RECHARGE MONEY</Text>

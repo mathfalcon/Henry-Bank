@@ -36,7 +36,7 @@ export default MenuOperation = ({ navigation, screen, userLogged }) => {
             navigation.navigate("myCards");
           }
         })
-        .catch((error) => console.log("Something went wrong"));
+        .catch((error) => console.log(error));
     }
   }, [inputKeyboard]);
 
@@ -51,7 +51,7 @@ export default MenuOperation = ({ navigation, screen, userLogged }) => {
               screen !== "stats" ? { color: "white" } : { color: "#ffff6d" }
             }
           />
-          <Text style={{ color: "white" }}>STATS</Text>
+          <Text style={{ color: "white", fontSize: 9 }}>STATS</Text>
         </Button>
 
         <Button vertical onPress={() => setModalVisible(!modalVisible)}>
@@ -61,7 +61,7 @@ export default MenuOperation = ({ navigation, screen, userLogged }) => {
               screen !== "cards" ? { color: "white" } : { color: "#ffff6d" }
             }
           />
-          <Text style={{ color: "white" }}>Cards</Text>
+          <Text style={{ color: "white", fontSize: 9 }}>Cards</Text>
         </Button>
         <Button vertical onPress={() => navigation.navigate("position")}>
           <Icon
@@ -71,7 +71,7 @@ export default MenuOperation = ({ navigation, screen, userLogged }) => {
               screen !== "position" ? { color: "white" } : { color: "#ffff6d" }
             }
           />
-          <Text style={{ color: "white" }}>HOME</Text>
+          <Text style={{ color: "white", fontSize: 9 }}>HOME</Text>
         </Button>
 
         <Button vertical onPress={() => navigation.navigate("accountHistory")}>
@@ -82,7 +82,7 @@ export default MenuOperation = ({ navigation, screen, userLogged }) => {
             type="FontAwesome"
             name="dollar"
           />
-          <Text style={{ color: "white" }}>History</Text>
+          <Text style={{ color: "white", fontSize: 9 }}>History</Text>
         </Button>
 
         <Button vertical onPress={() => navigation.navigate("contacts")}>
@@ -93,7 +93,7 @@ export default MenuOperation = ({ navigation, screen, userLogged }) => {
               screen !== "contacts" ? { color: "white" } : { color: "#ffff6d" }
             }
           />
-          <Text style={{ color: "white" }}>Friend</Text>
+          <Text style={{ color: "white", fontSize: 9 }}>CONTACTS</Text>
         </Button>
       </FooterTab>
 
@@ -102,7 +102,7 @@ export default MenuOperation = ({ navigation, screen, userLogged }) => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert("Close modal first");
+          setModalVisible(!modalVisible);
         }}
       >
         <View style={styles.modalView}>

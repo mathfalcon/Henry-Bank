@@ -22,7 +22,7 @@ function MyCards({ navigation }) {
           placeholder={{
             cvc: "123",
           }}
-          cvc="11111" // Epale revisa esto. Ese numero no esta saliendo por ningun lado
+          cvc="11111" 
           brand="henry"
           name={`${userLogged.name} ${userLogged.surname}`}
           number="12345678"
@@ -31,9 +31,6 @@ function MyCards({ navigation }) {
           imageFront={require("../assets/yellowBackground.png")}
           imageBack={require("../assets/cardBackOk.png")}
         />
-      </View>
-      <View style={styles.clientCard}>
-        <ClientCard user={userLogged} />
       </View>
       <View style={styles.menu}>
         {/* <MenuCards /> */}
