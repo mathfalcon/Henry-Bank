@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@react-native-community/datetimepicker": "^3.0.4",
-    "@react-native-community/masked-view": "0.1.10",    
+    "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/native": "^5.7.5",
     "@react-navigation/stack": "^5.9.2",
     "axios": "^0.20.0",
