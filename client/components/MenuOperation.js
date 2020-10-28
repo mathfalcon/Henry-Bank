@@ -19,7 +19,8 @@ import {
 export default MenuOperation = ({ navigation, screen, userLogged }) => {
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [inputKeyboard, setInputKeyboard] = useState("");  
+  const [inputKeyboard, setInputKeyboard] = useState("");
+  const [wrongPasscode, setWrongPasscode] = useState(false);
   
   useEffect(() => {
     if ( inputKeyboard.length === 4 ){      
@@ -31,13 +32,20 @@ export default MenuOperation = ({ navigation, screen, userLogged }) => {
       axios
       .post(`${api}/auth/check-passcode`,values)
         .then((response) => {          
-          if(response.data.success){             
+          if(response.data.success){
+            setWrongPasscode(false)             
             setInputKeyboard("");
             setModalVisible(false);                   
             navigation.navigate("myCards")            
           }       
         })
-        .catch(error => console.log("Something went wrong"));
+        .catch(error => {
+          setInputKeyboard("");         
+          setWrongPasscode(true);          
+          setTimeout(() => {
+            setWrongPasscode(false);
+            }, 3000);
+        });
       } 
   }, [inputKeyboard]);
 
@@ -147,10 +155,18 @@ export default MenuOperation = ({ navigation, screen, userLogged }) => {
             onPress={(val) => setInputKeyboard(val)}  
             style={styles.keyboard}         
           />
+            {
+              wrongPasscode
+                ?              
+                  <Text style={styles.textWrongPasscode}>Incorrect Passcode - Enter Again</Text>              
+                :
+                  null
+            }
 
           <TouchableHighlight
             style={styles.backButtom}
             onPress={() => {
+              setWrongPasscode(false);
               setInputKeyboard("");
               setModalVisible(!modalVisible)
               }
