@@ -101,6 +101,8 @@ server.post("/users/create", (req, res, next) => {
     state,
     country,
     role,
+    photo,
+    documentPhoto
   } = req.body;
   const emailToken = crypto.randomBytes(64).toString("hex");
   User.create({
@@ -120,6 +122,8 @@ server.post("/users/create", (req, res, next) => {
     country,
     role,
     emailToken,
+    photo,
+    documentPhoto
   })
     .then((userCreated) => {
       const msg = {
@@ -231,6 +235,8 @@ server.put("/users/update/:id", (req, res, next) => {
     state,
     country,
     role,
+    photo,
+    documentPhoto
   } = req.body;
   User.findByPk(req.params.id)
     .then((user) => {
@@ -250,6 +256,8 @@ server.put("/users/update/:id", (req, res, next) => {
         state,
         country,
         role,
+        photo,
+        documentPhoto
       });
     })
     .then((updatedUser) =>

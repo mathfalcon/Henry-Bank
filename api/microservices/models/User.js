@@ -19,6 +19,14 @@ module.exports = (sequelize) => {
         defaultValue: "client",
         allowNull: false,
       },
+      photo: {
+        type: DataTypes.BLOB,
+        get() { return this.getDataValue("img").toString("utf8") },
+      }, 
+      documentPhoto: {
+        type: DataTypes.BLOB,
+        get() { return this.getDataValue("img").toString("utf8") },
+      },
       password: {
         type: DataTypes.STRING,
         allowNull: true,
