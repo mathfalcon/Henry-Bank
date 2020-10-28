@@ -27,8 +27,8 @@ export default AccountMovementsChart = ({ userLogged }) => {
     pastDaysBalance.reverse().forEach((e) => {
       currentBalance -= e;
       toReturn.push(currentBalance);
-    });
-    return toReturn.reverse();
+    });  
+    return toReturn.reverse()
   };
   return (
     <LineChart

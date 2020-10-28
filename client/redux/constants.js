@@ -28,3 +28,7 @@ export const addContact = "ADD_CONTACT";
 export const deleteContact = "DELETE_CONTACT";
 
 export const modifyContact = "MODIFY_CONTACT";
+
+// TRANSACTIONS
+export const getAllTransactions = "GET_ALL_TRANSACTIONS";
+export const getAllTransactionsById = "GET_ALL_TRANSACTIONS_BY_ID";

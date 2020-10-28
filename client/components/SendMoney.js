@@ -40,7 +40,7 @@ export default SendMoney = ({ navigation, route }) => {
   const [error, setError] = useState(false);
   const [fromContacts, setFromContacts] = useState(false);
   const [message, setMessage] = useState("");
-  const [passCode, setPassCode] = useState(0);
+  const [passCode, setPassCode] = useState("");
   // const contacts = useSelector((state) => state.contacts);
   const userLogged = useSelector((state) => state.auth);
 
@@ -54,16 +54,10 @@ export default SendMoney = ({ navigation, route }) => {
       setFromContacts(true);
     }
   }, []);
-
-  // useEffect(() =>
-  // dispatch(getUserLogged())
-  // dispatch(getContactList())
-  // dispatch(verifyFunds())
-  // , []);
-
+  
   const userContacts = useSelector((state) => state.contacts.contacts);
   const handleSubmit = () => {
-    if (inputMoney === "" || selectContact === "") return setError(true);
+    if (inputMoney === "" || selectContact === "" || passCode === "") return setError(true);
     setError(false);
 
     if (inputMoney > Number(userLogged.user.account.balance))
@@ -77,6 +71,10 @@ export default SendMoney = ({ navigation, route }) => {
       })
       .then((data) => {
         const response = data.data;
+        setInputMoney("");
+        setSelectContact("");
+        setPassCode("");
+
         if (response.success) {
           Alert.alert(`${response.message}`);
           navigation.navigate("position");
@@ -88,8 +86,9 @@ export default SendMoney = ({ navigation, route }) => {
           navigation.navigate("position");
         }
       });
-    setInputMoney("");
-    setSelectContact("");
+    // setInputMoney("");
+    // setSelectContact("");
+    // setPassCode("");
   };
 
   return (
@@ -99,7 +98,15 @@ export default SendMoney = ({ navigation, route }) => {
           <Body
             style={{ flex: 1, flexDirection: "row", alignSelf: "flex-start" }}
           >
-            <Button transparent onPress={() => navigation.navigate("position")}>
+            <Button transparent onPress={() => {
+                setError(false);
+                setInputMoney("");
+                setSelectContact("");
+                setPassCode("");
+                navigation.navigate("position");
+                }
+              }
+            >
               <Icon style={{ color: "black" }} name="arrow-back" />
             </Button>
             <Title style={styles.headerTitle}>SEND MONEY</Title>
@@ -155,10 +162,18 @@ export default SendMoney = ({ navigation, route }) => {
           </Item>
           <Item>
             <Input
+              secureTextEntry={true}
+              placeholder="Passcode"
               placeholder="Introduce your passcode"
               keyboardType="numeric"
+              value={passCode}
               onChangeText={(value) => setPassCode(value)}
             />
+          {error && (
+            <Text style={styles.error}>
+              PassCode is Required!
+            </Text>
+          )}
           </Item>
         <Button style={styles.buttom} dark block onPress={handleSubmit}>
           <Text>SEND MONEY</Text>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Tooltip } from 'react-native-elements';
 import { getUsers, deleteUser, promoteUser } from "../../redux/actions/actions";
 import axios from "axios";
 import { api } from "../Constants/constants";
@@ -17,7 +18,7 @@ import {
   Form,
   Input,
   Label,
-  Content,
+  Content,  
   Button,
   Header,
   Left,
@@ -49,9 +50,10 @@ export default ManageUsers = ({ navigation }) => {
 
   const [listData, setListData] = useState();  
   const [modalVisible, setModalVisible] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const dispatch = useDispatch();
-  const { users }  = useSelector((state) => state.users);
+  const { users }  = useSelector((state) => state.users);  
   
   useEffect(() => {
     dispatch(getUsers());
@@ -182,10 +184,10 @@ export default ManageUsers = ({ navigation }) => {
       underlayColor={"#AAA"}
     >
       <View style={{ alignSelf: "flex-start", marginLeft: 50 }}>
-        <Text>Name: {data.item.name} {data.item.surname}</Text>        
-        <Text>Email: {data.item.email}</Text>
-        <Text>Role: {data.item.role}</Text>
-        <Text>Balance: { data.item.account ? data.item.account.balance : null }</Text>
+        <Text><Text style={{fontWeight:'bold'}}>Name:</Text><Text style={{fontStyle:'italic', color:'red'}}>  {data.item.name} {data.item.surname}</Text></Text>
+        <Text><Text style={{fontWeight:'bold'}}>Email:</Text><Text style={{fontStyle:'italic'}}>  {data.item.email}</Text></Text>
+        <Text><Text style={{fontWeight:'bold'}}>Role:</Text><Text style={{fontStyle:'italic'}}>  {data.item.role}</Text></Text>
+        <Text><Text style={{fontWeight:'bold'}}>Balance:</Text><Text style={{fontStyle:'italic'}}>  { data.item.account ? data.item.account.balance : null }</Text></Text>
       </View>
     </TouchableHighlight>
   );
@@ -193,22 +195,34 @@ export default ManageUsers = ({ navigation }) => {
   const renderHiddenItem = (data, rowMap) => (
     <View style={styles.rowBack}>
       <TouchableOpacity
-        // onPress={() =>
-        //   navigation.navigate("sendMoney", {
-        //     contact: data.item.key,
-        //     userId: data.item.value,
-        //     fromContacts: true,
-        //   })
-        // }
+            // onPress={() =>
+            //   Toast.show({
+            //     text: "Wrong password!",
+            //     buttonText: "Okay",
+            //     position: "top"
+            //   })}
+      >        
+      <Tooltip
+        popover={
+                 <View>
+                    <Text style={{color:'red'}}>CVU:</Text>                    
+                 </View>
+                }
+        containerStyle={{ marginLeft: 5 }}
+        backgroundColor='#c8cecf'
+        overlayColor='transparent'
+        height={50}
+        width={350}
       >
-        <Text>See Account</Text>
+        <Text  style={{ color: "#ffff8b" }}>Account</Text>
+      </Tooltip>        
       </TouchableOpacity>
 
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnLeft]}
         onPress={() => promoteRow(rowMap, data.item.key)}
       >
-        <Text style={styles.backTextWhite}>Promote</Text>
+        <Text style={styles.backTextBlack}>Promote</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -271,18 +285,7 @@ export default ManageUsers = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Header style={styles.header}>
-        <Left>
-          <Button transparent onPress={() => navigation.navigate("adminPanel")}>
-            <Icon style={{ color: "black" }} name="arrow-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title style={styles.headerTitle}>MANAGE USERS</Title>
-        </Body>
-        <Right />
-      </Header>
+    <View style={styles.container}>                  
 
       <SwipeListView
         useSectionList

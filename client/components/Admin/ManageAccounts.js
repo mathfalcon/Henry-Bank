@@ -7,27 +7,8 @@ import styles from "../../Styles/adminPanelStyles";
 export default ManageAccounts = ({ navigation }) => {    
   
     return (
-        <SafeAreaView>
-            <KeyboardAwareScrollView>
-
-                <Container>
-                    <Header style={styles.header}>
-                        <Left>
-                            <Button transparent onPress={() => navigation.navigate('adminPanel')}>
-                            <Icon style={{ color: "black" }} name='arrow-back' />
-                            </Button>
-                        </Left>
-                        <Body>
-                        <Title style={styles.headerTitle}>MANAGE ACCOUNTS</Title>
-                        </Body>
-                        <Right />              
-                    </Header>
-                    <Text>MANAGE ACCOUNTS</Text>
-
-                               
-            </Container>
-        
-        </KeyboardAwareScrollView>
-    </SafeAreaView>
+        <View>
+            <Text>MANAGE ACCOUNTS</Text>
+        </View>
     );
 }
