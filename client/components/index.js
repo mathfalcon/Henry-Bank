@@ -15,10 +15,8 @@ import Home from "./Home";
 import HomePosition from "./HomePosition/HomePosition";
 import LogIn from "./LogIn";
 import MyCards from "./MyCards";
-import Position from "./Position";
 import RechargeMoney from "../views/RechargeMoney";
 import SendMoney from "./SendMoney";
-import SignupForm from "./SignupForm";
 import Support from "./Support";
 import AboutHenryBank from "./AboutHenryBank";
 import UsersAndAccounts from "./UsersAndAccounts";
@@ -26,7 +24,6 @@ import AboutRechargeMoney from "./AboutRechargeMoney";
 import AboutPasswords from "./AboutPasswords";
 import AboutTransactions from "./AboutTransactions";
 import Position from "./Position";
-import SendMoney from "./SendMoney";
 import SignupForm from "./SignUp/SignupForm";
 import ResetPassword from "./ResetPassword";
 
@@ -50,7 +47,7 @@ export default function Index() {
       {        
         userLogged.user.role === undefined ?  
             <View style={[styles.container, styles.horizontal]}>
-                <ActivityIndicator size={100} color="#382ab5" />
+                <ActivityIndicator size={100} color="#ffff57" />
             </View>
         :
           userLogged.user.role === "guest" ? (
