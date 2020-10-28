@@ -1,15 +1,18 @@
 import "react-native-gesture-handler";
 import React, { useEffect } from "react";
+import { ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserLogged } from "../redux/actions/authActions";
+import styles from "../Styles/indexStyles"
 
 /* ------------------------------- COMPONENTS ------------------------------- */
-import AccountHistory from "./AccountHistory";
-import Contacts from "./Contacts";
+// import AccountHistory from "./AccountHistory";
+// import Contacts from "./Contacts";
 import ForgotPass from "./ForgotPass";
 import Home from "./Home";
+import HomePosition from "./HomePosition/HomePosition";
 import LogIn from "./LogIn";
 import MyCards from "./MyCards";
 import Position from "./Position";
@@ -22,17 +25,18 @@ import UsersAndAccounts from "./UsersAndAccounts";
 import AboutRechargeMoney from "./AboutRechargeMoney";
 import AboutPasswords from "./AboutPasswords";
 import AboutTransactions from "./AboutTransactions";
+import Position from "./Position";
+import SendMoney from "./SendMoney";
+import SignupForm from "./SignUp/SignupForm";
+import ResetPassword from "./ResetPassword";
 
 /* ------------------------------- ADMIN ------------------------------- */
 import AdminPanel from "./Admin/AdminPanel";
-import ManageUsers from "./Admin/ManageUsers";
-import ManageAccounts from "./Admin/ManageAccounts";
-import ManageTransactions from "./Admin/ManageTransactions";
-import SeeStats from "./Admin/SeeStats";
+
+// import userStats from "./UserStats";
 
 const LoggedFalseStack = createStackNavigator();
 const LoggedTrueStack = createStackNavigator();
-const AdminStack = createStackNavigator();
 
 export default function Index() {
   const dispatch = useDispatch();
@@ -41,11 +45,15 @@ export default function Index() {
 
   useEffect(() => dispatch(getUserLogged()), []);
   return (
+
     <NavigationContainer>
-      {
-        // La condicion "role === undefined" podria estar separada cargando un "spinner" si es "true"
-        userLogged.user.role === undefined ||
-        userLogged.user.role === "guest" ? (
+      {        
+        userLogged.user.role === undefined ?  
+            <View style={[styles.container, styles.horizontal]}>
+                <ActivityIndicator size={100} color="#382ab5" />
+            </View>
+        :
+          userLogged.user.role === "guest" ? (
           <>
             <LoggedFalseStack.Navigator headerMode="none">
               <LoggedFalseStack.Screen name="home" component={Home} />
@@ -117,6 +125,7 @@ export default function Index() {
   );
 }
 
+
 // De volver a la estructura que estaba ( la que quedó comentada abajo, descomentar linea 52 del componente login y borrar la 53
 // y descomentar la linea 36 del componente position y borrar la 37 )
 
@@ -177,3 +186,4 @@ export default function Index() {
 //     </NavigationContainer>
 //   );
 // }
+

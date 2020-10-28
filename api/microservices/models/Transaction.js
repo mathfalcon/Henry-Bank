@@ -15,6 +15,14 @@ module.exports = (sequelize) => {
         type: DataTypes.ENUM,
         values: ['created', 'inProcess', 'complete', 'cancelled'],
         allowNull: false
+    },
+    senderBalance: {
+      type: DataTypes.DECIMAL,
+      defaultValue: 0
+    },
+    receiverBalance: {
+      type: DataTypes.DECIMAL,
+      defaultValue: 0
     }
   });
 };

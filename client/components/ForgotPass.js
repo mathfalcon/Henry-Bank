@@ -1,116 +1,128 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import { TouchableOpacity, Image } from "react-native";
-import {   
-  Text,
-  Form,
-  Label,
-  Item,
-  Input, 
-  View,
-} from "native-base";
-// import CustomButton from "./customButton";
-import { CheckBox } from "react-native-elements";
+import { Text, Item, Icon, Input, View, Label } from "native-base";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { resetPass } from "../redux/actions/actions.js";
-import styles from "../Styles/forgotPassStyles.js";
-import MenuOperation from './MenuOperation';
+import { Alert, Image } from "react-native";
+import { api } from "./Constants/constants";
+import styles from "../Styles/forgotPassStyles";
+import CustomButton from "./customButton";
+import { CheckBox } from "react-native-elements";
 
-
-export default ForgotPass = () => {
-
-  const [check, setCheck] = useState(false);
-  const { responseReset } = useSelector((state) => state.users);
-
-  const dispatch = useDispatch();  
-
+export default ForgotPass = ({ navigation }) => {
   const {
-    values,    
+    values,
+    isSubmitting,
     setFieldValue,
-    touched,
-    handleBlur,
-    handleChange,
     handleSubmit,
     errors,
-    } = useFormik({
+    touched,
+    handleBlur,
+  } = useFormik({
     initialValues: {
-      email: "",      
+      user: "",
     },
-
-    onSubmit: (values) => {
-      //Send values to database
-      dispatch(resetPass( values.email ));
-      console.log('responseReset', responseReset);
-    },
-
+    onSubmit: () => navigation.navigate("resetPassword"),
     validate: (values) => {
       const errors = {};
-      if (
-        !values.email.trim() ||
-        !/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/.test(values.email)
-      ) errors.email = "Must be a valid email";      
-      
+      if (values.user.length <= 2) errors.user = "The email is invalid";
       return errors;
     },
   });
+  const [check, setCheck] = useState(false);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView>
-        <View style={styles.firstContainer}>
-          <Form style={styles.container}>
-            <Text style={styles.titulo}>Reset Password</Text>  
-            <Image
-            source={require("../assets/henryLogo.jpg")}
+        <View>
+          <Image
+            source={require("../assets/henryLogoBlack.jpg")}
             style={styles.logoImg}
           />
-            <Item style={styles.cBox} error={errors.email ? true : false}>
-              <Icon
-              name={"envelope"}
-              size={15}
-              color="grey"
+          <Text style={styles.title}>Forgot Password</Text>
+          <Text style={styles.subtitle}>
+            Enter your email address associated to your account below and we
+            will send you a password reset link.
+          </Text>
+          <Item
+            error={errors.user ? true : false}
+            style={{
+              marginLeft: 25,
+              marginRight: 25,
+              marginTop: 25,
+              marginBottom: 5,
+            }}
+            floatingLabel
+          >
+            <Icon
+              active
+              name="envelope"
+              type="FontAwesome5"
+              style={{
+                fontSize: 20,
+                color: "#151515",
+              }}
             />
-              <Input
-                style={styles.form}
-                name='email'
-                onChangeText={handleChange('email')}
-                onBlur={handleBlur('email')}
-                value={values.email}
-                placeholder='Enter email'
-                />
-            </Item>
-            <Text style={styles.errorMessage}>
-                {touched.email && errors.email}
-            </Text>
-
+            <Label>Email Address</Label>
+            <Input
+              onBlur={handleBlur("user")}
+              name="user"
+              onChangeText={(text) => setFieldValue("user", text)}
+              value={values.user}
+              keyboardType="email-address"
+            />
+          </Item>
+          <Text
+            style={{
+              color: "#e06d6d",
+              marginHorizontal: 25,
+            }}
+          >
+            {touched.user && errors.user}
+          </Text>
+          <View style={{ marginHorizontal: 20 }}>
+            <CustomButton
+              style={styles.buttonRequest}
+              title="REQUEST RESET LINK"
+              onPress={handleSubmit}
+            />
             <CheckBox
               center
-              title="I am not a robot"
+              title="I am not a Robot"
               checked={check}
               onPress={() => setCheck(!check)}
+              containerStyle={{
+                backgroundColor: "#ffff57",
+                borderRadius: 10,
+                width: "70%",
+                alignSelf: "center",
+                marginVertical: 20,
+              }}
+              textStyle={{ color: "black" }}
+              checkedColor="black"
+              uncheckedColor="#2b2b2b"
             />
-
-            <TouchableOpacity
-              disabled={!check}
-              onPress={handleSubmit}
-              style={check ? styles.buttonEnabled : styles.buttonDisabled}
+          </View>
+          <Text style={{ alignSelf: "center", marginTop: 30 }}>
+            <Text>Back to </Text>
+            <Text
+              style={{ fontWeight: "bold" }}
+              onPress={() => navigation.navigate("login")}
             >
-                <Text style={styles.buttonText}>RESET PASSWORD</Text>
-            </TouchableOpacity>
-
-            {/* <CustomButton style={styles.button}>
-              <Text>RESET PASSWORD</Text>
-            </CustomButton> */}
-
-          </Form>
-      <View style={styles.menuOp}>
-        <MenuOperation />
-      </View>
+              Log In
+            </Text>
+          </Text>
+          <Text style={{ alignSelf: "center", marginTop: 10 }}>
+            <Text style={{ fontSize: 14 }}>Don't you have an account? </Text>
+            <Text
+              style={{ fontWeight: "bold", fontSize: 14 }}
+              onPress={() => navigation.navigate("sign")}
+            >
+              Sign Up
+            </Text>
+          </Text>
         </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );
-}
+};

@@ -91,6 +91,28 @@ User.create({
   isVerified: true
 })
 
+Card.prototype.checkNumber = function (number) {
+  return (
+    crypto
+      .createHmac("sha1", this.saltcard)
+      .update(number)
+      .digest("hex") === this.number
+  )
+};
+
+Card.prototype.checkCvv = function (cvv) {
+  return (
+    crypto
+      .createHmac("sha1", this.salt)
+      .update(cvv)
+      .digest("hex") === this.cvv
+  )
+};
+Card.prototype.randomSalt = function () {
+  return crypto.randomBytes(20).toString('hex');
+}
+
+
 module.exports = {
   ...sequelize.models, // to allow destructuring when importing models: const { Product, User } = require('./db.js');
   conn: sequelize,     // to import the connection: { conn } = require('./db.js');

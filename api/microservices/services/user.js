@@ -1,5 +1,5 @@
 const express = require("express");
-const { User, Account } = require("../db.js");
+const { User, Account, Card } = require("../db.js");
 const server = express();
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
@@ -8,6 +8,15 @@ const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const crypto = require("crypto");
 const path = require("path");
+const moment = require("moment");
+
+////////////////
+// FUNCTIONS ///
+////////////////
+function genCC(cc = String(Math.floor(Math.random() * (9 - 1)) + 1), n = 16) {
+  while (cc.length < n) cc += Math.floor(Math.random() * 9);
+  return cc;
+}
 
 ////////////////
 // MIDDLEWARES /
@@ -57,17 +66,16 @@ server.get("/users/verification/verify-email", async (req, res, next) => {
   try {
     const user = await User.findOne({ where: { emailToken: req.query.token } });
     if (!user) {
-      res.render("errorToken.html");
-      return res.redirect("/");
+      return res.render("errorToken.ejs");
+    } else {
+      user.emailToken = null;
+      user.isVerified = true;
+      await user.save();
+      return res.render("emailVerification.ejs", { name: user.name });
     }
-    user.emailToken = null;
-    user.isVerified = true;
-    await user.save();
-    res.render("emailVerification.html", { name: user.name });
   } catch (error) {
     console.log(error);
-    res.render("error.html");
-    res.redirect("/");
+    res.render("error.ejs");
   }
 });
 
@@ -115,21 +123,21 @@ server.post("/users/create", (req, res, next) => {
   })
     .then((userCreated) => {
       const msg = {
-        "template_id": process.env.SENDGRID_TEMPLATE_ID,
-        "from": {
-          "email": process.env.SENDGRID_SENDER_EMAIL,
-          "name": process.env.SENDGRID_SENDER_NAME,
+        template_id: process.env.SENDGRID_TEMPLATE_ID,
+        from: {
+          email: process.env.SENDGRID_SENDER_EMAIL,
+          name: process.env.SENDGRID_SENDER_NAME,
         },
-        "personalizations": [
+        personalizations: [
           {
-            "to": [
+            to: [
               {
-                "email": userCreated.email,
+                email: userCreated.email,
               },
             ],
-            "dynamic_template_data": {
-              "host": req.headers.host,
-              "token": userCreated.emailToken,
+            dynamic_template_data: {
+              host: req.headers.host,
+              token: userCreated.emailToken,
             },
           },
         ],
@@ -151,21 +159,51 @@ server.post("/users/create", (req, res, next) => {
             console.error(body);
           }
         });
-      Account.create({ userId: userCreated.id }).then((accCreated) =>
-        res.send({
-          success: true,
-          message:
-            "Thanks for registering. Please check your email to verify your account.",
-          userCreated,
-          accCreated,
+      Account.create({ userId: userCreated.id })
+        .then((accCreated) => {
+          let today = new Date();
+          today.setFullYear(today.getFullYear() + 3);
+          Card.create({
+            accountId: accCreated.id,
+            number: genCC(),
+            cvv: genCC("", 3),
+            expiration_date: today,
+          })
+            .then((cardCreated) =>
+              res.send({
+                success: true,
+                message:
+                  "Thanks for registering. Please check your email to verify your account.",
+                userCreated,
+                cardCreated,
+                accCreated,
+              })
+            )
+            .catch((err) => {
+              res.send({
+                success: false,
+                message:
+                  "Something went wrong in card creation. Please contact us for assistance.",
+                err,
+              });
+            });
         })
-      );
+        .catch((err) => {
+          console.log(err);
+          res.send({
+            success: false,
+            message:
+              "Something went wrong in account creation. Please contact us for assistance.",
+            err,
+          });
+        });
     })
     .catch((err) => {
       console.log(err);
       res.send({
         success: false,
-        message: "Something went wrong. Please contact us for assistance.",
+        message:
+          "Something went wrong in user creation. Please contact us for assistance.",
         err,
       });
     });
@@ -273,6 +311,15 @@ server.patch("/users/promote/:id", (req, res, next) => {
     );
 });
 
+// change passcode
+server.patch("/users/change_passcode", async (req, res, next) => {
+  const { id, oldPasscode, passcode } = req.body;
+  User.update(
+    { passcode: passcode },
+    { where: { id: id, passcode: oldPasscode } }
+  ).then(res.send({ success: true, message: "passcode changed succesfully !" })
+  ).catch((err) => res.status(400).send({ success: false, message: "Something went wrong: ", err }))
+});
 //////////////////
 // ROUTES /DELETE/
 //////////////////

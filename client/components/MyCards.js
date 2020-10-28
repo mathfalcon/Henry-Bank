@@ -6,7 +6,7 @@ import MenuCards from "./MenuCards";
 import { useSelector } from "react-redux";
 import CreditCardDisplay from "react-native-credit-card-display";
 
-function MyCards() {
+function MyCards({ navigation }) {
   const userLogged = useSelector((state) => state.auth.user);
   console.log(userLogged);
   return (
@@ -22,7 +22,7 @@ function MyCards() {
           placeholder={{
             cvc: "123",
           }}
-          cvc="11111" // Epale revisa esto. Ese numero no esta saliendo por ningun lado
+          cvc="11111" 
           brand="henry"
           name={`${userLogged.name} ${userLogged.surname}`}
           number="12345678"
@@ -32,11 +32,12 @@ function MyCards() {
           imageBack={require("../assets/cardBackOk.png")}
         />
       </View>
-      <View style={styles.clientCard}>
-        <ClientCard user={userLogged} />
-      </View>
       <View style={styles.menu}>
         {/* <MenuCards /> */}
+      </View>
+
+      <View style={styles.menuOp}>
+            <MenuOperation navigation={navigation} screen={'cards'} />
       </View>
     </View>
   );
@@ -80,6 +81,10 @@ const styles = StyleSheet.create({
     // top: 685,
     flex: 2,
     // zIndex: 4,
+  },
+  menuOp:{
+    height:50,    
+    backgroundColor:"black",
   },
 });
 export default MyCards;

@@ -33,12 +33,17 @@ import {
 // import { SafeAreaView } from "react-native-safe-area-context";
 import { SwipeListView } from "react-native-swipe-list-view";
 import styles from "../Styles/contactsStyles";
+import { Avatar } from "react-native-elements";
+import PhoneNumberInput from "./PhoneNumberInput";
+import axios from "axios";
+import { api } from "./Constants/constants";
 
 export default Contacts = ({ navigation }) => {
   const [input, setInput] = useState({
     name: "",
     email: "",
     id: "",
+    phoneNumber: "",
   });
   const [error, setError] = useState({
     name: false,
@@ -51,10 +56,9 @@ export default Contacts = ({ navigation }) => {
   const dispatch = useDispatch();
   const userLogged = useSelector((state) => state.auth.user);
   const userContacts = useSelector((state) => state.contacts.contacts);
+
   useEffect(() => {
     dispatch(getContactList(userLogged.id));
-  }, []);
-  useEffect(() => {
     setListData(
       Array(1)
         .fill("")
@@ -84,9 +88,12 @@ export default Contacts = ({ navigation }) => {
   };
 
   const deleteRow = async (rowMap, rowKey, id) => {
-    await dispatch(deleteContact(id));
-    dispatch(getContactList(userLogged.id));
-    navigation.navigate("position");
+    const deleteRequest = await axios.delete(`${api}/contacts/delete/${id}`);
+    Alert.alert("Success", deleteRequest.data.message);
+    if (deleteRequest.data.success) {
+      dispatch(getContactList(userLogged.id));
+      navigation.navigate("position");
+    }
   };
 
   const onRowDidOpen = (rowKey) => {
@@ -99,9 +106,44 @@ export default Contacts = ({ navigation }) => {
       style={styles.rowFront}
       underlayColor={"#AAA"}
     >
-      <View style={{ alignSelf: "flex-start", marginLeft: 50 }}>
-        <Text>Contact: {data.item.text}</Text>
-        <Text>Email: {data.item.key}</Text>
+      <View style={{ alignSelf: "flex-start", flexDirection: "row" }}>
+        <View style={{ flex: 0.5 }}>
+          <Avatar
+            size="large"
+            icon={{ color: "black", name: "user", type: "font-awesome" }}
+            activeOpacity={0.7}
+            containerStyle={{
+              backgroundColor: "#ffff6d",
+              alignSelf: "center",
+            }}
+          />
+        </View>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "flex-start",
+          }}
+        >
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Icon
+              name="address-book"
+              onPress={() => navigation.navigate("myCards")}
+              style={{ color: "black", fontSize: 20 }}
+              type="FontAwesome5"
+            />
+            <Text style={{ paddingHorizontal: 15 }}>{data.item.text}</Text>
+          </View>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Icon
+              name="envelope"
+              onPress={() => navigation.navigate("myCards")}
+              style={{ color: "black", fontSize: 17 }}
+              type="FontAwesome5"
+            />
+            <Text style={{ paddingHorizontal: 15 }}>{data.item.key}</Text>
+          </View>
+        </View>
       </View>
     </TouchableHighlight>
   );
@@ -117,13 +159,13 @@ export default Contacts = ({ navigation }) => {
           })
         }
       >
-        <Text>Send Money</Text>
+        <Text style={{ color: "#ffff8b" }}>Send Money</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnLeft]}
         onPress={() => closeRow(rowMap, data.item.key, data.item.value)}
       >
-        <Text style={styles.backTextWhite}>Modify</Text>
+        <Text style={styles.backTextBlack}>Modify</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnRight]}
@@ -157,11 +199,39 @@ export default Contacts = ({ navigation }) => {
       if (modify) {
         dispatch(modifyContact(input.name, input.id));
       } else {
-        dispatch(addContact(input.name, input.email, userLogged.id));
+        axios
+          .post(`${api}/contacts/create`, {
+            userId: userLogged.id,
+            alias: input.name,
+            emailOfContact: input.email,
+          })
+          .then((response) => {
+            if (response.data.success) {
+              dispatch(getContactList(userLogged.id));
+              Alert.alert("Success", response.data.message);
+              navigation.navigate("position");
+            } else if (response.data.code === "not_client") {
+              Alert.alert("Invite your contact", response.data.message, [
+                {
+                  text: "Maybe later",
+                  onPress: () => navigation.navigate("position"),
+                },
+                {
+                  text: "Sounds good",
+                  onPress: () => {
+                    setModalVisible(!modalVisible);
+                    navigation.navigate("invitation");
+                  },
+                },
+              ]);
+            } else {
+              dispatch(getContactList(userLogged.id));
+              Alert.alert("Failure", response.data.message);
+              navigation.navigate("position");
+            }
+          })
+          .catch((err) => console.log(err));
       }
-      Alert.alert("Se agrego el nuevo contacto");
-      dispatch(getContactList(userLogged.id));
-      navigation.navigate("position");
     }
   };
 
@@ -202,7 +272,7 @@ export default Contacts = ({ navigation }) => {
         renderItem={renderItem}
         renderHiddenItem={renderHiddenItem}
         // renderSectionHeader={renderSectionHeader}
-        leftOpenValue={75}
+        leftOpenValue={115}
         rightOpenValue={-150}
         previewRowKey={"0"}
         previewOpenValue={-40}
@@ -237,7 +307,7 @@ export default Contacts = ({ navigation }) => {
                   <Text style={styles.error}>Must fill this field</Text>
                 )}
 
-                <Item floatingLabel last>
+                <Item floatingLabel>
                   <Label>Email</Label>
                   <Input
                     disabled={modify}
@@ -250,6 +320,23 @@ export default Contacts = ({ navigation }) => {
                   <Text style={styles.error}>Enter a valid Email</Text>
                 )}
 
+                {/* <Item floatingLabel last>
+                  <Label>Phone Number</Label>
+                  <Input
+                    name="phoneNumber"
+                    value={input.phoneNumber}
+                    onChangeText={(text) => handleChange("phoneNumber", text)}
+                  />
+                </Item>
+                <PhoneNumberInput 
+                  name="phoneNumber"
+                  value={input.phoneNumber}
+                  onChangeText={(text) => handleChange("phoneNumber", text)}
+                />
+                {error.phoneNumber && (
+                  <Text style={styles.error}>Must fill this field</Text>
+                )} */}
+
                 <View style={styles.buttoms}>
                   <TouchableHighlight
                     style={{ ...styles.openButton, backgroundColor: "#151515" }}
@@ -257,6 +344,7 @@ export default Contacts = ({ navigation }) => {
                       setInput({
                         name: "",
                         email: "",
+                        phoneNumber: "",
                       });
                       setError(false);
                       setModify(false);
@@ -279,14 +367,10 @@ export default Contacts = ({ navigation }) => {
           </View>
         </View>
       </Modal>
+
+      <View style={styles.menuOp}>
+        <MenuOperation navigation={navigation} screen={"contacts"} />
+      </View>
     </View>
   );
 };
-
-// Se debe incluir las siguientes funcionalidades:
-
-// Asociar Contacto: dar de alta un nuevo contacto cargando su nombre y mail: Validar que el nuevo contacto es cliente de Henry Bank por su mail.
-
-// Modificar Contacto: poder cambiar el nombre solamente del contacto.
-
-// Eliminar Contacto: dar de baja en contacto.

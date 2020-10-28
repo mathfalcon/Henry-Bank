@@ -68,8 +68,7 @@ function Home({ navigation }) {
               </TouchableOpacity>
             </View>
           </View>
-        </ImageBackground>
-      )}
+        </ImageBackground>      
     </SafeAreaView>
   );
 }

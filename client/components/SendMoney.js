@@ -5,7 +5,6 @@ import {
   Text,
   Textarea,
   Item,
-  View,
   Button,
   Body,
   Card,
@@ -17,6 +16,8 @@ import {
   Right,
   Title,
   Form,
+  Label,
+  Footer,
 } from "native-base";
 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -26,10 +27,11 @@ import { sendMoney } from "../redux/actions/accountActions";
 import { getContactList } from "../redux/actions/contactsActions";
 // import { getUserLogged } from "../redux/actions/authActions";
 import styles from "../Styles/sendMoneyStyles.js";
-import { Alert } from "react-native";
+import { Alert,View } from "react-native";
 import { getUserLogged } from "../redux/actions/authActions";
 import axios from "axios";
 import { api } from "./Constants/constants";
+import MenuOperation from "./MenuOperation";
 
 export default SendMoney = ({ navigation, route }) => {
   const [selectContact, setSelectContact] = useState("");
@@ -38,7 +40,7 @@ export default SendMoney = ({ navigation, route }) => {
   const [error, setError] = useState(false);
   const [fromContacts, setFromContacts] = useState(false);
   const [message, setMessage] = useState("");
-  const [passCode, setPassCode] = useState(0);
+  const [passCode, setPassCode] = useState("");
   // const contacts = useSelector((state) => state.contacts);
   const userLogged = useSelector((state) => state.auth);
 
@@ -52,127 +54,131 @@ export default SendMoney = ({ navigation, route }) => {
       setFromContacts(true);
     }
   }, []);
-
-  // useEffect(() =>
-  // dispatch(getUserLogged())
-  // dispatch(getContactList())
-  // dispatch(verifyFunds())
-  // , []);
-
+  
   const userContacts = useSelector((state) => state.contacts.contacts);
   const handleSubmit = () => {
-    if (inputMoney === "" || selectContact === "") return setError(true);
+    if (inputMoney === "" || selectContact === "" || passCode === "") return setError(true);
     setError(false);
 
     if (inputMoney > Number(userLogged.user.account.balance))
       return Alert.alert("Do not have funds enough");
 
-    axios.post(`${api}/transactions/${userLogged.user.id}/to/${selectContact}`,{
-      amount: inputMoney,
-      message: message,
-      passcode: passCode.toString()
-    }).then(data => {
-      const response = data.data
-      if (response.success) {
-        Alert.alert(`${response.message}`);
-        navigation.navigate("position")
-      } else if (!response.success) {
-        Alert.alert(`${response.message}`);
-        navigation.navigate("position")
-      } else {
-        Alert.alert("Your transaction is being processed");
-        navigation.navigate("position")
-      }
-    })
-    setInputMoney("");
-    setSelectContact("");
+    axios
+      .post(`${api}/transactions/${userLogged.user.id}/to/${selectContact}`, {
+        amount: inputMoney,
+        message: message,
+        passcode: passCode.toString(),
+      })
+      .then((data) => {
+        const response = data.data;
+        setInputMoney("");
+        setSelectContact("");
+        setPassCode("");
+
+        if (response.success) {
+          Alert.alert(`${response.message}`);
+          navigation.navigate("position");
+        } else if (!response.success) {
+          Alert.alert(`${response.message}`);
+          navigation.navigate("position");
+        } else {
+          Alert.alert("Your transaction is being processed");
+          navigation.navigate("position");
+        }
+      });
+    // setInputMoney("");
+    // setSelectContact("");
+    // setPassCode("");
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAwareScrollView>
-        {/* <Text style={styles.title}>Send Money</Text> */}
+    <KeyboardAwareScrollView style={{height: '100%', flex: 1}}>
+      <View style={styles.main1}>
         <Header style={styles.header}>
-          <Left>
-            <Button transparent onPress={() => navigation.navigate("position")}>
+          <Body
+            style={{ flex: 1, flexDirection: "row", alignSelf: "flex-start" }}
+          >
+            <Button transparent onPress={() => {
+                setError(false);
+                setInputMoney("");
+                setSelectContact("");
+                setPassCode("");
+                navigation.navigate("position");
+                }
+              }
+            >
               <Icon style={{ color: "black" }} name="arrow-back" />
-              {/* <Text>Back</Text> */}
             </Button>
-          </Left>
-          <Body>
             <Title style={styles.headerTitle}>SEND MONEY</Title>
           </Body>
-          <Right />
+          <View style={styles.picker}>
+            <Picker
+              mode="dropdown"
+              enabled={!fromContacts}
+              selectedValue={selectContact}
+              onValueChange={setSelectContact}
+              itemStyle={styles.pickerItem}
+            >
+              <Picker.Item
+                label={
+                  userContacts.length < 1
+                    ? "You need at least one contact to send money"
+                    : "Select a Contact..."
+                }
+                value=""
+              />
+              {userContacts.map((e, key) => (
+                <Picker.Item label={e.alias} value={e.user.id} key={key} />
+              ))}
+            </Picker>
+          </View>
+          <Label style={{ textAlign: "center", paddingVertical: 5 }}>
+            <Text>Select a contact</Text>
+          </Label>
         </Header>
-
-        <View style={styles.picker}>
-          <Picker
-            mode="dropdown"
-            enabled={!fromContacts}
-            selectedValue={selectContact}
-            onValueChange={setSelectContact}
-            itemStyle={styles.pickerItem}
-          >
-            <Picker.Item
-              label={
-                userContacts.length < 1
-                  ? "You need at least one contact to send money"
-                  : "Select a Contact..."
-              }
-              value=""
+      </View>
+      <View style={styles.main2}>
+        {error && (
+          <Text style={styles.error}>
+            Please select a Contact and enter an amount
+          </Text>
+        )}
+          <Item style={{ width: "100%" }}>
+            <Input
+              placeholder="Enter the amount to send (Minimum $10)"
+              keyboardType="numeric"
+              name="money"
+              value={inputMoney}
+              onChangeText={(value) => setInputMoney(value)}
+              style={styles.input}
             />
-            {userContacts.map((e, key) => (
-              <Picker.Item label={e.alias} value={e.user.id} key={key} />
-            ))}
-          </Picker>
-        </View>
-
-        <Card style={styles.card}>
-          <CardItem>
-            <Body style={{ alignItems: "center" }}>
-              {error && (
-                <Text style={styles.error}>
-                  Select a Contact and enter an ammount
-                </Text>
-              )}
-              <Form>
-                <Text style={styles.label}>Enter the amount to send</Text>
-                <Item style={{ width: "75%" }}>
-                  <Input
-                    placeholder="Minimum $10"
-                    keyboardType="numeric"
-                    name="money"
-                    value={inputMoney}
-                    onChangeText={(value) => setInputMoney(value)}
-                    style={styles.input}
-                  />
-                </Item>
-                <Item style={{ height: 100 }}>
-                  <Input
-                    placeholder="Message"
-                    multiline={true}
-                    onChangeText={(value) => setMessage(value)}
-                  />
-                </Item>
-                <Item>
-                  <Input placeholder="Passcode" keyboardType="numeric" onChangeText={(value)=> setPassCode(value)}/>
-                </Item>
-              </Form>
-
-              {/* <CheckBox                    
-                    title="Send email to the contact"
-                    checked={check}
-                    onPress={() => setCheck(!check)}
-                    style={styles.check}
-                /> */}
-
-              <Button style={styles.buttom} dark block onPress={handleSubmit}>
-                <Text>SEND MONEY</Text>
-              </Button>
-            </Body>
-          </CardItem>
-        </Card>
-      </KeyboardAwareScrollView>
-    </SafeAreaView>
+          </Item>
+          <Item style={{ height: 150 }}>
+            <Input
+              placeholder="Message"
+              multiline={true}
+              onChangeText={(value) => setMessage(value)}
+            />
+          </Item>
+          <Item>
+            <Input
+              secureTextEntry={true}
+              placeholder="Passcode"
+              placeholder="Introduce your passcode"
+              keyboardType="numeric"
+              value={passCode}
+              onChangeText={(value) => setPassCode(value)}
+            />
+          {error && (
+            <Text style={styles.error}>
+              PassCode is Required!
+            </Text>
+          )}
+          </Item>
+        <Button style={styles.buttom} dark block onPress={handleSubmit}>
+          <Text>SEND MONEY</Text>
+        </Button>
+      </View>
+    </KeyboardAwareScrollView>
   );
 };

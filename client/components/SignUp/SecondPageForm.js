@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { getLocation } from "../redux/actions/actions.js";
-import styles from "../Styles/signInStyles.js";
+// import { getLocation } from "../../redux/actions/actions.js";
+import styles from "../../Styles/signInStyles.js";
 import {
   Text,
   Label,
@@ -25,7 +25,7 @@ import { Alert, Image, View } from "react-native";
 export default SecondPageForm = ({ route, navigation }) => {
   const [initialState, setInitialState] = useState(true);
   const { responseLocation } = useSelector((state) => state.users);
-  const personalInfo = route.params;  
+  const personalInfo = route.params;
 
   const dispatch = useDispatch();
 
@@ -110,8 +110,8 @@ export default SecondPageForm = ({ route, navigation }) => {
                 <Icon style={{ color: "black" }} name="arrow-back" />
               </Button>
             </Left>
-            <Body>
-              <Text style={styles.headerText}>STEP 2/3</Text>
+            <Body>              
+              <Title style={styles.headerTitle}>STEP 2/4</Title>
             </Body>
             <Right>
               <Button transparent onPress={confirmCancel}>
@@ -123,7 +123,7 @@ export default SecondPageForm = ({ route, navigation }) => {
           <Form style={styles.form}>
             <View style={styles.logoView}>
               <Image
-                source={require("../assets/henryLogoBlack.jpg")}
+                source={require("../../assets/henryLogoBlack.jpg")}
                 style={styles.logoImg}
               />
               <Text style={styles.logoViewText}>Location Information</Text>
@@ -140,6 +140,7 @@ export default SecondPageForm = ({ route, navigation }) => {
                 name="country"
                 onChangeText={(text) => setFieldValue("country", text)}
                 value={values.country}
+                style={{ textTransform: "capitalize" }}
               />
 
               {touched.country && !errors.country ? (
@@ -170,6 +171,7 @@ export default SecondPageForm = ({ route, navigation }) => {
                 name="state"
                 onChangeText={(text) => setFieldValue("state", text)}
                 value={values.state}
+                style={{ textTransform: "capitalize" }}
               />
 
               {touched.state && !errors.state ? (
@@ -200,6 +202,7 @@ export default SecondPageForm = ({ route, navigation }) => {
                 name="locality"
                 onChangeText={(text) => setFieldValue("locality", text)}
                 value={values.locality}
+                style={{ textTransform: "capitalize" }}
               />
 
               {touched.locality && !errors.locality ? (
@@ -230,6 +233,7 @@ export default SecondPageForm = ({ route, navigation }) => {
                 name="street"
                 onChangeText={(text) => setFieldValue("street", text)}
                 value={values.street}
+                style={{ textTransform: "capitalize" }}
               />
 
               {touched.street && !errors.street ? (
@@ -260,6 +264,7 @@ export default SecondPageForm = ({ route, navigation }) => {
                 name="streetNumber"
                 onChangeText={(text) => setFieldValue("streetNumber", text)}
                 value={values.streetNumber}
+                keyboardType="numeric"
               />
 
               {touched.streetNumber && !errors.streetNumber ? (
