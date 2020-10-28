@@ -28,7 +28,9 @@ export default function HomePosition() {
       <Stack.Screen name="accountHistory" component={AccountHistory} />
 
       <Stack.Screen name="contacts" component={Contacts} />
+      
       <Stack.Screen name="invitation" component={Invitation} />
+
     </Stack.Navigator>
   );
 }

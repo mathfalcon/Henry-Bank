@@ -29,7 +29,7 @@ export default ManageTransactions = ({ navigation }) => {
 
     const { allTransactions } = useSelector((state) => state.transactions);
     const { users } = useSelector((state) => state.users);        
-
+    
     useEffect(() => {
         dispatch(getUsers());
         dispatch(getAllTransactions());        

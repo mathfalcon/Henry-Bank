@@ -9,10 +9,10 @@ import styles from "../../Styles/adminPanelStyles";
 export default AdminPanel = ({ navigation }) => {
   return (
       <Container>
-        <Header style={styles.header}>
+        <Header style={{backgroundColor: '#151515'}}>
             <Left style={{ flex: 1 }}>
                 <Button transparent onPress={() => navigation.navigate('position')}>
-                    <Icon style={{ color: "black" }} name="arrow-back" />
+                    <Icon style={{ color: "whitesmoke" }} name="arrow-back" />
                 </Button>
             </Left>
             <Body>
@@ -25,16 +25,16 @@ export default AdminPanel = ({ navigation }) => {
             renderTabBar={()=> <ScrollableTab />}
             locked={true}
         >
-          <Tab heading="Users">
+          <Tab heading="Users" tabStyle={{backgroundColor: '#151515'}} activeTabStyle={{backgroundColor: '#151515'}} activeTextStyle={{color: '#ffff8b'}} textStyle={{color: 'whitesmoke', opacity: 0.7}}>
             <ManageUsers />
           </Tab>
-          <Tab heading="Accounts">
+          <Tab heading="Accounts" tabStyle={{backgroundColor: '#151515'}} activeTabStyle={{backgroundColor: '#151515'}} activeTextStyle={{color: '#ffff8b'}} textStyle={{color: 'whitesmoke', opacity: 0.7}}>
             <ManageAccounts />
           </Tab>
-          <Tab heading="Transactions">
+          <Tab heading="Transactions" tabStyle={{backgroundColor: '#151515'}} activeTabStyle={{backgroundColor: '#151515'}} activeTextStyle={{color: '#ffff8b'}} textStyle={{color: 'whitesmoke', opacity: 0.7}}>
             <ManageTransactions />
           </Tab>
-          <Tab heading="Stats">
+          <Tab heading="Stats" tabStyle={{backgroundColor: '#151515'}} activeTabStyle={{backgroundColor: '#151515'}} activeTextStyle={{color: '#ffff8b'}} textStyle={{color: 'whitesmoke', opacity: 0.7}}>
             <SeeStats />
           </Tab>          
         </Tabs>

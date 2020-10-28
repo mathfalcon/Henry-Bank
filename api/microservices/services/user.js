@@ -37,7 +37,7 @@ server.engine("html", require("ejs").renderFile);
 
 // Route for getting all users
 server.get("/users", (req, res, next) => {
-  User.findAll({ include: [{ model: Account }] })
+  User.findAll({ include: [{ model: Account }], attributes: ['id', 'name', 'surname', 'role','email', 'phone'] })
     .then((users) => {
       res.send({ success: true, message: "Users list: ", users });
     })
@@ -102,7 +102,7 @@ server.post("/users/create", (req, res, next) => {
     country,
     role,
     photo,
-    documentPhoto
+    documentPhoto,
   } = req.body;
   const emailToken = crypto.randomBytes(64).toString("hex");
   User.create({
@@ -122,8 +122,8 @@ server.post("/users/create", (req, res, next) => {
     country,
     role,
     emailToken,
-    photo,
-    documentPhoto
+    documentPhoto,
+    photo: documentPhoto
   })
     .then((userCreated) => {
       const msg = {
@@ -184,12 +184,15 @@ server.post("/users/create", (req, res, next) => {
               })
             )
             .catch((err) => {
-              res.send({
-                success: false,
-                message:
-                  "Something went wrong in card creation. Please contact us for assistance.",
-                err,
-              });
+              {
+                console.log(err);
+                res.send({
+                  success: false,
+                  message:
+                    "Something went wrong in card creation. Please contact us for assistance.",
+                  err,
+                });
+              }
             });
         })
         .catch((err) => {
@@ -236,7 +239,7 @@ server.put("/users/update/:id", (req, res, next) => {
     country,
     role,
     photo,
-    documentPhoto
+    documentPhoto,
   } = req.body;
   User.findByPk(req.params.id)
     .then((user) => {
@@ -257,7 +260,7 @@ server.put("/users/update/:id", (req, res, next) => {
         country,
         role,
         photo,
-        documentPhoto
+        documentPhoto,
       });
     })
     .then((updatedUser) =>
@@ -325,8 +328,15 @@ server.patch("/users/change_passcode", async (req, res, next) => {
   User.update(
     { passcode: passcode },
     { where: { id: id, passcode: oldPasscode } }
-  ).then(res.send({ success: true, message: "passcode changed succesfully !" })
-  ).catch((err) => res.status(400).send({ success: false, message: "Something went wrong: ", err }))
+  )
+    .then(
+      res.send({ success: true, message: "passcode changed succesfully !" })
+    )
+    .catch((err) =>
+      res
+        .status(400)
+        .send({ success: false, message: "Something went wrong: ", err })
+    );
 });
 //////////////////
 // ROUTES /DELETE/

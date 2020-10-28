@@ -22,7 +22,9 @@ export default ForgotPass = ({ navigation }) => {
     initialValues: {
       user: "",
     },
-    onSubmit: () => navigation.navigate("resetPassword"),
+    onSubmit: () => {
+      navigation.navigate("resetPassword")
+    },
     validate: (values) => {
       const errors = {};
       if (values.user.length <= 2) errors.user = "The email is invalid";
@@ -81,11 +83,6 @@ export default ForgotPass = ({ navigation }) => {
             {touched.user && errors.user}
           </Text>
           <View style={{ marginHorizontal: 20 }}>
-            <CustomButton
-              style={styles.buttonRequest}
-              title="REQUEST RESET LINK"
-              onPress={handleSubmit}
-            />
             <CheckBox
               center
               title="I am not a Robot"
@@ -101,6 +98,11 @@ export default ForgotPass = ({ navigation }) => {
               textStyle={{ color: "black" }}
               checkedColor="black"
               uncheckedColor="#2b2b2b"
+            />
+            <CustomButton
+              style={styles.buttonRequest}
+              title="REQUEST RESET LINK"
+              onPress={handleSubmit}
             />
           </View>
           <Text style={{ alignSelf: "center", marginTop: 30 }}>

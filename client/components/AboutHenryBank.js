@@ -152,17 +152,19 @@ export default class AboutHenryBank extends Component {
             justifyContent: "center",
             alignContent: "center",
             flex: 0.15,
-            backgroundColor: "#ffff7f",
+            backgroundColor: "#151515",
+            
           }}
         >
-          <Text>Do you need more help? </Text>
-          <Text style={{ fontWeight: "bold" }} onPress={this._handlePress}>
+          <Text style={{color: 'whitesmoke'}}>Do you need more help? </Text>
+          <Text style={{ fontWeight: "bold", color: 'whitesmoke' }} onPress={this._handlePress}>
             Contact us:
           </Text>
           <Text
             style={{
               fontWeight: "bold",
               fontStyle: "italic",
+              color: 'whitesmoke'
             }}
             onPress={this._handlePress}
           >

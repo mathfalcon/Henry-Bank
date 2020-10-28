@@ -31,7 +31,8 @@ export default FourthPageForm = ({ route, navigation }) => {
   const personalInfo = route.params.personalInfo;
   const locationInfo = route.params.locationInfo;
   const documentPhoto = route.params.selectedImage.picture.base64;
-  const photo = route.params.photo.base64;
+  
+  // const photo = route.params.photo.base64;
 
   const [initialState, setInitialState] = useState(true);
   const [showPass, setShowPass] = useState(false);
@@ -72,7 +73,7 @@ export default FourthPageForm = ({ route, navigation }) => {
         state: locationInfo.state,
         country: locationInfo.country,
         documentPhoto: documentPhoto,
-        photo: photo,
+        photo: documentPhoto,
         role: "client",
       };
 
