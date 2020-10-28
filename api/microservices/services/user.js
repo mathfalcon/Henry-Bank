@@ -159,7 +159,7 @@ server.post("/users/create", (req, res, next) => {
             console.error(body);
           }
         });
-      Account.create({ userId: userCreated.id })
+      Account.create({ userId: userCreated.id, cvu: genCC("", 22) })
         .then((accCreated) => {
           let today = new Date();
           today.setFullYear(today.getFullYear() + 3);
