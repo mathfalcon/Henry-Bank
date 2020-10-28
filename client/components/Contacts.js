@@ -200,7 +200,6 @@ export default Contacts = ({ navigation }) => {
         dispatch(modifyContact(input.name, input.id));
       } else {
         dispatch(addContact(input.name, input.email, input.phoneNumber, userLogged.id, userLogged.name));
-=======
         // axios
 //   .post(`${api}/contacts/create`, {
 //     userId: userLogged.id,
