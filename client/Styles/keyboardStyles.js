@@ -1,68 +1,72 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet } from "react-native";
 
 // Aca estan los estilos del teclado
 // client\node_modules\react-native-virtual-keyboard\src\VirtualKeyboard.style.js
 
 export default StyleSheet.create({
-
-    // centeredView:{
-
-    // },
-    modalView:{
-        display:'flex',
-        flexDirection:'column',
-        flex: 13,
-        backgroundColor: "rgba(0, 0, 0, 0.85)",             
-		justifyContent: 'center',
-		alignItems: 'center',
-        // backgroundColor: '#F5FCFF',
-        height:150,
-        width:370,        
-        borderRadius: 75,
-        padding: 25,        
-    },
-    modalText:{
-        flex: 2,
-        color:'yellow',
-        fontSize: 25,
-        marginTop:25,
-    },
-    inputs:{
-        flex: 3,
-        flexDirection:'row',
-        width:230,
-        // justifyContent:'center',        
-    },
-    textInput: {        
-        borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
-        width: Dimensions.get('window').width * 0.2,
-        height: Dimensions.get('window').width * 0.1,
-        fontSize: 20,
-        color:'blue',
-        marginRight: 12,
-        paddingLeft:17,
-        backgroundColor: 'whitesmoke',        
-    },
-    keyboard:{
-        flex: 6,
-        marginTop:-25,        
-    },
-    textStyle: {
-        color: "white",        
-        fontWeight: "bold",
-        alignSelf:'center',                       
-    },
-    backButtom: {
-        flex:2,
-        // flexDirection:'column',
-        backgroundColor: "blue",                              
-        marginTop: 60,
-        width: 200,
-        maxHeight:30,
-        borderRadius: 5,
-        padding: 10,
-        paddingBottom:35,       
-      },
+  modalView: {
+    flexDirection: "column",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ffff8b",
+    width: "100%",
+    padding: 25,
+    paddingTop: 50
+  },
+  modalText: {
+    color: "#151515",
+    fontSize: 20,
+    marginTop: 25,
+    textAlign: "center",
+  },
+  inputs: {
+    flex: 1.5,
+    flexDirection: "row",
+    width: 230,
+    height: 500,
+    // justifyContent:'center',
+  },
+  textInput: {
+    // justifyContent:'center',
+    // alignItems:'center',
+    fontSize: 25,
+    color: "whitesmoke",
+    marginRight: 10,
+    paddingLeft: 16,
+    backgroundColor: "#151515",
+    borderRadius: 15,
+  },
+  keyboard: {
+    flex: 4,
+    marginTop: -10,
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    alignSelf: "center",
+  },
+  backButton: {
+    // flexDirection:'column',
+    backgroundColor: "#151515",
+    width: 200,
+    maxHeight: 30,
+    borderRadius: 5,
+    padding: 10,
+    paddingBottom: 40,
+  },
+  backButtonView: {
+    flex: 2,
+  },
+  logoImg: {
+    height: 60,
+    width: 60,
+    alignSelf: "center",
+    borderRadius: 10,
+  },
+  logoView:{
+    marginBottom:30,
+  }
 });
 
 // Modificar en la libreria
@@ -87,7 +91,6 @@ export default StyleSheet.create({
 //     }
 // }
 
-
 // VirtualKeyboard.styles.js
 // import { StyleSheet, Dimensions, Platform } from 'react-native';
 // const { height, width } = Dimensions.get('window');
@@ -99,32 +102,31 @@ export default StyleSheet.create({
 // 		marginRight: 30,
 // 		alignItems: 'flex-start',
 // 	},
-// 	row: {		
-// 		flexDirection: 'row',		
+// 	row: {
+// 		flexDirection: 'row',
 // 		marginTop: 15,
 // 	},
-// 	number: {		
-// 		fontSize: 15,
+// 	number: {
+// 		fontSize: 30,
 // 		color:'white',
-// 		textAlign: 'center',		
+// 		textAlign: 'center',
 // 	},
 // 	backspace: {
-// 		flex: 1,		
+// 		flex: 1,
 // 		alignItems: 'center',
 // 		justifyContent: 'center',
 // 		backgroundColor:'blue',
-// 		marginRight:10,
-// 		maxWidth: 75,		
+// 		marginRight:15,
+// 		maxWidth: 75,
 // 		borderRadius: 100,
 // 		color:'black',
 // 	},
-// 	cell: {		
-// 		flex: 1,	
-// 		borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
-//         width: Dimensions.get('window').width * 0.2,
-//         height: Dimensions.get('window').width * 0.1,	
+// 	cell: {
+// 		flex: 1,
 // 		justifyContent: 'center',
-// 		backgroundColor:'blue',		
-// 		marginRight:10,		
+// 		backgroundColor:'blue',
+// 		maxWidth: 75,
+// 		marginRight:10,
+// 		borderRadius: 100,
 // 	},
 // });

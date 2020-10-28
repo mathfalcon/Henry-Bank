@@ -34,6 +34,7 @@ import {
 import { SwipeListView } from "react-native-swipe-list-view";
 import styles from "../Styles/contactsStyles";
 import { Avatar } from "react-native-elements";
+import PhoneNumberInput from "./PhoneNumberInput";
 import axios from "axios";
 import { api } from "./Constants/constants";
 
@@ -42,6 +43,7 @@ export default Contacts = ({ navigation }) => {
     name: "",
     email: "",
     id: "",
+    phoneNumber: "",
   });
   const [error, setError] = useState({
     name: false,
@@ -90,7 +92,7 @@ export default Contacts = ({ navigation }) => {
     Alert.alert("Success", deleteRequest.data.message);
     if (deleteRequest.data.success) {
       dispatch(getContactList(userLogged.id));
-      navigation.navigate('position')
+      navigation.navigate("position");
     }
   };
 
@@ -208,6 +210,24 @@ export default Contacts = ({ navigation }) => {
               dispatch(getContactList(userLogged.id));
               Alert.alert("Success", response.data.message);
               navigation.navigate("position");
+            } else if (response.data.code === "not_client") {
+              Alert.alert("Invite your contact", response.data.message, [
+                {
+                  text: "Maybe later",
+                  onPress: () => navigation.navigate("position"),
+                },
+                {
+                  text: "Sounds good",
+                  onPress: () => {
+                    setModalVisible(!modalVisible);
+                    navigation.navigate("invitation");
+                  },
+                },
+              ]);
+            } else {
+              dispatch(getContactList(userLogged.id));
+              Alert.alert("Failure", response.data.message);
+              navigation.navigate("position");
             }
           })
           .catch((err) => console.log(err));
@@ -287,7 +307,7 @@ export default Contacts = ({ navigation }) => {
                   <Text style={styles.error}>Must fill this field</Text>
                 )}
 
-                <Item floatingLabel last>
+                <Item floatingLabel>
                   <Label>Email</Label>
                   <Input
                     disabled={modify}
@@ -300,6 +320,23 @@ export default Contacts = ({ navigation }) => {
                   <Text style={styles.error}>Enter a valid Email</Text>
                 )}
 
+                {/* <Item floatingLabel last>
+                  <Label>Phone Number</Label>
+                  <Input
+                    name="phoneNumber"
+                    value={input.phoneNumber}
+                    onChangeText={(text) => handleChange("phoneNumber", text)}
+                  />
+                </Item>
+                <PhoneNumberInput 
+                  name="phoneNumber"
+                  value={input.phoneNumber}
+                  onChangeText={(text) => handleChange("phoneNumber", text)}
+                />
+                {error.phoneNumber && (
+                  <Text style={styles.error}>Must fill this field</Text>
+                )} */}
+
                 <View style={styles.buttoms}>
                   <TouchableHighlight
                     style={{ ...styles.openButton, backgroundColor: "#151515" }}
@@ -307,6 +344,7 @@ export default Contacts = ({ navigation }) => {
                       setInput({
                         name: "",
                         email: "",
+                        phoneNumber: "",
                       });
                       setError(false);
                       setModify(false);

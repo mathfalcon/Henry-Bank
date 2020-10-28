@@ -5,7 +5,7 @@ import { api } from "../../components/Constants/constants";
 export const getAccountHistory = ( userId ) => {  
   return function (dispatch) {
     axios        
-      .get(`${api}/transactions/user/2`)      
+      .get(`${api}/transactions/user/${userId}`)      
       .then((response) => {
         dispatch({ type: C.accountHistory, payload: response.data });
       })

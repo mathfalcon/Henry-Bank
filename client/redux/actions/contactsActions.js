@@ -12,13 +12,14 @@ export const getContactList = (id) => {
   };
 };
 
-export const addContact = (contactName, contactEmail, userId) => {
+export const addContact = (contactName, contactEmail, userId, userName ) => {
   return function (dispatch) {
     axios
       .post(`${api}/contacts/create`, {
         userId,
         alias: contactName,
         emailOfContact: contactEmail,
+        phoneNumber: contactPhoneNumber
       })
       .then((response) => {
         dispatch({ type: C.addContact, payload: response.data });

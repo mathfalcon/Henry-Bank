@@ -16,20 +16,18 @@ export default AccountMovementsChart = ({ userLogged }) => {
   }, []);
 
   const getPastDaysBalance = () => {
-    axios(
-      `${api}/transactions/history/weekly/${userLogged.user.id}`
-    )
-    .then((response) => console.log(response.data))
-    .catch( err => console.log( err ))
+    axios(`${api}/transactions/history/weekly/${userLogged.user.id}`)
+      .then((response) => console.log(response.data))
+      .catch((err) => console.log(err));
   };
-    const getData = () => {
+
+  const getData = () => {
     let currentBalance = userLogged.user.account.balance;
     let toReturn = [];
     pastDaysBalance.reverse().forEach((e) => {
       currentBalance -= e;
-      toReturn.push(currentBalance)
-    });
-    
+      toReturn.push(currentBalance);
+    });  
     return toReturn.reverse()
   };
   return (

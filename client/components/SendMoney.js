@@ -164,6 +164,7 @@ export default SendMoney = ({ navigation, route }) => {
             <Input
               secureTextEntry={true}
               placeholder="Passcode"
+              placeholder="Introduce your passcode"
               keyboardType="numeric"
               value={passCode}
               onChangeText={(value) => setPassCode(value)}

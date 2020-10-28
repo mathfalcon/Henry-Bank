@@ -47,9 +47,12 @@ server.get("/transactions", (req, res, next) => {
     );
 });
 server.get("/transactions/user/:userId", (req, res, next) => {
-  const {userId} = req.params
+  const { userId } = req.params;
   Transaction.findAll({
-    where: {receiverId: userId},
+    where: { [Op.or]: {
+      receiverId: userId,
+      senderId: userId
+    } },
     include: [
       {
         model: User,
@@ -64,15 +67,16 @@ server.get("/transactions/user/:userId", (req, res, next) => {
         include: Account,
       },
     ],
+    order: [["updatedAt", "DESC"]],
   })
     .then((transactions) => {
       res.send({ success: true, message: "transactions list: ", transactions });
     })
-    .catch((err) =>
+    .catch((err) => {
       res
         .status(400)
-        .send({ success: false, message: "Something went wrong: ", err })
-    );
+        .send({ success: false, message: "Something went wrong: ", err });
+    });
 });
 // Route for getting user income
 server.get("/transactions/income/:userId", (req, res, next) => {
@@ -125,32 +129,52 @@ server.get("/transactions/outcome/:userId", (req, res, next) => {
 server.get("/transactions/history/:userId", (req, res, next) => {
   const { startDate, toDate } = req.body;
   Promise.all([
-  Transaction.findAll({ 
-    where: {
-      createdAt: { [Op.between]: [ startDate, toDate ] },   
-      senderId: req.params.userId
-  }}),
-  Transaction.findAll({ 
-    where: {
-      createdAt: { [Op.between]: [ startDate, toDate ] },
-      receiverId: req.params.userId
-  }})
+    Transaction.findAll({
+      where: {
+        createdAt: { [Op.between]: [startDate, toDate] },
+        senderId: req.params.userId,
+      },
+    }),
+    Transaction.findAll({
+      where: {
+        createdAt: { [Op.between]: [startDate, toDate] },
+        receiverId: req.params.userId,
+      },
+    }),
+    Transaction.findAll({
+      where: {
+        createdAt: { [Op.between]: [startDate, toDate] },
+        senderId: req.params.userId,
+        receiverId: req.params.userId,
+      },
+    }),
   ])
-  .then((transactions) => {
-    let outcomes = transactions[0].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
-    let incomes = transactions[1].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
-    let total = incomes - outcomes;
-  res.send({ transactions, total });
-  })
-  .catch((err) =>
-      res.status(400)
+    .then((transactions) => {
+      let outcomes = transactions[0].reduce(
+        (total, trans) =>
+          trans.state === "complete" ? total + Number(trans.amount) : total,
+        0
+      );
+      let incomes = transactions[1].reduce(
+        (total, trans) =>
+          trans.state === "complete" ? total + Number(trans.amount) : total,
+        0
+      );
+      let total = incomes - outcomes;
+      res.send({ transactions, total });
+    })
+    .catch((err) =>
+      res
+        .status(400)
         .send({ success: false, message: "Something went wrong: ", err })
     );
 });
 // Route to get the balance in the last 7 days
 server.get("/transactions/history/weekly/:userId", (req, res, next) => {
   const today = new Date(Date.now());
-  const refe = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0));
+  const refe = new Date(
+    Date.UTC(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0)
+  );
   const day1 = new Date(refe - 1000 * 60 * 60 * 24 * 7).toISOString();
   const day2 = new Date(refe - 1000 * 60 * 60 * 24 * 6).toISOString();
   const day3 = new Date(refe - 1000 * 60 * 60 * 24 * 5).toISOString();
@@ -159,124 +183,225 @@ server.get("/transactions/history/weekly/:userId", (req, res, next) => {
   const day6 = new Date(refe - 1000 * 60 * 60 * 24 * 2).toISOString();
   const day7 = new Date(refe - 1000 * 60 * 60 * 24 * 1).toISOString();
   const todayDate = refe.toISOString();
-  console.log(day1)
-  console.log(todayDate)
+  console.log(day1);
+  console.log(todayDate);
 
-
-  Promise.all([  
-  Transaction.findAll({ 
-    where: {
-      createdAt: { [Op.lt]: day1 },   
-      senderId: req.params.userId
-  }}),
-  Transaction.findAll({ 
-    where: {
-      createdAt: { [Op.lt]: day1 },
-      receiverId: req.params.userId
-  }}),                                                // Balance record
-  Transaction.findAll({ 
-    where: { createdAt: { [Op.between]: [ day1, day2 ] },
-      senderId: req.params.userId
-  }}),
-  Transaction.findAll({ 
-    where: { createdAt: { [Op.between]: [ day1, day2 ] },
-      receiverId: req.params.userId
-  }}),                                                // Balance day 1
-  Transaction.findAll({ 
-    where: { createdAt: { [Op.between]: [ day2, day3 ] },
-      senderId: req.params.userId
-  }}),
-  Transaction.findAll({ 
-    where: { createdAt: { [Op.between]: [ day2, day3 ] },
-      receiverId: req.params.userId
-  }}),                                                // Balance day 2
-  Transaction.findAll({ 
-    where: { createdAt: { [Op.between]: [ day3, day4 ] },
-      senderId: req.params.userId
-  }}),
-  Transaction.findAll({ 
-    where: { createdAt: { [Op.between]: [ day3, day4 ] },
-      receiverId: req.params.userId
-  }}),                                                // Balance day 3
-  Transaction.findAll({ 
-    where: { createdAt: { [Op.between]: [ day4, day5 ] },
-      senderId: req.params.userId
-  }}),
-  Transaction.findAll({ 
-    where: { createdAt: { [Op.between]: [ day4, day5 ] },
-      receiverId: req.params.userId
-  }}),                                                // Balance day 4
-  Transaction.findAll({ 
-    where: { createdAt: { [Op.between]: [ day5, day6 ] },
-      senderId: req.params.userId
-  }}),
-  Transaction.findAll({ 
-    where: { createdAt: { [Op.between]: [ day5, day6 ] },
-      receiverId: req.params.userId
-  }}),                                                // Balance day 5
-  Transaction.findAll({ 
-    where: { createdAt: { [Op.between]: [ day6, day7 ] },
-      senderId: req.params.userId
-  }}),
-  Transaction.findAll({ 
-    where: { createdAt: { [Op.between]: [ day6, day7 ] },
-      receiverId: req.params.userId
-  }}),                                                // Balance day 6
-  Transaction.findAll({ 
-    where: {
-      createdAt: { [Op.between]: [ day7, todayDate ] },
-      senderId: req.params.userId
-  }}),
-  Transaction.findAll({ 
-    where: {
-      createdAt: { [Op.between]: [ day7, todayDate ] },
-      receiverId: req.params.userId
-  }}),                                                // Balance day 7
+  Promise.all([
+    Transaction.findAll({
+      where: {
+        createdAt: { [Op.lt]: day1 },
+        senderId: req.params.userId,
+      },
+    }),
+    Transaction.findAll({
+      where: {
+        createdAt: { [Op.lt]: day1 },
+        receiverId: req.params.userId,
+      },
+    }), // Balance record
+    Transaction.findAll({
+      where: {
+        createdAt: { [Op.between]: [day1, day2] },
+        senderId: req.params.userId,
+      },
+    }),
+    Transaction.findAll({
+      where: {
+        createdAt: { [Op.between]: [day1, day2] },
+        receiverId: req.params.userId,
+      },
+    }), // Balance day 1
+    Transaction.findAll({
+      where: {
+        createdAt: { [Op.between]: [day2, day3] },
+        senderId: req.params.userId,
+      },
+    }),
+    Transaction.findAll({
+      where: {
+        createdAt: { [Op.between]: [day2, day3] },
+        receiverId: req.params.userId,
+      },
+    }), // Balance day 2
+    Transaction.findAll({
+      where: {
+        createdAt: { [Op.between]: [day3, day4] },
+        senderId: req.params.userId,
+      },
+    }),
+    Transaction.findAll({
+      where: {
+        createdAt: { [Op.between]: [day3, day4] },
+        receiverId: req.params.userId,
+      },
+    }), // Balance day 3
+    Transaction.findAll({
+      where: {
+        createdAt: { [Op.between]: [day4, day5] },
+        senderId: req.params.userId,
+      },
+    }),
+    Transaction.findAll({
+      where: {
+        createdAt: { [Op.between]: [day4, day5] },
+        receiverId: req.params.userId,
+      },
+    }), // Balance day 4
+    Transaction.findAll({
+      where: {
+        createdAt: { [Op.between]: [day5, day6] },
+        senderId: req.params.userId,
+      },
+    }),
+    Transaction.findAll({
+      where: {
+        createdAt: { [Op.between]: [day5, day6] },
+        receiverId: req.params.userId,
+      },
+    }), // Balance day 5
+    Transaction.findAll({
+      where: {
+        createdAt: { [Op.between]: [day6, day7] },
+        senderId: req.params.userId,
+      },
+    }),
+    Transaction.findAll({
+      where: {
+        createdAt: { [Op.between]: [day6, day7] },
+        receiverId: req.params.userId,
+      },
+    }), // Balance day 6
+    Transaction.findAll({
+      where: {
+        createdAt: { [Op.between]: [day7, todayDate] },
+        senderId: req.params.userId,
+      },
+    }),
+    Transaction.findAll({
+      where: {
+        createdAt: { [Op.between]: [day7, todayDate] },
+        receiverId: req.params.userId,
+      },
+    }), // Balance day 7
   ])
-  .then((transactions) => {
-    let outcomesRecord = transactions[0].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
-    let incomesRecord = transactions[1].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
-    let balanceRecord = incomesRecord - outcomesRecord;
+    .then((transactions) => {
+      let outcomesRecord = transactions[0].reduce(
+        (total, trans) =>
+          trans.state === "complete" ? total + Number(trans.amount) : total,
+        0
+      );
+      let incomesRecord = transactions[1].reduce(
+        (total, trans) =>
+          trans.state === "complete" ? total + Number(trans.amount) : total,
+        0
+      );
+      let balanceRecord = incomesRecord - outcomesRecord;
 
-    let outcomes1 = transactions[2].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
-    let incomes1 = transactions[3].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
-    let total1 = incomes1 - outcomes1;
-    let balance1 = balanceRecord + total1;
+      let outcomes1 = transactions[2].reduce(
+        (total, trans) =>
+          trans.state === "complete" ? total + Number(trans.amount) : total,
+        0
+      );
+      let incomes1 = transactions[3].reduce(
+        (total, trans) =>
+          trans.state === "complete" ? total + Number(trans.amount) : total,
+        0
+      );
+      let total1 = incomes1 - outcomes1;
+      let balance1 = balanceRecord + total1;
 
-    let outcomes2 = transactions[4].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
-    let incomes2 = transactions[5].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
-    let total2 = incomes2 - outcomes2;
-    let balance2 = balance1 + total2;
+      let outcomes2 = transactions[4].reduce(
+        (total, trans) =>
+          trans.state === "complete" ? total + Number(trans.amount) : total,
+        0
+      );
+      let incomes2 = transactions[5].reduce(
+        (total, trans) =>
+          trans.state === "complete" ? total + Number(trans.amount) : total,
+        0
+      );
+      let total2 = incomes2 - outcomes2;
+      let balance2 = balance1 + total2;
 
-    let outcomes3 = transactions[6].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
-    let incomes3 = transactions[7].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
-    let total3 = incomes3 - outcomes3;
-    let balance3 = balance2 + total3;
+      let outcomes3 = transactions[6].reduce(
+        (total, trans) =>
+          trans.state === "complete" ? total + Number(trans.amount) : total,
+        0
+      );
+      let incomes3 = transactions[7].reduce(
+        (total, trans) =>
+          trans.state === "complete" ? total + Number(trans.amount) : total,
+        0
+      );
+      let total3 = incomes3 - outcomes3;
+      let balance3 = balance2 + total3;
 
-    let outcomes4 = transactions[8].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
-    let incomes4 = transactions[9].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
-    let total4 = incomes4 - outcomes4;
-    let balance4 = balance3 + total4;
+      let outcomes4 = transactions[8].reduce(
+        (total, trans) =>
+          trans.state === "complete" ? total + Number(trans.amount) : total,
+        0
+      );
+      let incomes4 = transactions[9].reduce(
+        (total, trans) =>
+          trans.state === "complete" ? total + Number(trans.amount) : total,
+        0
+      );
+      let total4 = incomes4 - outcomes4;
+      let balance4 = balance3 + total4;
 
-    let outcomes5 = transactions[10].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
-    let incomes5 = transactions[11].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
-    let total5 = incomes5 - outcomes5;
-    let balance5 = balance4 + total5;
+      let outcomes5 = transactions[10].reduce(
+        (total, trans) =>
+          trans.state === "complete" ? total + Number(trans.amount) : total,
+        0
+      );
+      let incomes5 = transactions[11].reduce(
+        (total, trans) =>
+          trans.state === "complete" ? total + Number(trans.amount) : total,
+        0
+      );
+      let total5 = incomes5 - outcomes5;
+      let balance5 = balance4 + total5;
 
-    let outcomes6 = transactions[12].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
-    let incomes6 = transactions[13].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
-    let total6 = incomes6 - outcomes6;
-    let balance6 = balance5 + total6;
+      let outcomes6 = transactions[12].reduce(
+        (total, trans) =>
+          trans.state === "complete" ? total + Number(trans.amount) : total,
+        0
+      );
+      let incomes6 = transactions[13].reduce(
+        (total, trans) =>
+          trans.state === "complete" ? total + Number(trans.amount) : total,
+        0
+      );
+      let total6 = incomes6 - outcomes6;
+      let balance6 = balance5 + total6;
 
-    let outcomes7 = transactions[14].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
-    let incomes7 = transactions[15].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
-    let total7 = incomes7 - outcomes7;
-    let balance7 = balance6 + total7;
+      let outcomes7 = transactions[14].reduce(
+        (total, trans) =>
+          trans.state === "complete" ? total + Number(trans.amount) : total,
+        0
+      );
+      let incomes7 = transactions[15].reduce(
+        (total, trans) =>
+          trans.state === "complete" ? total + Number(trans.amount) : total,
+        0
+      );
+      let total7 = incomes7 - outcomes7;
+      let balance7 = balance6 + total7;
 
-  res.send( [ balanceRecord, balance1, balance2, balance3, balance4, balance5, balance6, balance7 ]);
-  })
-  .catch((err) =>
-      res.status(400)
+      res.send([
+        balanceRecord,
+        balance1,
+        balance2,
+        balance3,
+        balance4,
+        balance5,
+        balance6,
+        balance7,
+      ]);
+    })
+    .catch((err) =>
+      res
+        .status(400)
         .send({ success: false, message: "Something went wrong: ", err })
     );
 });
@@ -363,7 +488,6 @@ server.get(
       );
   }
 );
-
 
 ////////////////
 // ROUTES /POST/
@@ -643,7 +767,7 @@ server.get("/transactions/account/graph", (req, res, next) => {
     },
   }).then((transactions) =>
     Account.findOne({ where: { userId: receiverId } }).then((account) => {
-      res.send({transactions, account})
+      res.send({ transactions, account });
     })
   );
 });
