@@ -31,7 +31,7 @@ export default FourthPageForm = ({ route, navigation }) => {
   const personalInfo = route.params.personalInfo;
   const locationInfo = route.params.locationInfo;
   const documentPhoto = route.params.selectedImage.picture.base64;
-  
+
   // const photo = route.params.photo.base64;
 
   const [initialState, setInitialState] = useState(true);
@@ -78,7 +78,7 @@ export default FourthPageForm = ({ route, navigation }) => {
       };
 
       try {
-        const response = await axios.post(`${api}/users/create`, accountInfo);        
+        const response = await axios.post(`${api}/users/create`, accountInfo);
         let errorMsj = "";
         if (response.data.err) {
           const errorMail = response.data.err.original.constraint || undefined;
@@ -131,7 +131,8 @@ export default FourthPageForm = ({ route, navigation }) => {
         errors.password = "Must contain: 5-20 digits, A-Z and a-z.";
       if (values.confirmPassword !== values.password || !values.confirmPassword)
         errors.confirmPassword = "Must the same password.";
-      if (!values.passcode && value.passcode.length < 4) errors.passcode = "Enter a 4 digit passcode.";
+      if (!values.passcode && values.passcode.length < 4)
+        errors.passcode = "Enter a 4 digit passcode.";
       return errors;
     },
   });

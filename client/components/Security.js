@@ -17,8 +17,7 @@ import {
 import styles from "../Styles/adminPanelStyles";
 import ResetPassword from "./ResetPassword";
 import ChangeMyPass from "./ChangeMyPass";
-/* import ChangePassword from "./ChangePassword";
- */
+import ChangeMyPin from "./ChangeMyPin";
 
 export default Security = ({ navigation }) => {
   return (
@@ -56,7 +55,7 @@ export default Security = ({ navigation }) => {
           activeTextStyle={{ color: "#ffff8b" }}
           textStyle={{ color: "whitesmoke", opacity: 0.7 }}
         >
-          <Text>Holi</Text>
+          <ChangeMyPin />
         </Tab>
       </Tabs>
     </Container>

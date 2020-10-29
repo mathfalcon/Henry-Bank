@@ -9,7 +9,7 @@ import styles from "../Styles/forgotPassStyles";
 import CustomButton from "./customButton";
 import { CheckBox } from "react-native-elements";
 
-function ChangeMyPass({ navigation }) {
+function ChangeMyPin({ navigation }) {
   const {
     values,
     isSubmitting,
@@ -20,24 +20,19 @@ function ChangeMyPass({ navigation }) {
     handleBlur,
   } = useFormik({
     initialValues: {
-      currentPass: "",
-      newPass: "",
-      confirmNewPass: "",
+      currentPin: "",
+      newPin: "",
+      confirmNewPin: "",
     },
     onSubmit: () => Alert.alert("ACA VA EL FETCH :)"),
     validate: (values) => {
       const errors = {};
-      if (!/^(?=.*\d)(?=.*[A-Za-z])[A-Za-z0-9]{5,20}$/.test(values.currentPass))
-        errors.newPass = "Must contain: 5-20 digits, A-Z and a-z.";
-      if (
-        !/^(?=.*\d)(?=.*[A-Za-z])[A-Za-z0-9]{5,20}$/.test(
-          values.newPass && values.newPass == values.currentPass
-        )
-      )
-        errors.newPass = "Must contain: 5-20 digits, A-Z and a-z. ";
-      if (values.confirmNewPass !== values.newPass || !values.confirmNewPass)
-        errors.confirmNewPass = "Must be the same password.";
-
+      if (!values.currentPin && values.currentPin.length < 4)
+        errors.currentPin = "Enter a 4 digit passcode.";
+      if (!values.newPin && values.newPin.length < 4)
+        errors.newPin = "Enter a 4 digit passcode.";
+      if (!values.confirmNewPin && values.confirmNewPin.length < 4)
+        errors.confirmNewPin = "Enter a 4 digit passcode.";
       return errors;
     },
   });
@@ -46,7 +41,7 @@ function ChangeMyPass({ navigation }) {
     <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView>
         <View>
-          <Text style={styles.title}>Change my Password</Text>
+          <Text style={styles.title}>Change my Pin Code</Text>
           <Text style={styles.subtitle}>
             In order to protect your account, make sure your password must
             contain 5-20 digits, A-Z and a-z.
@@ -69,13 +64,13 @@ function ChangeMyPass({ navigation }) {
                 color: "#151515",
               }}
             />
-            <Label>Current Password</Label>
+            <Label>Current Pin Code</Label>
             <Input
-              onBlur={handleBlur("currentPass")}
-              name="currentPass"
-              onChangeText={(text) => setFieldValue("currentPass", text)}
-              value={values.currentPass}
-              keyboardType="email-address"
+              onBlur={handleBlur("currentPin")}
+              name="currentPin"
+              onChangeText={(text) => setFieldValue("currentPin", text)}
+              value={values.currentPin}
+              keyboardType="numeric"
             />
           </Item>
           <Text
@@ -84,7 +79,7 @@ function ChangeMyPass({ navigation }) {
               marginHorizontal: 25,
             }}
           >
-            {touched.currentPass && errors.currentPass}
+            {errors.currentPin}
           </Text>
           <Item
             error={errors.user ? true : false}
@@ -103,13 +98,13 @@ function ChangeMyPass({ navigation }) {
                 color: "#151515",
               }}
             />
-            <Label>New Password</Label>
+            <Label>New Pin Code</Label>
             <Input
-              onBlur={handleBlur("newPass")}
-              name="newPass"
-              onChangeText={(text) => setFieldValue("newPass", text)}
-              value={values.newPass}
-              keyboardType="email-address"
+              onBlur={handleBlur("newPin")}
+              name="newPin"
+              onChangeText={(text) => setFieldValue("newPin", text)}
+              value={values.newPin}
+              keyboardType="numeric"
             />
           </Item>
           <Text
@@ -118,7 +113,7 @@ function ChangeMyPass({ navigation }) {
               marginHorizontal: 25,
             }}
           >
-            {touched.newPass && errors.newPass}
+            {touched.newPin && errors.newPin}
           </Text>
           <Item
             error={errors.user ? true : false}
@@ -137,13 +132,13 @@ function ChangeMyPass({ navigation }) {
                 color: "#151515",
               }}
             />
-            <Label>Confirm New Password</Label>
+            <Label>Confirm New Pin Code</Label>
             <Input
-              onBlur={handleBlur("confirmNewPass")}
-              name="confirmNewPass"
-              onChangeText={(text) => setFieldValue("confirmNewPass", text)}
-              value={values.confirmNewPass}
-              keyboardType="email-address"
+              onBlur={handleBlur("confirmNewPin")}
+              name="confirmNewPin"
+              onChangeText={(text) => setFieldValue("confirmNewPin", text)}
+              value={values.confirmNewPin}
+              keyboardType="numeric"
             />
           </Item>
           <Text
@@ -152,7 +147,8 @@ function ChangeMyPass({ navigation }) {
               marginHorizontal: 25,
             }}
           >
-            {touched.confirmNewPass && errors.confirmNewPass}
+            {touched.confirmNewPin && errors.confirmNewPin}
+            {console.log(errors)}
           </Text>
           <View style={{ marginHorizontal: 20 }}>
             <CustomButton
@@ -166,4 +162,4 @@ function ChangeMyPass({ navigation }) {
     </SafeAreaView>
   );
 }
-export default ChangeMyPass;
+export default ChangeMyPin;
