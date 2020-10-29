@@ -37,7 +37,7 @@ server.engine("html", require("ejs").renderFile);
 
 // Route for getting all users
 server.get("/users", (req, res, next) => {
-  User.findAll({ include: [{ model: Account }] })
+  User.findAll({ include: [{ model: Account }], attributes: ['id', 'name', 'surname', 'role','email', 'phone'] })
     .then((users) => {
       res.send({ success: true, message: "Users list: ", users });
     })
@@ -101,6 +101,8 @@ server.post("/users/create", (req, res, next) => {
     state,
     country,
     role,
+    photo,
+    documentPhoto,
   } = req.body;
   const emailToken = crypto.randomBytes(64).toString("hex");
   User.create({
@@ -120,6 +122,8 @@ server.post("/users/create", (req, res, next) => {
     country,
     role,
     emailToken,
+    documentPhoto,
+    photo: documentPhoto
   })
     .then((userCreated) => {
       const msg = {
@@ -159,7 +163,7 @@ server.post("/users/create", (req, res, next) => {
             console.error(body);
           }
         });
-      Account.create({ userId: userCreated.id })
+      Account.create({ userId: userCreated.id, cvu: genCC("", 22) })
         .then((accCreated) => {
           let today = new Date();
           today.setFullYear(today.getFullYear() + 3);
@@ -180,12 +184,15 @@ server.post("/users/create", (req, res, next) => {
               })
             )
             .catch((err) => {
-              res.send({
-                success: false,
-                message:
-                  "Something went wrong in card creation. Please contact us for assistance.",
-                err,
-              });
+              {
+                console.log(err);
+                res.send({
+                  success: false,
+                  message:
+                    "Something went wrong in card creation. Please contact us for assistance.",
+                  err,
+                });
+              }
             });
         })
         .catch((err) => {
@@ -231,6 +238,8 @@ server.put("/users/update/:id", (req, res, next) => {
     state,
     country,
     role,
+    photo,
+    documentPhoto,
   } = req.body;
   User.findByPk(req.params.id)
     .then((user) => {
@@ -250,6 +259,8 @@ server.put("/users/update/:id", (req, res, next) => {
         state,
         country,
         role,
+        photo,
+        documentPhoto,
       });
     })
     .then((updatedUser) =>
@@ -317,8 +328,15 @@ server.patch("/users/change_passcode", async (req, res, next) => {
   User.update(
     { passcode: passcode },
     { where: { id: id, passcode: oldPasscode } }
-  ).then(res.send({ success: true, message: "passcode changed succesfully !" })
-  ).catch((err) => res.status(400).send({ success: false, message: "Something went wrong: ", err }))
+  )
+    .then(
+      res.send({ success: true, message: "passcode changed succesfully !" })
+    )
+    .catch((err) =>
+      res
+        .status(400)
+        .send({ success: false, message: "Something went wrong: ", err })
+    );
 });
 //////////////////
 // ROUTES /DELETE/

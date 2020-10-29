@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Tooltip } from "react-native-elements";
 import { getUsers, deleteUser, promoteUser } from "../../redux/actions/actions";
 import axios from "axios";
 import { api } from "../Constants/constants";
@@ -27,10 +28,9 @@ import {
 } from "native-base";
 
 import { SwipeListView } from "react-native-swipe-list-view";
-import styles from "../../Styles/manageUserStyles"
+import styles from "../../Styles/manageUserStyles";
 
-export default ManageUsers = ({ navigation }) => {    
-
+export default ManageUsers = ({ navigation }) => {
   const [input, setInput] = useState({
     id: "",
     name: "",
@@ -47,17 +47,18 @@ export default ManageUsers = ({ navigation }) => {
     phone: false,
   });
 
-  const [listData, setListData] = useState();  
+  const [listData, setListData] = useState();
   const [modalVisible, setModalVisible] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const dispatch = useDispatch();
-  const { users }  = useSelector((state) => state.users);
-  
+  const { users } = useSelector((state) => state.users);
+
   useEffect(() => {
     dispatch(getUsers());
-  }, []);  
+  }, []);
 
-  useEffect(() => {    
+  useEffect(() => {
     setListData(
       Array(1)
         .fill("")
@@ -71,14 +72,13 @@ export default ManageUsers = ({ navigation }) => {
             email: i.email,
             phone: i.phone,
             role: i.role,
-            account: i.account
+            account: i.account,
           })),
         }))
     );
   }, [users]);
 
-
-  const promoteRow = (rowMap, rowKey) => {    
+  const promoteRow = (rowMap, rowKey) => {
     Alert.alert(
       "PROMOTE USER",
       "Promote this user?",
@@ -87,36 +87,32 @@ export default ManageUsers = ({ navigation }) => {
           text: "Yes, Promote",
           onPress: () => {
             // dispatch(promoteUser(rowKey));
-            axios
-              .patch(`${api}/users/promote/${rowKey}`)
-              .then((response) => {
-                if(response.data.success){
-                  closeRow(rowMap, rowKey);            
-                  dispatch(getUsers());
-                }else{
-                  Alert.alert(
-                    "Error",
-                    "Something went wrong",
-                    [
-                      {
-                        text: "Understood",
-                      },
-                    ],
-                    { cancelable: false }
-                  );
-                }                
-            });            
-          }
+            axios.patch(`${api}/users/promote/${rowKey}`).then((response) => {
+              if (response.data.success) {
+                closeRow(rowMap, rowKey);
+                dispatch(getUsers());
+              } else {
+                Alert.alert(
+                  "Error",
+                  "Something went wrong",
+                  [
+                    {
+                      text: "Understood",
+                    },
+                  ],
+                  { cancelable: false }
+                );
+              }
+            });
+          },
         },
-        { text: "No, Leave it",
-          onPress: () => closeRow(rowMap, rowKey)
-        },
+        { text: "No, Leave it", onPress: () => closeRow(rowMap, rowKey) },
       ],
       { cancelable: false }
-    );    
-  };  
+    );
+  };
 
-  const deleteRow = (rowMap, rowKey) => {    
+  const deleteRow = (rowMap, rowKey) => {
     Alert.alert(
       "DELETE USER",
       "Delete this user?",
@@ -124,39 +120,35 @@ export default ManageUsers = ({ navigation }) => {
         {
           text: "Yes, Delete",
           // dispatch(deleteUser(rowKey));
-          onPress: () => {            
-            axios
-            .delete(`${api}/users/${rowKey}`)
-              .then((response) => {
-                if(response.data.success){
-                  closeRow(rowMap, rowKey);            
-                  dispatch(getUsers());
-                }else{
-                  Alert.alert(
-                    "Error",
-                    "Something went wrong",
-                    [
-                      {
-                        text: "Understood",
-                      },
-                    ],
-                    { cancelable: false }
-                  );
-                }                
-            });            
-          }
+          onPress: () => {
+            axios.delete(`${api}/users/${rowKey}`).then((response) => {
+              if (response.data.success) {
+                closeRow(rowMap, rowKey);
+                dispatch(getUsers());
+              } else {
+                Alert.alert(
+                  "Error",
+                  "Something went wrong",
+                  [
+                    {
+                      text: "Understood",
+                    },
+                  ],
+                  { cancelable: false }
+                );
+              }
+            });
+          },
         },
-        { text: "No, Leave it",
-          onPress: () => closeRow(rowMap, rowKey)
-        },
+        { text: "No, Leave it", onPress: () => closeRow(rowMap, rowKey) },
       ],
       { cancelable: false }
-    );    
-  };  
+    );
+  };
 
   const closeRow = (rowMap, rowKey) => {
     if (rowMap[rowKey]) {
-        rowMap[rowKey].closeRow();
+      rowMap[rowKey].closeRow();
     }
   };
 
@@ -167,7 +159,7 @@ export default ManageUsers = ({ navigation }) => {
   const renderItem = (data) => (
     <TouchableHighlight
       onPress={() => {
-        setModalVisible(true)        
+        setModalVisible(true);
         setInput({
           ...input,
           id: data.item.key,
@@ -176,39 +168,54 @@ export default ManageUsers = ({ navigation }) => {
           docNumber: data.item.docNumber,
           email: data.item.email,
           phone: data.item.phone,
-        });        
+        });
       }}
       style={styles.rowFront}
       underlayColor={"#AAA"}
     >
       <View style={{ alignSelf: "flex-start", marginLeft: 50 }}>
-        <Text>Name: {data.item.name} {data.item.surname}</Text>        
-        <Text>Email: {data.item.email}</Text>
-        <Text>Role: {data.item.role}</Text>
-        <Text>Balance: { data.item.account ? data.item.account.balance : null }</Text>
+        <Text>
+          <Text style={{ fontWeight: "bold" }}>Name:</Text>
+          <Text style={{ fontStyle: "italic", color: "red" }}>
+            {" "}
+            {data.item.name} {data.item.surname}
+          </Text>
+        </Text>
+        <Text>
+          <Text style={{ fontWeight: "bold" }}>Email:</Text>
+          <Text style={{ fontStyle: "italic" }}> {data.item.email}</Text>
+        </Text>
+        <Text>
+          <Text style={{ fontWeight: "bold" }}>Role:</Text>
+          <Text style={{ fontStyle: "italic" }}> {data.item.role}</Text>
+        </Text>
+        <Text>
+          <Text style={{ fontWeight: "bold" }}>Balance:</Text>
+          <Text style={{ fontStyle: "italic" }}>
+            {" "}
+            ${data.item.account ? data.item.account.balance : null}
+          </Text>
+        </Text>
+        <Text>
+          <Text style={{ fontWeight: "bold" }}>CVU:</Text>
+          <Text style={{ fontStyle: "italic" }}>
+            {" "}
+            ${data.item.account ? data.item.account.cvu : null}
+          </Text>
+        </Text>
       </View>
     </TouchableHighlight>
   );
 
   const renderHiddenItem = (data, rowMap) => (
     <View style={styles.rowBack}>
-      <TouchableOpacity
-        // onPress={() =>
-        //   navigation.navigate("sendMoney", {
-        //     contact: data.item.key,
-        //     userId: data.item.value,
-        //     fromContacts: true,
-        //   })
-        // }
-      >
-        <Text>See Account</Text>
-      </TouchableOpacity>
+
 
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnLeft]}
         onPress={() => promoteRow(rowMap, data.item.key)}
       >
-        <Text style={styles.backTextWhite}>Promote</Text>
+        <Text style={styles.backTextBlack}>Promote</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -217,7 +224,6 @@ export default ManageUsers = ({ navigation }) => {
       >
         <Text style={styles.backTextWhite}>Delete</Text>
       </TouchableOpacity>
-
     </View>
   );
 
@@ -236,7 +242,8 @@ export default ManageUsers = ({ navigation }) => {
     if (!input.surname.trim()) return setError({ ...error, surname: true });
     if (!input.docNumber.trim()) return setError({ ...error, docNumber: true });
     if (!input.phone.trim()) return setError({ ...error, phone: true });
-    if (!input.email.trim() || !regex_email.test(input.email)) return setError({ ...error, email: true });
+    if (!input.email.trim() || !regex_email.test(input.email))
+      return setError({ ...error, email: true });
 
     setError({
       name: false,
@@ -246,51 +253,45 @@ export default ManageUsers = ({ navigation }) => {
       phone: false,
     });
 
-    if (!error.name && !error.surname && !error.docNumber && !error.phone && !error.email) {
+    if (
+      !error.name &&
+      !error.surname &&
+      !error.docNumber &&
+      !error.phone &&
+      !error.email
+    ) {
       const updateInfo = {
-        email: input.email,        
+        email: input.email,
         docNumber: input.docNumber,
         name: input.name,
-        surname: input.surname,        
+        surname: input.surname,
         phone: input.phone,
       };
 
       axios
-        .put(`${api}/users/update/${input.id}`,updateInfo)
-          .then((response) => {
-            if(response.data.success){ 
-              Alert.alert("Se modifico el contacto");                        
-              dispatch(getUsers());
-              setModalVisible(false);
-            } else {
-              Alert.alert("Something went wrong"); 
-            }          
-          })
-          .catch(error => Alert.alert("Something went wrong"));
-      }      
+        .put(`${api}/users/update/${input.id}`, updateInfo)
+        .then((response) => {
+          if (response.data.success) {
+            Alert.alert("Se modifico el contacto");
+            dispatch(getUsers());
+            setModalVisible(false);
+          } else {
+            Alert.alert("Something went wrong");
+          }
+        })
+        .catch((error) => Alert.alert("Something went wrong"));
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Header style={styles.header}>
-        <Left>
-          <Button transparent onPress={() => navigation.navigate("adminPanel")}>
-            <Icon style={{ color: "black" }} name="arrow-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title style={styles.headerTitle}>MANAGE USERS</Title>
-        </Body>
-        <Right />
-      </Header>
-
       <SwipeListView
         useSectionList
         sections={listData}
         renderItem={renderItem}
         renderHiddenItem={renderHiddenItem}
         // renderSectionHeader={renderSectionHeader}
-        leftOpenValue={75}
+        disableRightSwipe
         rightOpenValue={-150}
         previewRowKey={"0"}
         previewOpenValue={-40}
@@ -308,9 +309,7 @@ export default ManageUsers = ({ navigation }) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>
-              MODIFY USER
-            </Text>
+            <Text style={styles.modalText}>MODIFY USER</Text>
             <Content>
               <Form>
                 <Item floatingLabel>
@@ -376,9 +375,9 @@ export default ManageUsers = ({ navigation }) => {
                 <View style={styles.buttoms}>
                   <TouchableHighlight
                     style={{ ...styles.openButton, backgroundColor: "#151515" }}
-                    onPress={() => {                                        
+                    onPress={() => {
                       setModalVisible(!modalVisible);
-                      // setError(false);    
+                      // setError(false);
                     }}
                   >
                     <Text style={styles.textStyle}>CANCEL</Text>
@@ -389,9 +388,8 @@ export default ManageUsers = ({ navigation }) => {
                     onPress={modifyUser}
                   >
                     <Text style={styles.textStyle}>MODIFY</Text>
-                  </TouchableHighlight>                  
+                  </TouchableHighlight>
                 </View>
-
               </Form>
             </Content>
           </View>

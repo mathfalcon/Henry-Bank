@@ -13,7 +13,6 @@ import {
 } from "native-base";
 
 export default CardPosition = ({ navigation, userLogged }) => {
-  console.log(userLogged)
   return (
     <Card>
       <CardItem header bordered>

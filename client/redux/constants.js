@@ -16,6 +16,8 @@ export const validateAddress = "VALIDATE_ADDRESS";
 // ACCOUNT
 export const accountHistory = "ACCOUNT_HISTORY";
 
+export const filterAccountHistory = "FILTER_ACCOUNT_HISTORY";
+
 export const verifyFunds = "VERIFY_FUNDS";
 
 export const sendMoney = "SEND_MONEY";
@@ -28,3 +30,7 @@ export const addContact = "ADD_CONTACT";
 export const deleteContact = "DELETE_CONTACT";
 
 export const modifyContact = "MODIFY_CONTACT";
+
+// TRANSACTIONS
+export const getAllTransactions = "GET_ALL_TRANSACTIONS";
+export const getAllTransactionsById = "GET_ALL_TRANSACTIONS_BY_ID";

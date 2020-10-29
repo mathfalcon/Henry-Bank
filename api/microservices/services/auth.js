@@ -133,7 +133,7 @@ server.post("/auth/reset_password", async (req, res, next) => {
         .status(404)
         .send({ success: false, message: "User not found" });
     }
-    const newResetToken = crypto.randomBytes(64).toString("hex");
+    const newResetToken = crypto.randomBytes(8).toString("hex");
     user.resetToken = newResetToken;
     await user.save();
     const msg = {
@@ -141,16 +141,19 @@ server.post("/auth/reset_password", async (req, res, next) => {
       to: user.email,
       subject: "Henry Bank - Reset Password",
       text: `
-          Hello ${user.name}, please copy and paste in your browser the address below to change your password: 
-          http://${req.headers.host}/users/reset_password?token=${newResetToken}
+          Hello ${user.name},  
+          Please use this code:${newResetToken} to reset your password.
       `,
       html: `
           <h1>Hello ${user.name},</h1>
-          <a href="http://${req.headers.host}/users/reset_password?token=${newResetToken}">Please click here to reset your password</a>
+          <p>Please use this code:${newResetToken} to reset your password.</p>
       `,
     };
     await sgMail.send(msg);
-    res.send({ success: true, message: `Your password has been reset` });
+    res.send({
+      success: true,
+      message: `A reset token has been sent to your email.`,
+    });
   } catch (e) {
     console.log(e);
     return next(new Error(e));
@@ -167,7 +170,7 @@ server.post("/auth/check-passcode", async (req, res, next) => {
         message: "The provided passcode is valid",
       });
     } else {
-      return res.status(401).send({
+      return res.send({
         success: false,
         message: "The provided passcode is incorrect",
       });
@@ -233,23 +236,29 @@ server.get("/auth/logout", (req, res, next) => {
 
 // Route for changing password
 server.put("/auth/change-password", (req, res, next) => {
-  const { userId, currentPw, newPw } = req.body;
-
-  User.findByPk(userId).then((user) => {
-    if (!user.checkPassword(currentPw)) {
-      res.send({
-        success: false,
-        message: "The provided actual password is incorrect",
-      });
-    } else if (user.checkPassword(currentPw)) {
+  const { newResetToken, newPw } = req.body;
+  User.findOne({ where: { resetToken: newResetToken } })
+    .then((user) => {
+      // if (!user.checkPassword(currentPw)) {
+      //   res.send({
+      //     success: false,
+      //     message: "The provided actual password is incorrect",
+      //   });
+      // } else if (user.checkPassword(currentPw)) {
       user.password = newPw;
       user.save();
       res.status(200).send({
         success: true,
         message: "The password has been successfully updated",
       });
-    }
-  });
+      //}
+    })
+    .catch((err) => {
+      res.status(400).send({
+        success: false,
+        message: "The provided reset token is not valid",
+      });
+    });
 });
 
 // Deploying service server

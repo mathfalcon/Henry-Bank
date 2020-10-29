@@ -66,6 +66,12 @@ export default StyleSheet.create({
   },
   logoView:{
     marginBottom:30,
+  },
+  errorText:{
+    textAlign: 'center',
+    fontWeight: 'bold',
+    paddingTop: 5,
+    color: '#f05545'
   }
 });
 

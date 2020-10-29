@@ -23,12 +23,18 @@ function Home({ navigation }) {
 
   loadAsync({
     // Load a font `Microgramma` from a static resource
-    Microgramma: require('../assets/fonts/Microgramma.ttf')
+    Microgramma: require("../assets/fonts/Microgramma.ttf"),
   });
-  
+
   return (
     <SafeAreaView style={styles.mainContainer}>
-        <ImageBackground style={{width: '100%', height: '100%'}} source={require('../assets/mainBg.jpg')}>
+      {userLogged.success ? (
+        navigation.navigate("position")
+      ) : (
+        <ImageBackground
+          style={{ width: "100%", height: "100%" }}
+          source={require("../assets/mainBg.jpg")}
+        >
           <View
             style={{
               flex: 1,
@@ -44,8 +50,7 @@ function Home({ navigation }) {
               <Text style={styles.titleText}>Henry Bank</Text>
               <Text style={styles.logoText}>Your E-Wallet</Text>
             </View>
-            <View style={styles.mainTitleContainer}>
-            </View>
+            <View style={styles.mainTitleContainer}></View>
             <View style={styles.mainButtonsContainer}>
               <Text style={styles.welcomeText}>Welcome!</Text>
               <CustomButton
@@ -58,12 +63,13 @@ function Home({ navigation }) {
                 title="SIGN UP"
                 onPress={() => navigation.navigate("sign")}
               />
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate("support")}>
                 <Text style={styles.supportText}>Need support?</Text>
               </TouchableOpacity>
             </View>
           </View>
-        </ImageBackground>      
+        </ImageBackground>  
+      )}    
     </SafeAreaView>
   );
 }

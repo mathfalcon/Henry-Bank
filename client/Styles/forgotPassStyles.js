@@ -15,7 +15,7 @@ export default StyleSheet.create({
     fontSize: 28,
     alignSelf: "center",
     fontWeight: "bold",
-    marginTop: 40,
+    marginTop: 30,
   },
   subtitle: {
     marginVertical: 20,

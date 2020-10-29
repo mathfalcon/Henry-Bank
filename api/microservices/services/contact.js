@@ -78,15 +78,19 @@ server.get("/contacts/:userId", (req, res, next) => {
 server.post("/contacts/whatsapp/connect", whatsapp.connectApi);
 // Route to send whatsapp notifications
 server.post("/contacts/whatsapp/sendmessage", whatsapp.sendMessage);
+// Route to send Whatsapp invitations
+server.post("/contacts/whatsapp/invitation", whatsapp.sendInvitation);
 
 // Route for assigning a new contact
 server.post("/contacts/create", async (req, res, next) => {
-  const { userId, alias, emailOfContact, phoneNumber, userName } = req.body;
+  const { userId, alias, emailOfContact } = req.body;
 
   const is_contact_of = await User.findOne({
     where: { email: emailOfContact },
   });
-  if(!is_contact_of) return whatsapp.sendInvitation(req, res, phoneNumber, userName);
+  if(is_contact_of === null) return res.send({ success: false, message: "The provided email is not a Henry Bank client, do you want to send him and invitation?", code: 'not_client'})
+  if(emailOfContact === 'bankhenry@recharges.com') return res.send({ success: false, message: "You can't add this adress to your contact list." })
+  // if(!is_contact_of) return whatsapp.sendInvitation(req, res, phoneNumber, userName);
   Contact.create({ userId, alias, is_contact_of: is_contact_of.id })
     .then((contactCreated) => {
       res.send({ success: true, message: "Contact created: ", contactCreated });
@@ -97,6 +101,7 @@ server.post("/contacts/create", async (req, res, next) => {
         .send({ success: false, message: "Something went wrong: ", err })
     );
 });
+
 
 ///////////////
 // ROUTES /PUT/

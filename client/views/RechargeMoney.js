@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Button, Input } from "native-base";
+import { Button, Icon, Input } from "native-base";
 import { Card, CardItem, Body, Text, Form, Item } from "native-base";
 import QRCode from "react-native-qrcode-svg";
 import { api } from "../components/Constants/constants";
@@ -19,7 +19,8 @@ import { useDispatch } from "react-redux";
 export default RechargeMoney = ({ route }) => {
   const [amount, setAmount] = useState(0);
   let logo = require("../assets/henryLogoBlack.jpg");
-  const userLogged = route.params.user;
+  const userLogged = route.params.userLogged.user;
+  const navigation = route.params.navigation;
   const dispatch = useDispatch();
 
   const handleRecharge = () => {
@@ -29,11 +30,15 @@ export default RechargeMoney = ({ route }) => {
       })
       .then((data) => {
         dispatch(getUserLogged());
-        Alert.alert('Success', 'Your recharge has been sucessfully added to your account\'s balance')
+        Alert.alert(
+          "Success",
+          "Your recharge has been sucessfully added to your account's balance"
+        );
+        navigation.navigate("position");
       });
   };
   return (
-    <KeyboardAwareScrollView style={{ backgroundColor: "#ffff57", flex: 1 }}>
+    <KeyboardAwareScrollView style={{ backgroundColor: "#ffff8b", flex: 1 }}>
       <View style={styles.mainView}>
         <View style={styles.firstView}>
           <View style={styles.titleView}>
@@ -86,9 +91,24 @@ export default RechargeMoney = ({ route }) => {
                 />
               </Item>
             </Form>
-            <Button dark block onPress={() => handleRecharge()}>
-              <Text>CONFIRMAR RECARGA</Text>
-            </Button>
+            <View style={{ flexDirection: "row", alignSelf: "center" }}>
+              <Button
+                style={{ marginHorizontal: 10, marginVertical: 10 }}
+                dark
+                block
+                onPress={() => navigation.goBack()}
+              >
+                <Text>GO BACK</Text>
+              </Button>
+              <Button
+                style={{ marginHorizontal: 10, marginVertical: 10 }}
+                dark
+                block
+                onPress={() => handleRecharge()}
+              >
+                <Text>CONFIRM RECHARGE</Text>
+              </Button>
+            </View>
           </View>
         </View>
       </View>
@@ -126,7 +146,7 @@ const styles = StyleSheet.create({
   },
   container: {},
   title: {
-    color: "white",
+    color: "#151515",
     fontSize: 35,
     alignSelf: "center",
     marginTop: 25,
@@ -136,13 +156,13 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     width: 1500,
-    backgroundColor: "black",
+    backgroundColor: "#ffff8b",
   },
   mainView: {
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
-    backgroundColor: "#ffff57",
+    backgroundColor: "#ffff8b",
   },
   firstView: {
     flex: 1,

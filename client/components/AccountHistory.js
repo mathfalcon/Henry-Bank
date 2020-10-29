@@ -19,38 +19,31 @@ import { TouchableOpacity, Image } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
-import { getAccountHistory } from "../redux/actions/accountActions";
+import { getAccountHistory, filterAccountHistory } from "../redux/actions/accountActions";
 import styles from "../Styles/historyStyles.js";
 import MenuOperation from "./MenuOperation";
 
 export default AccountHistory = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const [dataFrom, setDateFrom] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [userId, setUserId] = useState("");
   const [theFilter, setTheFilter] = useState(true);
 
-  // const { accountHistory } = useSelector((state) => state.accountInfo);
   const userLogged = useSelector((state) => state.auth.user);
-
-
-  // ver como diferenciar envios y cargas / saldo positivo y saldo negativo
   const accountHistory = useSelector((state) => state.accountInfo.accountHistory.transactions);
-
+  
   useEffect(() => {
     const userId = userLogged.id;
     setUserId(userId);
     const createdAt = new Date(userLogged.createdAt);
     const today = new Date();
-    console.log("createdAt", createdAt);
-    console.log("today", today);
-    console.log("user", userId);
     dispatch(getAccountHistory(userId));
   }, []);
 
   const setFilter = () => {
-    // dispatch(getAccountHistory( userId, dataFrom, dateTo)); // Que formato
-    // Validar fecha date sea menos a fecha to Date
+    dispatch(filterAccountHistory(userId, dateFrom, dateTo));
+    setTheFilter(true)
   };
 
   return (
@@ -98,18 +91,18 @@ export default AccountHistory = ({ navigation, route }) => {
 
               <List style={styles.list}>
                 {accountHistory &&
-                  accountHistory.map((e) => (
+                  accountHistory.map((e, index) => { 
+                    e.senderId === userLogged.id ? e.amount = -Math.abs(e.amount): null
+                    return (
                     <>
-                      <ListItem itemDivider style={styles.divider} />
                       <ListItem key={e.id}>
                         <Icon
                           type="AntDesign"
-                          name={e.money > 0 ? "downcircleo" : "upcircleo"}
+                          name={e.amount > 0 ? "downcircleo" : "upcircleo"}
                           style={{ color: "#FBC02D" }}
                         />
-
                         <Left style={styles.card}>
-                          <Text style={styles.myName}>{e.sender.name} {e.sender.surname}</Text>
+                          <Text style={styles.myName}>{e.sender.name ? `${e.sender.name} ${e.sender.surname}` :'Account balance recharge'}</Text>
                           <Text style={styles.item}>{new Date (e.createdAt).toDateString()}</Text>
                           <Text style={styles.item}>{e.sender.email}</Text>
                         </Left>
@@ -127,7 +120,7 @@ export default AccountHistory = ({ navigation, route }) => {
                         </Right>
                       </ListItem>
                     </>
-                  ))}
+                  )})}
               </List>
             </Content>
           </Container>
@@ -136,15 +129,12 @@ export default AccountHistory = ({ navigation, route }) => {
             <Header style={styles.header}>
               <Left>
                 <Button
-                  style={{ backgroundColor: "black" }}
+                  style={{ backgroundColor: "#151515" }}
                   onPress={() => setTheFilter(true)}
                 >
                   <Icon style={{ color: "white" }} name="arrow-back" />
                 </Button>
               </Left>
-              <Body>
-                <Title style={styles.continue}>Continue</Title>
-              </Body>
               <Right />
             </Header>
 
@@ -182,7 +172,7 @@ export default AccountHistory = ({ navigation, route }) => {
                 <DatePicker
                   placeHolderText="To Date"
                   defaultDate={new Date()}
-                  minimumDate={new Date(dataFrom)}
+                  minimumDate={new Date(dateFrom)}
                   // maximumDate={new Date(2020, 6, 6)}
                   locale={"en"}
                   timeZoneOffsetInMinutes={undefined}

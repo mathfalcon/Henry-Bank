@@ -11,7 +11,7 @@ import { Avatar, Divider } from "react-native-elements";
 import CardPosition from "./CardPosition";
 import MenuOperation from "./MenuOperation";
 
-import { View, Text, Container, Card, CardItem } from "native-base";
+import { View, Text, Container, Card, CardItem, Icon } from "native-base";
 import styles from "../Styles/positionStyles";
 import CustomButton from "./customButton";
 import axios from "axios";
@@ -48,6 +48,7 @@ export default Position = ({ navigation }) => {
   }, []);
 
   const userLogged = useSelector((state) => state.auth);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden={true} />
@@ -57,12 +58,17 @@ export default Position = ({ navigation }) => {
           <View style={styles.headerSection}>
             <View style={styles.avatarSection}>
               <Avatar
-                size="large"
-                icon={{ color: "black", name: "user", type: "font-awesome" }}
+                size={115}
+                rounded
                 activeOpacity={0.7}
                 containerStyle={{
-                  backgroundColor: "#ffff6d",
+                  backgroundColor: "#ffdd3c",
                   alignSelf: "center",
+                  shadowColor: "red",
+                  padding: 2,
+                }}
+                source={{
+                  uri: `data:image/jpeg;base64,${userLogged.user.documentPhoto}`,
                 }}
               />
             </View>
@@ -71,15 +77,40 @@ export default Position = ({ navigation }) => {
                 style={styles.moneySection}
               >{`Hello ${userLogged.user.name} ${userLogged.user.surname}`}</Text>
 
-              <CustomButton
+              <TouchableOpacity
                 style={{
                   color: "black",
                   backgroundColor: "#ffff6d",
                   fontSize: 18,
+                  borderRadius: 10,
+                  flexDirection: "row",
+                  height: 50,
+                  paddingHorizontal: 15,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  shadowColor: "#000",
+                  shadowOffset: {
+                    width: 3,
+                    height: 12,
+                  },
+                  shadowOpacity: 0.9,
+                  shadowRadius: 12.35,
+
+                  elevation: 10,
                 }}
                 title="LOG OUT"
                 onPress={handleLogOut}
-              />
+              >
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                  LOG OUT
+                </Text>
+                <Icon
+                  active
+                  name="sign-out-alt"
+                  type="FontAwesome5"
+                  style={{ color: "black", fontSize: 23, marginLeft: 10 }}
+                />
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -90,7 +121,7 @@ export default Position = ({ navigation }) => {
               </View>
               <View style={{ marginHorizontal: 15 }}>
                 <Card>
-                  <AccountMovementsChart userLogged={userLogged}/>
+                  <AccountMovementsChart userLogged={userLogged} />
                 </Card>
               </View>
               <View style={styles.buttonsView}>
@@ -98,12 +129,26 @@ export default Position = ({ navigation }) => {
                   onPress={() => navigation.navigate("sendMoney")}
                   style={styles.sendMoneyButton}
                 >
+                  <Icon
+                    active
+                    name="paper-plane"
+                    type="FontAwesome5"
+                    style={{ color: "#ffff8b", fontSize: 19 }}
+                  />
                   <Text style={styles.sendMoneyText}>SEND MONEY</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("recharge", userLogged)}
+                  onPress={() =>
+                    navigation.navigate("recharge", { userLogged, navigation })
+                  }
                   style={styles.sendMoneyButton}
                 >
+                  <Icon
+                    active
+                    name="wallet"
+                    type="FontAwesome5"
+                    style={{ color: "#ffff8b", fontSize: 19 }}
+                  />
                   <Text style={styles.sendMoneyText}>RECHARGE MONEY</Text>
                 </TouchableOpacity>
 
@@ -118,17 +163,44 @@ export default Position = ({ navigation }) => {
                           width: 150,
                         }}
                         title="ADMIN PANEL"
-                        onPress={() => navigation.navigate("adminPanel")}
+                        onPress={() =>
+                          navigation.navigate("adminPanel", {
+                            userLogged,
+                            navigation,
+                          })
+                        }
                       />
                     </View>
                   </>
-                ) : null}
+                ) : (
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate("userPanel", {
+                        userLogged,
+                        navigation,
+                      })
+                    }
+                    style={styles.adminPanelText}
+                  >
+                    <Icon
+                      active
+                      name="user-cog"
+                      type="FontAwesome5"
+                      style={{ color: "#ffff8b", fontSize: 19 }}
+                    />
+                    <Text style={styles.sendMoneyText}>USER PANEL</Text>
+                  </TouchableOpacity>
+                )}
               </View>
             </View>
           </View>
 
           <View style={styles.menuOp}>
-            <MenuOperation navigation={navigation} screen={"position"} userLogged={userLogged} />
+            <MenuOperation
+              navigation={navigation}
+              screen={"position"}
+              userLogged={userLogged}
+            />
           </View>
         </Container>
       ) : (

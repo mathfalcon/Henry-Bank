@@ -8,7 +8,7 @@ import UserStats from "../UserStats";
 import MyCards from "../MyCards";
 import AccountHistory from "../AccountHistory";
 import Contacts from "../Contacts";
-
+import Invitation from "../Invitation";
 const Stack = createStackNavigator();
 
 export default function HomePosition() {
@@ -28,6 +28,8 @@ export default function HomePosition() {
       <Stack.Screen name="accountHistory" component={AccountHistory} />
 
       <Stack.Screen name="contacts" component={Contacts} />
+      
+      <Stack.Screen name="invitation" component={Invitation} />
 
     </Stack.Navigator>
   );
