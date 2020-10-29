@@ -67,7 +67,7 @@ export default Contacts = ({ navigation }) => {
           data: userContacts.map((i) => ({
             key: `${i.user.email}`,
             text: `${i.alias}`,
-            value: i.id,
+            value: i.is_contact_of,
           })),
         }))
     );
@@ -151,12 +151,12 @@ export default Contacts = ({ navigation }) => {
   const renderHiddenItem = (data, rowMap) => (
     <View style={styles.rowBack}>
       <TouchableOpacity
-        onPress={() =>
+        onPress={() =>{
           navigation.navigate("sendMoney", {
             contact: data.item.key,
             userId: data.item.value,
             fromContacts: true,
-          })
+          })}
         }
       >
         <Text style={{ color: "#ffff8b" }}>Send Money</Text>

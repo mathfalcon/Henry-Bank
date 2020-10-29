@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Svg, { Text, Rect } from "react-native-svg";
 
-import { Alert, Dimensions } from "react-native";
+import { Alert, Dimensions, StyleSheet } from "react-native";
 import { Container, View } from "native-base";
 import { LineChart } from "react-native-chart-kit";
 import axios from "axios";
@@ -10,28 +10,28 @@ import { api } from "./Constants/constants";
 export default AccountMovementsChart = ({ userLogged }) => {
   const today = new Date();
   const [pastDaysBalance, setBalance] = useState([]);
-
+  const [decoratorValue, setDecoratorValue] = useState('0');
+  const [decoratorX, setDecoratorX] = useState(300);
+  const [decoratorY, setDecoratorY] = useState(0);
   useEffect(() => {
     getPastDaysBalance();
   }, []);
 
-  const getPastDaysBalance = () => {
-    axios(`${api}/transactions/history/weekly/${userLogged.user.id}`)
-      .then((response) => console.log(response.data))
-      .catch((err) => console.log(err));
+  const getPastDaysBalance = async () => {
+    const response = await axios(
+      `${api}/transactions/history/weekly/${userLogged.user.id}`
+    );
+    setBalance(response.data);
   };
-
-  const getData = () => {
-    let currentBalance = userLogged.user.account.balance;
-    let toReturn = [];
-    pastDaysBalance.reverse().forEach((e) => {
-      currentBalance -= e;
-      toReturn.push(currentBalance);
-    });  
-    return toReturn.reverse()
-  };
+  const decoratorView = StyleSheet.create({
+    container: {
+      opacity: 1
+    }
+  })
+  
   return (
     <LineChart
+      fromZero
       data={{
         labels: [
           today.getDate() - 7,
@@ -45,13 +45,13 @@ export default AccountMovementsChart = ({ userLogged }) => {
         datasets: [
           {
             data: [
-              Math.random() * 100,
-              Math.random() * 100,
-              Math.random() * 100,
-              Math.random() * 100,
-              Math.random() * 100,
-              Math.random() * 100,
-              Math.random() * 100,
+              pastDaysBalance[1] || 0,
+              pastDaysBalance[2] || 0,
+              pastDaysBalance[3] || 0,
+              pastDaysBalance[4] || 0,
+              pastDaysBalance[5] || 0,
+              pastDaysBalance[6] || 0,
+              pastDaysBalance[7] || 0,
             ],
           },
         ],
@@ -59,25 +59,42 @@ export default AccountMovementsChart = ({ userLogged }) => {
       width={Dimensions.get("window").width - 40} // from react-native
       height={200}
       yAxisLabel="$"
-      yAxisSuffix="k"
       decorator={() => {
         return (
-          <View>
+          <View style={decoratorView.container}>
             <Svg>
-              <Rect x={80} y={110} width="40" height="30" fill="black" />
+              <Rect
+                x={decoratorX}
+                y={decoratorY +10}
+                width="70"
+                height="30"
+                fill="black"
+                textAnchor="middle"
+              />
               <Text
-                x={100}
-                y={130}
+                x={decoratorX + 35}
+                y={decoratorY + 30}
                 fill="white"
                 fontSize="16"
                 fontWeight="bold"
                 textAnchor="middle"
               >
-                0.0
+                {decoratorValue}
               </Text>
             </Svg>
           </View>
         );
+      }}
+      onDataPointClick={(data) => {
+        console.log(data)
+        setDecoratorValue(`$${data.value}`)
+        if(data.x > 300){
+          setDecoratorX(parseInt(data.x -50))
+        setDecoratorY(parseInt(data.y))
+        } else{
+        setDecoratorX(parseInt(data.x))
+        setDecoratorY(parseInt(data.y))
+        }
       }}
       yAxisInterval={1} // optional, defaults to 1
       chartConfig={{
@@ -95,9 +112,10 @@ export default AccountMovementsChart = ({ userLogged }) => {
       }}
       bezier
       style={{
-        marginVertical: 8,
         elevation: 15,
       }}
+      withHorizontalLines={false}
+      formatYLabel={(num) => parseInt(num)}
     />
   );
 };

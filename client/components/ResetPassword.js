@@ -8,8 +8,11 @@ import { api } from "./Constants/constants";
 import styles from "../Styles/forgotPassStyles";
 import CustomButton from "./customButton";
 import { CheckBox } from "react-native-elements";
+import axios from 'axios';
 
 export default ResetPassowrd = ({ navigation }) => {
+  const [showPass, setShowPass] = useState(false);
+
   const {
     values,
     isSubmitting,
@@ -20,10 +23,18 @@ export default ResetPassowrd = ({ navigation }) => {
     handleBlur,
   } = useFormik({
     initialValues: {
+      token: '',
       newPass: "",
       confirmNewPass: "",
     },
-    onSubmit: () => Alert.alert("submited"),
+    onSubmit: async (values) => {
+      const response = await axios.put(`${api}/auth/change-password`,{
+        newResetToken: values.token,
+        newPw: values.newPass
+      })
+      response.data.success ? Alert.alert('Success', response.data.message) : Alert.alert('Failure', response.data.message)
+      navigation.navigate('login')
+    },
     validate: (values) => {
       const errors = {};
       if (!/^(?=.*\d)(?=.*[A-Za-z])[A-Za-z0-9]{5,20}$/.test(values.newPass))
@@ -50,6 +61,8 @@ export default ResetPassowrd = ({ navigation }) => {
           </Text>
           <Text style={styles.title}>Reset Password</Text>
           <Text style={styles.subtitle}>
+            You will shortly receive an email to the provided address where you will find the reset token needed to continue.
+            {"\n"}{"\n"}
             In order to protect your account, make sure your password must
             contain 5-20 digits, A-Z and a-z.
           </Text>
@@ -64,19 +77,19 @@ export default ResetPassowrd = ({ navigation }) => {
           >
             <Icon
               active
-              name="lock"
+              name="key"
               type="FontAwesome5"
               style={{
                 fontSize: 20,
                 color: "#151515",
               }}
             />
-            <Label>New Password</Label>
+            <Label>Reset Token</Label>
             <Input
-              onBlur={handleBlur("newPass")}
-              name="newPass"
-              onChangeText={(text) => setFieldValue("newPass", text)}
-              value={values.newPass}
+              onBlur={handleBlur("token")}
+              name="token"
+              onChangeText={(text) => setFieldValue("token", text)}
+              value={values.token}
               keyboardType="email-address"
             />
           </Item>
@@ -104,7 +117,13 @@ export default ResetPassowrd = ({ navigation }) => {
               name="newPass"
               onChangeText={(text) => setFieldValue("newPass", text)}
               value={values.newPass}
-              keyboardType="email-address"
+              secureTextEntry={showPass}
+            />
+            <Icon
+              name={showPass ? "eye" : "eye-slash"}
+              style={{ color: "grey", fontSize: 15 }}
+              type="FontAwesome5"
+              onPress={() => setShowPass(!showPass)}
             />
           </Item>
           <Text
@@ -139,7 +158,7 @@ export default ResetPassowrd = ({ navigation }) => {
               name="confirmNewPass"
               onChangeText={(text) => setFieldValue("confirmNewPass", text)}
               value={values.confirmNewPass}
-              keyboardType="email-address"
+              secureTextEntry={showPass}
             />
           </Item>
           <Text
@@ -158,7 +177,7 @@ export default ResetPassowrd = ({ navigation }) => {
               onPress={handleSubmit}
             />
           </View>
-          <Text style={{ alignSelf: "center", marginTop: 80 }}>
+          <Text style={{ alignSelf: "center", marginTop: 20 }}>
             <Text>Back to </Text>
             <Text
               style={{ fontWeight: "bold" }}

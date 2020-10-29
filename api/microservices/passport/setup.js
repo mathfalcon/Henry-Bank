@@ -1,4 +1,4 @@
-const { User, Account } = require("../db.js");
+const { User, Account,Card } = require("../db.js");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
@@ -8,7 +8,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-  User.findOne({where:{id}, include:Account})
+  User.findOne({where:{id}, include:{model: Account, as: 'account', include: Card}, attributes: { exclude: ['photo'] }})
     .then((user) => done(null, user))
     .catch((err) => {
       if (err) {

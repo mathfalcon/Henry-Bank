@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Image } from "react-native";
 import { CardView } from "react-native-credit-card-input";
 import ClientCard from "./ClientCard";
 import MenuCards from "./MenuCards";
@@ -11,7 +11,15 @@ function MyCards({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.blackMenu}>
-        <Text style={styles.title}>MY CARDS</Text>
+        <View>
+          <Image
+            source={require("../assets/henryLogoBlack.jpg")}
+            style={styles.logoImg}
+          />
+        </View>
+        <View>
+          <Text style={styles.title}>MY CARDS</Text>
+        </View>
       </View>
       <View style={styles.card}>
         <CardView
@@ -21,22 +29,18 @@ function MyCards({ navigation }) {
           placeholder={{
             cvc: "123",
           }}
-          cvc="11111" 
+          cvc="11111"
           brand="henry"
           name={`${userLogged.name} ${userLogged.surname}`}
-          number="12345678"
-          expiry="13/20"
-          scale={1.2}
+          number={userLogged.account.card.number}
+          expiry={userLogged.account.card.expiration_date.split('T')[0]}
+          scale={1.3}
           imageFront={require("../assets/yellowBackground.png")}
           imageBack={require("../assets/cardBackOk.png")}
         />
       </View>
-      <View style={styles.menu}>
-        {/* <MenuCards /> */}
-      </View>
-
       <View style={styles.menuOp}>
-            <MenuOperation navigation={navigation} screen={'cards'} />
+        <MenuOperation navigation={navigation} screen={"cards"} />
       </View>
     </View>
   );
@@ -47,43 +51,46 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     // alignItems: "center",
     // justifyContent: "space-evenly",
-    backgroundColor: "#ffff57",
+    backgroundColor: "#ffff8b",
     flex: 18,
   },
   card: {
     // zIndex: 2,
-    flex: 8,
+    flex: 10,
     alignSelf: "center",
-    marginTop:50
-  },
-  clientCard: {
-    flex: 6,
+    alignItems:'center',
+    justifyContent: 'center'
   },
   blackMenu: {
     // bottom: "1.2%",
     // width:500,
     // height: 160,
-    backgroundColor: "black",
+    backgroundColor: "#151515",
     // zIndex: 2,
     flex: 2,
+    justifyContent: "space-around",
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   title: {
-    color: "#ffff57",
-    alignSelf: "center",
+    color: "#ffff8b",
+    alignSelf: "flex-end",
     fontSize: 30,
-    marginTop: 10,
-    padding: 5,
-    // left: 160,
-    // top: "30%",
+    marginRight: 15,
   },
   menu: {
     // top: 685,
     flex: 2,
     // zIndex: 4,
   },
-  menuOp:{
-    height:50,    
-    backgroundColor:"black",
+  menuOp: {
+    height: 50,
+    backgroundColor: "black",
+  },
+  logoImg: {
+    height: 60,
+    width: 60,
+    borderRadius: 10,
   },
 });
 export default MyCards;

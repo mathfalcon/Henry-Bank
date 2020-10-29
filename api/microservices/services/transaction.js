@@ -49,10 +49,12 @@ server.get("/transactions", (req, res, next) => {
 server.get("/transactions/user/:userId", (req, res, next) => {
   const { userId } = req.params;
   Transaction.findAll({
-    where: { [Op.or]: {
-      receiverId: userId,
-      senderId: userId
-    } },
+    where: {
+      [Op.or]: {
+        receiverId: userId,
+        senderId: userId,
+      },
+    },
     include: [
       {
         model: User,
@@ -67,7 +69,7 @@ server.get("/transactions/user/:userId", (req, res, next) => {
         include: Account,
       },
     ],
-    order: [["updatedAt", "DESC"]],
+    order: [["createdAt", "DESC"]],
   })
     .then((transactions) => {
       res.send({ success: true, message: "transactions list: ", transactions });
@@ -126,27 +128,72 @@ server.get("/transactions/outcome/:userId", (req, res, next) => {
     );
 });
 // Route for getting user transactions from a specific date to another
-server.get("/transactions/history/:userId", (req, res, next) => {
-  const { startDate, toDate } = req.body;
+server.post("/transactions/historyByDate", (req, res, next) => {
+  const { userId, dateFrom, dateTo } = req.body;
+
   Promise.all([
     Transaction.findAll({
       where: {
-        createdAt: { [Op.between]: [startDate, toDate] },
-        senderId: req.params.userId,
+        createdAt: { [Op.between]: [dateFrom, dateTo] },
+        senderId: userId,
       },
+      include: [
+        {
+          model: User,
+          as: "sender",
+          attributes: ["id", "email", "name", "surname"],
+          include: Account,
+        },
+        {
+          model: User,
+          as: "receiver",
+          attributes: ["id", "email", "name", "surname"],
+          include: Account,
+        },
+      ],
+      order: [["createdAt", "DESC"]],
     }),
     Transaction.findAll({
       where: {
-        createdAt: { [Op.between]: [startDate, toDate] },
-        receiverId: req.params.userId,
+        createdAt: { [Op.between]: [dateFrom, dateTo] },
+        receiverId: userId,  
       },
+      include: [
+        {
+          model: User,
+          as: "sender",
+          attributes: ["id", "email", "name", "surname"],
+          include: Account,
+        },
+        {
+          model: User,
+          as: "receiver",
+          attributes: ["id", "email", "name", "surname"],
+          include: Account,
+        },
+      ],
+      order: [["createdAt", "DESC"]],
     }),
     Transaction.findAll({
       where: {
-        createdAt: { [Op.between]: [startDate, toDate] },
-        senderId: req.params.userId,
-        receiverId: req.params.userId,
+        createdAt: { [Op.between]: [dateFrom, dateTo] },
+        [Op.or]: { senderId: userId, receiverId: userId },
       },
+      include: [
+        {
+          model: User,
+          as: "sender",
+          attributes: ["id", "email", "name", "surname"],
+          include: Account,
+        },
+        {
+          model: User,
+          as: "receiver",
+          attributes: ["id", "email", "name", "surname"],
+          include: Account,
+        },
+      ],
+      order: [["createdAt", "DESC"]],
     }),
   ])
     .then((transactions) => {
@@ -161,7 +208,7 @@ server.get("/transactions/history/:userId", (req, res, next) => {
         0
       );
       let total = incomes - outcomes;
-      res.send({ transactions, total });
+      res.send({transactions: transactions[2]});
     })
     .catch((err) =>
       res
@@ -495,7 +542,7 @@ server.get(
 
 // Route for posting a 'created' transaction
 server.post("/transactions/:sender/to/:receiver", (req, res, next) => {
-  const { amount, message, passcode } = req.body;
+  const { amount, message, passcode, testFecha } = req.body;
 
   Promise.all([
     Account.findOne({ where: { userId: req.params.sender } }), // Search for the account that sends the money
@@ -525,6 +572,7 @@ server.post("/transactions/:sender/to/:receiver", (req, res, next) => {
                 amount,
                 message,
                 state: "complete",
+                createdAt: testFecha,
               })
                 .then((transactionCreated) => {
                   const msg = {

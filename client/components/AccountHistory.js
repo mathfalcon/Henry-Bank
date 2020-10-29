@@ -19,24 +19,20 @@ import { TouchableOpacity, Image } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
-import { getAccountHistory } from "../redux/actions/accountActions";
+import { getAccountHistory, filterAccountHistory } from "../redux/actions/accountActions";
 import styles from "../Styles/historyStyles.js";
 import MenuOperation from "./MenuOperation";
 
 export default AccountHistory = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const [dataFrom, setDateFrom] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [userId, setUserId] = useState("");
   const [theFilter, setTheFilter] = useState(true);
 
-  // const { accountHistory } = useSelector((state) => state.accountInfo);
   const userLogged = useSelector((state) => state.auth.user);
-
-
-  // ver como diferenciar envios y cargas / saldo positivo y saldo negativo
   const accountHistory = useSelector((state) => state.accountInfo.accountHistory.transactions);
-
+  
   useEffect(() => {
     const userId = userLogged.id;
     setUserId(userId);
@@ -46,8 +42,8 @@ export default AccountHistory = ({ navigation, route }) => {
   }, []);
 
   const setFilter = () => {
-    // dispatch(getAccountHistory( userId, dataFrom, dateTo)); // Que formato
-    // Validar fecha date sea menos a fecha to Date
+    dispatch(filterAccountHistory(userId, dateFrom, dateTo));
+    setTheFilter(true)
   };
 
   return (
@@ -176,7 +172,7 @@ export default AccountHistory = ({ navigation, route }) => {
                 <DatePicker
                   placeHolderText="To Date"
                   defaultDate={new Date()}
-                  minimumDate={new Date(dataFrom)}
+                  minimumDate={new Date(dateFrom)}
                   // maximumDate={new Date(2020, 6, 6)}
                   locale={"en"}
                   timeZoneOffsetInMinutes={undefined}
