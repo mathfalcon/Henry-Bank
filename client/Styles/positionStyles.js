@@ -33,8 +33,8 @@ export default StyleSheet.create({
     flexDirection: "column",
     width: "100%",
     justifyContent: "space-around",
-    backgroundColor: '#ffff8b',
-    paddingTop: 15
+    backgroundColor: "#ffff8b",
+    paddingTop: 15,
   },
   menuOp: {
     flex: 0.8,
@@ -53,18 +53,49 @@ export default StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#ffff8b",
     justifyContent: "space-evenly",
-    alignContent: 'center',
-    flexWrap: 'wrap'
+    alignContent: "center",
+    flexWrap: "wrap",
   },
   sendMoneyButton: {
+    borderRadius: 10,
     flexDirection: "row",
     backgroundColor: "#151515",
     height: 50,
-    width: 175,
+    paddingHorizontal: 15,
+    alignItems: "center",
     justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 3,
+      height: 12,
+    },
+    shadowOpacity: 0.9,
+    shadowRadius: 12.35,
+
+    elevation: 10,
   },
   sendMoneyText: {
+    marginLeft: 5,
     alignSelf: "center",
     color: "whitesmoke",
+  },
+  adminPanelText: {
+    borderRadius: 10,
+    marginTop: 20,
+    flexDirection: "row",
+    backgroundColor: "#151515",
+    height: 50,
+    paddingHorizontal: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 3,
+      height: 12,
+    },
+    shadowOpacity: 0.9,
+    shadowRadius: 12.35,
+
+    elevation: 10,
   },
 });
