@@ -31,7 +31,7 @@ export default FourthPageForm = ({ route, navigation }) => {
   const personalInfo = route.params.personalInfo;
   const locationInfo = route.params.locationInfo;
   const documentPhoto = route.params.selectedImage.picture.base64;
-  
+
   // const photo = route.params.photo.base64;
 
   const [initialState, setInitialState] = useState(true);
@@ -79,7 +79,7 @@ export default FourthPageForm = ({ route, navigation }) => {
       };
 
       try {
-        const response = await axios.post(`${api}/users/create`, accountInfo);        
+        const response = await axios.post(`${api}/users/create`, accountInfo);
         let errorMsj = "";
         if (response.data.err) {
           const errorMail = response.data.err.original.constraint || undefined;
