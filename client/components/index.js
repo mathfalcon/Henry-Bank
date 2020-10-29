@@ -164,6 +164,7 @@ import AboutRechargeMoney from "./AboutRechargeMoney";
 import AboutPasswords from "./AboutPasswords";
 import AboutTransactions from "./AboutTransactions";
 import UserPanel from "./UserPanel";
+import Security from "./Security";
 
 const LoggedFalseStack = createStackNavigator();
 const LoggedTrueStack = createStackNavigator();
@@ -228,7 +229,9 @@ export default function Index() {
             {/* <LoggedTrueStack.Screen name="accountHistory" component={AccountHistory} />
                 <LoggedTrueStack.Screen name="userStats" component={userStats} /> */}
             <LoggedTrueStack.Screen name="adminPanel" component={AdminPanel} />
-            <LoggedTrueStack.Screen name="userPanel" component={UserPanel} />
+            <LoggedFalseStack.Screen name="userPanel" component={UserPanel} />
+            <LoggedFalseStack.Screen name="security" component={Security} />
+            <LoggedFalseStack.Screen name="support" component={Support} />
             <LoggedTrueStack.Screen
               name="manageUsers"
               component={ManageUsers}

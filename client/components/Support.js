@@ -25,7 +25,7 @@ export default Support = ({ navigation }) => {
         style={{ backgroundColor: "#ffff57", display: "flex" }}
       >
         <Left style={{ flex: 1 }}>
-          <Button transparent onPress={() => navigation.navigate("home")}>
+          <Button transparent onPress={() => navigation.goBack()}>
             <Icon style={{ color: "black" }} name="arrow-back" />
           </Button>
         </Left>
@@ -54,14 +54,14 @@ export default Support = ({ navigation }) => {
         <Card
           style={{
             backgroundColor: "#151515",
-            borderColor:'#151515',
-            paddingHorizontal: 10
+            borderColor: "#151515",
+            paddingHorizontal: 10,
           }}
         >
           <CardItem
             style={{
               justifyContent: "space-between",
-              marginVertical:10,
+              marginVertical: 10,
               shadowColor: "#000",
               shadowOffset: {
                 width: 0,
@@ -74,7 +74,12 @@ export default Support = ({ navigation }) => {
             button
             onPress={() => navigation.navigate("aboutHenryBank")}
           >
-            <Icon active name="credit-card" type="FontAwesome5" style={{width: 30}}/>
+            <Icon
+              active
+              name="credit-card"
+              type="FontAwesome5"
+              style={{ width: 30 }}
+            />
             <Text style={{ paddingHorizontal: 5 }}>
               <Text style={{ fontWeight: "bold" }}>About Henry Bank{"\n"}</Text>
               <Text>What is henry bank and how does it work</Text>
@@ -100,7 +105,12 @@ export default Support = ({ navigation }) => {
             button
             onPress={() => navigation.navigate("usersAndAccounts")}
           >
-            <Icon active name="user" type="FontAwesome5" style={{width: 30}}/>
+            <Icon
+              active
+              name="user"
+              type="FontAwesome5"
+              style={{ width: 30 }}
+            />
             <Text>
               <Text style={{ fontWeight: "bold" }}>User and Account{"\n"}</Text>
               <Text>Get started with Henry Bank</Text>
@@ -202,8 +212,8 @@ export default Support = ({ navigation }) => {
             alignItems: "center",
             justifyContent: "center",
             alignContent: "center",
-            flexDirection: 'row',
-            flexWrap: 'wrap'
+            flexDirection: "row",
+            flexWrap: "wrap",
           }}
         >
           <Text style={{ color: "whitesmoke" }}>Do you need more help? </Text>

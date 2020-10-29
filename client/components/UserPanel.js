@@ -28,12 +28,18 @@ export default UserPanel = ({ route, navigation }) => {
   const userName = route.params.userLogged.user.name;
 
   return (
-    <Content style={{ backgroundColor: "#151515", flex: 1 }}>
+    <View
+      style={{
+        backgroundColor: "#151515",
+        flex: 10,
+      }}
+    >
       <Header
         transparent
         style={{
           backgroundColor: "#ffff8b",
           alignItems: "center",
+
           justifyContent: "flex-start",
         }}
       >
@@ -60,23 +66,38 @@ export default UserPanel = ({ route, navigation }) => {
             : null
         } 
       /> */}
-      <View>
+      <View
+        style={{
+          flexDirection: "column",
+          marginVertical: 40,
+        }}
+      >
+        <Image
+          source={require("../assets/henryLogo.jpg")}
+          style={{
+            height: 60,
+            width: 60,
+            alignSelf: "center",
+            borderRadius: 10,
+            marginVertical: 10,
+          }}
+        />
         <Text
           style={{
             fontSize: 40,
             textAlign: "center",
             fontWeight: "bold",
-            margin: 20,
             color: "whitesmoke",
+            marginVertical: 10,
           }}
         >
-          Hi! {userName}
+          Hi {userName}!
         </Text>
         <View
           style={{
+            marginVertical: 10,
             flexDirection: "row",
             justifyContent: "space-around",
-            marginVertical: 25,
           }}
         >
           <Item
@@ -88,6 +109,8 @@ export default UserPanel = ({ route, navigation }) => {
               justifyContent: "center",
               alignItems: "center",
             }}
+            button
+            onPress={() => navigation.navigate("security")}
           >
             <View>
               <Icon
@@ -112,6 +135,8 @@ export default UserPanel = ({ route, navigation }) => {
               justifyContent: "center",
               alignItems: "center",
             }}
+            button
+            onPress={() => navigation.navigate("support")}
           >
             <View>
               <Icon
@@ -143,6 +168,8 @@ export default UserPanel = ({ route, navigation }) => {
               justifyContent: "center",
               alignItems: "center",
             }}
+            button
+            onPress={() => navigation.navigate("support")}
           >
             <View>
               <Icon
@@ -170,6 +197,8 @@ export default UserPanel = ({ route, navigation }) => {
               justifyContent: "center",
               alignItems: "center",
             }}
+            button
+            onPress={() => navigation.navigate("support")}
           >
             <View>
               <Icon
@@ -184,6 +213,6 @@ export default UserPanel = ({ route, navigation }) => {
           </Item>
         </View>
       </View>
-    </Content>
+    </View>
   );
 };
