@@ -172,6 +172,7 @@ export default function Index() {
   const userLogged = useSelector((state) => state.auth);
 
   useEffect(() => dispatch(getUserLogged()), []);
+
   return (
     <NavigationContainer>
       {userLogged.user.role === undefined ? (

@@ -41,16 +41,16 @@ export default SendMoney = ({ navigation, route }) => {
   const [fromContacts, setFromContacts] = useState(false);
   const [message, setMessage] = useState("");
   const [passCode, setPassCode] = useState("");
-  // const contacts = useSelector((state) => state.contacts);
+
   const userLogged = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (route.params) {
+    if (route.params.fromContacts) {
       dispatch(getUserLogged());
       // console.log('from contact!')
-      setSelectContact(route.params.contact);
+      setSelectContact(route.params.userId);
       setFromContacts(true);
     }
   }, []);

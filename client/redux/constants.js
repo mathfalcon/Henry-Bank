@@ -16,6 +16,8 @@ export const validateAddress = "VALIDATE_ADDRESS";
 // ACCOUNT
 export const accountHistory = "ACCOUNT_HISTORY";
 
+export const filterAccountHistory = "FILTER_ACCOUNT_HISTORY";
+
 export const verifyFunds = "VERIFY_FUNDS";
 
 export const sendMoney = "SEND_MONEY";

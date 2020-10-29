@@ -6,13 +6,6 @@ module.exports = (sequelize) => {
     number: {
       type: DataTypes.STRING,
       allowNull: false,
-      set(value) {
-        const rSalt = this.randomSalt();
-        this.setDataValue("saltcard", rSalt);
-        this.setDataValue("number",
-          crypto.createHmac("sha1", this.saltcard)
-            .update(value).digest("hex"));
-      },
     },
     cvv: {
       type: DataTypes.STRING,

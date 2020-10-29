@@ -8,6 +8,7 @@ import { api } from "./Constants/constants";
 import styles from "../Styles/forgotPassStyles";
 import CustomButton from "./customButton";
 import { CheckBox } from "react-native-elements";
+import axios from 'axios';
 
 export default ForgotPass = ({ navigation }) => {
   const {
@@ -22,7 +23,9 @@ export default ForgotPass = ({ navigation }) => {
     initialValues: {
       user: "",
     },
-    onSubmit: () => {
+    onSubmit: async (value) => {
+      const response = await axios.post(`${api}/auth/reset_password`, {email: values.user});
+      response.data.success ? Alert.alert('Success', response.data.message) : Alert.alert('Failure', 'The provided email does not exist.')
       navigation.navigate("resetPassword")
     },
     validate: (values) => {
