@@ -57,6 +57,7 @@ export default FourthPageForm = ({ route, navigation }) => {
     },
 
     onSubmit: async (values) => {
+
       const accountInfo = {
         email: personalInfo.email,
         password: values.password,
@@ -129,9 +130,9 @@ export default FourthPageForm = ({ route, navigation }) => {
       const errors = {};
       if (!/^(?=.*\d)(?=.*[A-Za-z])[A-Za-z0-9]{5,20}$/.test(values.password))
         errors.password = "Must contain: 5-20 digits, A-Z and a-z.";
-      if (values.confirmPassword !== values.password || !values.confirmPassword)
+      if ((values.confirmPassword !== values.password) || !values.confirmPassword)
         errors.confirmPassword = "Must the same password.";
-      if (!values.passcode && value.passcode.length < 4) errors.passcode = "Enter a 4 digit passcode.";
+      if (values.passcode.length < 4) errors.passcode = "Enter a 4 digit passcode.";
       return errors;
     },
   });
@@ -283,7 +284,7 @@ export default FourthPageForm = ({ route, navigation }) => {
               dark
               onPress={handleSubmit}
               disabled={
-                initialState || !Object.values(errors).length === 0
+                initialState || !Object.values(errors).length === 0 || !check
                   ? true
                   : false
               }
@@ -291,7 +292,7 @@ export default FourthPageForm = ({ route, navigation }) => {
               style={
                 initialState
                   ? styles.buttonDisabled
-                  : Object.values(errors).length === 0
+                  : Object.values(errors).length === 0 || !check
                   ? styles.buttonEnabled
                   : styles.buttonDisabled
               }
