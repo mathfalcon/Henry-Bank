@@ -559,7 +559,7 @@ server.post("/transactions/:sender/to/:receiver", (req, res, next) => {
                           receiverAcc: acc[1].cvu,
                           senderName: `${acc[2].name} ${acc[2].surname}`,
                           receiverName: `${acc[3].name} ${acc[3].surname}`,
-                          amount: req.body.amount,
+                          amount: `${req.body.amount} ${acc[0].type}`,
                           message: req.body.message,
                         },
                       },
