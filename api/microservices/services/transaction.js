@@ -122,31 +122,31 @@ server.get("/transactions/outcome/:userId", (req, res, next) => {
     );
 });
 // Route for getting user transactions from a specific date to another
-server.get("/transactions/history/:userId", (req, res, next) => {
-  const { startDate, toDate } = req.body;
+server.get("/transactions/historyByDate", (req, res, next) => {
+  const { userId, dateFrom, dateTo } = req.body;
   Promise.all([
   Transaction.findAll({ 
     where: {
-      createdAt: { [Op.between]: [ startDate, toDate ] },   
-      senderId: req.params.userId
+      createdAt: { [Op.between]: [ dateFrom, dateTo ] },   
+      senderId: userId
   }}),
   Transaction.findAll({ 
     where: {
       createdAt: { [Op.between]: [ startDate, toDate ] },
-      receiverId: req.params.userId
+      receiverId: userId
   }}),
   Transaction.findAll({ 
     where: {
       createdAt: { [Op.between]: [ startDate, toDate ] },
-      senderId: req.params.userId,
-      receiverId: req.params.userId
+      senderId: userId,
+      receiverId: userId
   }})
   ])
   .then((transactions) => {
     let outcomes = transactions[0].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
     let incomes = transactions[1].reduce((total, trans) => trans.state === "complete" ? total + Number(trans.amount) : total, 0);
     let total = incomes - outcomes;
-  res.send({ transactions, total });
+  res.send({ success: true, message: "transactions list: ", transactions, total });
   })
   .catch((err) =>
       res.status(400)
