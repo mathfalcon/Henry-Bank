@@ -14,6 +14,7 @@ function MyCards({ navigation }) {
         <Text style={styles.title}>MY CARDS</Text>
       </View>
       <View style={styles.card}>
+        { userLogged &&
         <CardView
           onFocused
           appStack
@@ -30,6 +31,7 @@ function MyCards({ navigation }) {
           imageFront={require("../assets/yellowBackground.png")}
           imageBack={require("../assets/cardBackOk.png")}
         />
+        }
       </View>
       <View style={styles.menu}>
         {/* <MenuCards /> */}

@@ -19,6 +19,7 @@ import {
 export default MenuOperation = ({ navigation, screen, userLogged }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [inputKeyboard, setInputKeyboard] = useState("");
+  const [wrongPasscode, setWrongPasscode] = useState(false);
 
   useEffect(() => {
     if (inputKeyboard.length === 4) {
@@ -36,7 +37,13 @@ export default MenuOperation = ({ navigation, screen, userLogged }) => {
             navigation.navigate("myCards");
           }
         })
-        .catch((error) => console.log(error));
+        .catch(error => {
+          setInputKeyboard("");         
+          setWrongPasscode(true);          
+          setTimeout(() => {
+            setWrongPasscode(false);
+            }, 3000);
+        });
     }
   }, [inputKeyboard]);
 
@@ -149,6 +156,13 @@ export default MenuOperation = ({ navigation, screen, userLogged }) => {
               style={styles.textInput}
             />
           </View>
+          {
+              wrongPasscode
+                ?              
+                  <Text style={styles.textWrongPasscode}>Incorrect Passcode - Enter Again</Text>              
+                :
+                  null
+          }
           <VirtualKeyboard
             color="black"
             pressMode="string"

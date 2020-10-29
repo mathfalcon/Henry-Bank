@@ -66,29 +66,34 @@ export default StyleSheet.create({
   },
   logoView:{
     marginBottom:30,
-  }
+  },
+  textWrongPasscode:{       
+    color:'red',
+  },
 });
 
 // Modificar en la libreria
 
 // VirtualKeyboard.js
-// onPress(val) {
+// onPress(val) {		
+//     if (this.state.text.length === 4) return this.setState({ text: '' });
 //     if (this.props.pressMode === 'string') {
 //         let curText = this.state.text;
-//         if (isNaN(val)) {
+//         if (isNaN(val)) {				
 //             if (val === 'back') {
 //                 curText = curText.slice(0, -1);
 //             } else if (this.state.text < 9999) {
-//                 curText += val;
+//                 curText += val;				
 //             }
 //         } else if (this.state.text < 9999) {
-//             curText += val;
+//             curText += val;								
 //         }
 //         this.setState({ text: curText });
 //         this.props.onPress(curText);
 //     } else /* if (props.pressMode == 'char')*/ {
 //         this.props.onPress(val);
 //     }
+//     if (this.state.text.length === 3) this.setState({ text: '' });
 // }
 
 // VirtualKeyboard.styles.js

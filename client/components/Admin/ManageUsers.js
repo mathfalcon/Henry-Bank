@@ -59,12 +59,14 @@ export default ManageUsers = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
+    let filterUsers = users.filter( user => user.email !== 'bankhenry@recharges.com');
+
     setListData(
       Array(1)
         .fill("")
         .map((_, i) => ({
           title: `Users`,
-          data: users.map((i) => ({
+          data: filterUsers.map((i) => ({
             key: i.id,
             name: i.name,
             surname: i.surname,
