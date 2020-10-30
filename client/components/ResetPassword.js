@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Text, Item, Icon, Input, View, Label } from "native-base";
+import { Text, Item, Icon, Input, View, Label,Button } from "native-base";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Alert } from "react-native";
 import { api } from "./Constants/constants";
 import styles from "../Styles/forgotPassStyles";
 import CustomButton from "./customButton";
 import { CheckBox } from "react-native-elements";
-import axios from 'axios';
+import axios from "axios";
 
 export default ResetPassowrd = ({ navigation }) => {
   const [showPass, setShowPass] = useState(false);
-
+  const [initialState, setInitialState] = useState(true);
   const {
     values,
     isSubmitting,
@@ -23,19 +23,28 @@ export default ResetPassowrd = ({ navigation }) => {
     handleBlur,
   } = useFormik({
     initialValues: {
-      token: '',
+      token: "",
       newPass: "",
       confirmNewPass: "",
     },
     onSubmit: async (values) => {
-      const response = await axios.put(`${api}/auth/change-password`,{
+      const response = await axios.put(`${api}/auth/change-password`, {
         newResetToken: values.token,
-        newPw: values.newPass
-      })
-      response.data.success ? Alert.alert('Success', response.data.message) : Alert.alert('Failure', response.data.message)
-      navigation.navigate('login')
+        newPw: values.newPass,
+      });
+      console.log(response);
+      response.data.success
+        ? Alert.alert("Success", response.data.message, [
+            {
+              text: "Understood",
+              onPress: () => navigation.navigate("login"),
+              style: "cancel",
+            },
+          ])
+        : Alert.alert("Failure", response.data.message);
     },
     validate: (values) => {
+      setInitialState(false);
       const errors = {};
       if (!/^(?=.*\d)(?=.*[A-Za-z])[A-Za-z0-9]{5,20}$/.test(values.newPass))
         errors.newPass = "Must contain: 5-20 digits, A-Z and a-z.";
@@ -61,8 +70,10 @@ export default ResetPassowrd = ({ navigation }) => {
           </Text>
           <Text style={styles.title}>Reset Password</Text>
           <Text style={styles.subtitle}>
-            You will shortly receive an email to the provided address where you will find the reset token needed to continue.
-            {"\n"}{"\n"}
+            You will shortly receive an email to the provided address where you
+            will find the reset token needed to continue.
+            {"\n"}
+            {"\n"}
             In order to protect your account, make sure your password must
             contain 5-20 digits, A-Z and a-z.
           </Text>
@@ -171,11 +182,25 @@ export default ResetPassowrd = ({ navigation }) => {
             {touched.confirmNewPass && errors.confirmNewPass}
           </Text>
           <View style={{ marginHorizontal: 20 }}>
-            <CustomButton
-              style={styles.buttonRequest}
-              title="RESET PASSWORD"
+            <Button
+              dark
               onPress={handleSubmit}
-            />
+              disabled={
+                initialState || !Object.values(errors).length === 0
+                  ? true
+                  : false
+              }
+              block
+              style={
+                initialState
+                  ? styles.buttonDisabled
+                  : Object.values(errors).length === 0
+                  ? [styles.buttonChange, styles.buttonEnabled]
+                  : [styles.buttonChange, styles.buttonDisabled]
+              }
+            >
+              <Text>RESET PASSWORD</Text>
+            </Button>
           </View>
           <Text style={{ alignSelf: "center", marginTop: 20 }}>
             <Text>Back to </Text>

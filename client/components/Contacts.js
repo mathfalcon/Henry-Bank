@@ -71,7 +71,8 @@ export default Contacts = ({ navigation }) => {
             email: `${i.user.email}`,
             alias: `${i.alias}`,
             value: i.is_contact_of,
-            photo: i.user.documentPhoto
+            photo: i.user.documentPhoto,
+            id: i.id
           })),
         }))
     );

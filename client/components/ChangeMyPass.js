@@ -59,7 +59,7 @@ function ChangeMyPass({ navigation }) {
     <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView>
         <View>
-          <Text style={styles.title}>Change my Password</Text>
+          <Text style={styles.title}>Change my password</Text>
           <Text style={styles.subtitle}>
             In order to protect your account, make sure your password must
             contain 5-20 digits, A-Z and a-z.
@@ -88,7 +88,7 @@ function ChangeMyPass({ navigation }) {
               name="currentPass"
               onChangeText={(text) => setFieldValue("currentPass", text)}
               value={values.currentPass}
-              keyboardType="email-address"
+              secureTextEntry
             />
           </Item>
           <Text
@@ -122,7 +122,7 @@ function ChangeMyPass({ navigation }) {
               name="newPass"
               onChangeText={(text) => setFieldValue("newPass", text)}
               value={values.newPass}
-              keyboardType="email-address"
+              secureTextEntry
             />
           </Item>
           <Text
@@ -156,7 +156,7 @@ function ChangeMyPass({ navigation }) {
               name="confirmNewPass"
               onChangeText={(text) => setFieldValue("confirmNewPass", text)}
               value={values.confirmNewPass}
-              keyboardType="email-address"
+              secureTextEntry
             />
           </Item>
           <Text

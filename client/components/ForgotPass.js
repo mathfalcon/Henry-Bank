@@ -25,8 +25,11 @@ export default ForgotPass = ({ navigation }) => {
     },
     onSubmit: async (value) => {
       const response = await axios.post(`${api}/auth/reset_password`, {email: values.user});
-      response.data.success ? Alert.alert('Success', response.data.message) : Alert.alert('Failure', 'The provided email does not exist.')
-      navigation.navigate("resetPassword")
+      response.data.success ? Alert.alert('Success', response.data.message,[{
+        text: "Understood",
+        onPress: () => navigation.navigate("resetPassword"),
+        style: "cancel"
+      }]) : Alert.alert('Failure', response.data.message)
     },
     validate: (values) => {
       const errors = {};
