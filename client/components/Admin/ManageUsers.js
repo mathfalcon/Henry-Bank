@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Tooltip } from "react-native-elements";
-import { getUsers, deleteUser, promoteUser } from "../../redux/actions/actions";
+// import { Tooltip } from "react-native-elements";
+import { getUsers } from "../../redux/actions/actions";
 import axios from "axios";
 import { api } from "../Constants/constants";
 import {
@@ -13,18 +13,11 @@ import {
 } from "react-native";
 import {
   Text,
-  Item,
-  Icon,
+  Item,  
   Form,
   Input,
   Label,
   Content,
-  Button,
-  Header,
-  Left,
-  Body,
-  Right,
-  Title,
 } from "native-base";
 
 import { SwipeListView } from "react-native-swipe-list-view";
@@ -48,8 +41,7 @@ export default ManageUsers = ({ navigation }) => {
   });
 
   const [listData, setListData] = useState();
-  const [modalVisible, setModalVisible] = useState(false);
-  const [showToast, setShowToast] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);  
 
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.users);

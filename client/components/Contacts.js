@@ -40,9 +40,9 @@ import { api } from "./Constants/constants";
 
 export default Contacts = ({ navigation }) => {
   const [input, setInput] = useState({
-    name: "",
-    email: "",
     id: "",
+    name: "",
+    email: "",    
     phoneNumber: "",
   });
   const [error, setError] = useState({
@@ -55,46 +55,79 @@ export default Contacts = ({ navigation }) => {
 
   const dispatch = useDispatch();
   const userLogged = useSelector((state) => state.auth.user);
-  const userContacts = useSelector((state) => state.contacts.contacts);
+  const userContacts = useSelector((state) => state.contacts.contacts);    
 
   useEffect(() => {
     dispatch(getContactList(userLogged.id));
+  }, []);
+
+  useEffect(() => {    
     setListData(
       Array(1)
         .fill("")
         .map((_, i) => ({
           title: `Contacts`,
-          data: userContacts.map((i) => ({
-            key: `${i.user.email}`,
-            text: `${i.alias}`,
-            value: i.is_contact_of,
+          data: userContacts.map((i) => ({     
+            key: i.is_contact_of,
+            id:i.id,     
+            email: i.user.email,
+            alias: i.alias,            
           })),
         }))
     );
-  }, []);
+  }, [userContacts]);
 
-  const closeRow = (rowMap, rowKey, id) => {
+  const modifyRow = (rowMap, rowKey, id, email) => {    
     setInput({
       ...input,
-      email: rowKey,
       id: id,
+      email: email,      
     });
+    closeRow(rowMap, rowKey)
     setModify(true);
-    setModalVisible(true);
-    // console.log("rowKeymodify", rowKey);
+    setModalVisible(true);    
+  };
+
+  const deleteRow = (rowMap, rowKey, id) => {    
+    Alert.alert(
+      "DELETE CONTACT",
+      "Delete this contact?",      
+      [
+        {
+          text: "Yes, Delete",          
+          onPress: () => {
+            axios.delete(`${api}/contacts/delete/${id}`).then((response) => {                            
+              if (response.data.success) {                                
+                dispatch(getContactList(userLogged.id));                
+                closeRow(rowMap, rowKey);
+              } else {
+                Alert.alert(
+                  "Error",
+                  "Something went wrong",
+                  [
+                    {
+                      text: "Understood",
+                      onPress: () => closeRow(rowMap, rowKey)
+                    },
+                  ],
+                  { cancelable: false }
+                );
+              }
+            });
+          },
+        },
+        { text: "No, Leave it", onPress: () => closeRow(rowMap, rowKey) },
+      ],
+      { cancelable: false }
+    );        
+  };
+
+  const closeRow = (rowMap, rowKey) => {
     if (rowMap[rowKey]) {
       rowMap[rowKey].closeRow();
     }
   };
-
-  const deleteRow = async (rowMap, rowKey, id) => {
-    const deleteRequest = await axios.delete(`${api}/contacts/delete/${id}`);
-    Alert.alert("Success", deleteRequest.data.message);
-    if (deleteRequest.data.success) {
-      dispatch(getContactList(userLogged.id));
-      navigation.navigate("position");
-    }
-  };
+     
 
   const onRowDidOpen = (rowKey) => {
     // console.log("This row opened", rowKey);
@@ -128,20 +161,20 @@ export default Contacts = ({ navigation }) => {
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Icon
               name="address-book"
-              onPress={() => navigation.navigate("myCards")}
+              // onPress={() => navigation.navigate("myCards")}
               style={{ color: "black", fontSize: 20 }}
               type="FontAwesome5"
             />
-            <Text style={{ paddingHorizontal: 15 }}>{data.item.text}</Text>
+            <Text style={{ paddingHorizontal: 15 }}>{data.item.alias}</Text>
           </View>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Icon
               name="envelope"
-              onPress={() => navigation.navigate("myCards")}
+              // onPress={() => navigation.navigate("myCards")}
               style={{ color: "black", fontSize: 17 }}
               type="FontAwesome5"
             />
-            <Text style={{ paddingHorizontal: 15 }}>{data.item.key}</Text>
+            <Text style={{ paddingHorizontal: 15 }}>{data.item.email}</Text>
           </View>
         </View>
       </View>
@@ -152,24 +185,28 @@ export default Contacts = ({ navigation }) => {
     <View style={styles.rowBack}>
       <TouchableOpacity
         onPress={() =>{
+          closeRow(rowMap, data.item.key)
           navigation.navigate("sendMoney", {
-            contact: data.item.key,
-            userId: data.item.value,
+            contact: data.item.email,
+            userId: data.item.key,
             fromContacts: true,
-          })}
+          })
+           }
         }
       >
         <Text style={{ color: "#ffff8b" }}>Send Money</Text>
       </TouchableOpacity>
+
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnLeft]}
-        onPress={() => closeRow(rowMap, data.item.key, data.item.value)}
+        onPress={() => modifyRow(rowMap, data.item.key, data.item.id, data.item.email)}
       >
         <Text style={styles.backTextBlack}>Modify</Text>
       </TouchableOpacity>
+      
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnRight]}
-        onPress={() => deleteRow(rowMap, data.item.key, data.item.value)}
+        onPress={() => deleteRow(rowMap, data.item.key, data.item.id)}
       >
         <Text style={styles.backTextWhite}>Delete</Text>
       </TouchableOpacity>
@@ -196,8 +233,27 @@ export default Contacts = ({ navigation }) => {
     });
 
     if (!error.name && !error.email) {
-      if (modify) {
-        dispatch(modifyContact(input.name, input.id));
+      if (modify) {        
+        axios
+        .put(`${api}/contacts/update/${input.id}`, {
+          alias: input.name,
+        })
+        .then((response) => {
+          if (response.data.success) {  
+            Alert.alert("Success", response.data.message); 
+            dispatch(getContactList(userLogged.id));
+            setModalVisible(!modalVisible) 
+            setInput({
+              name: "",
+              email: "",
+              phoneNumber: "",
+            }); 
+          } else {              
+            Alert.alert("Failure", response.data.message);                        
+          }        
+        })
+        .catch( err => console.log( err ));
+    
       } else {
         axios
           .post(`${api}/contacts/create`, {
@@ -206,29 +262,39 @@ export default Contacts = ({ navigation }) => {
             emailOfContact: input.email,
           })
           .then((response) => {
-            if (response.data.success) {
-              dispatch(getContactList(userLogged.id));
+            if (response.data.success) {              
               Alert.alert("Success", response.data.message);
-              navigation.navigate("position");
+              setInput({
+                name: "",
+                email: "",
+                phoneNumber: "",
+              });
+              dispatch(getContactList(userLogged.id));
+              setModalVisible(!modalVisible)             
             } else if (response.data.code === "not_client") {
               Alert.alert("Invite your contact", response.data.message, [
                 {
-                  text: "Maybe later",
-                  onPress: () => navigation.navigate("position"),
+                  text: "Maybe later",                  
+                  onPress: () => {
+                    setModalVisible(!modalVisible)
+                  }
                 },
                 {
                   text: "Sounds good",
                   onPress: () => {
-                    setModalVisible(!modalVisible);
-                    console.log(navigation.navigate)
+                    setModalVisible(!modalVisible);                    
                     navigation.navigate("invitation");
                   },
                 },
               ]);
-            } else {
-              dispatch(getContactList(userLogged.id));
-              Alert.alert("Failure", response.data.message);
-              navigation.navigate("position");
+              setInput({
+                name: "",
+                email: "",
+                phoneNumber: "",
+              });
+            } else {              
+              Alert.alert("Failure", response.data.message);   
+              dispatch(getContactList(userLogged.id));           
             }
           })
           .catch((err) => console.log(err));
