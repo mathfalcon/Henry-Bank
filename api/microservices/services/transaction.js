@@ -222,16 +222,14 @@ server.get("/transactions/history/weekly/:userId", (req, res, next) => {
   const refe = new Date(
     Date.UTC(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0)
   );
-  const day1 = new Date(refe - 1000 * 60 * 60 * 24 * 7).toISOString();
-  const day2 = new Date(refe - 1000 * 60 * 60 * 24 * 6).toISOString();
-  const day3 = new Date(refe - 1000 * 60 * 60 * 24 * 5).toISOString();
-  const day4 = new Date(refe - 1000 * 60 * 60 * 24 * 4).toISOString();
-  const day5 = new Date(refe - 1000 * 60 * 60 * 24 * 3).toISOString();
-  const day6 = new Date(refe - 1000 * 60 * 60 * 24 * 2).toISOString();
-  const day7 = new Date(refe - 1000 * 60 * 60 * 24 * 1).toISOString();
-  const todayDate = refe.toISOString();
-  console.log(day1);
-  console.log(todayDate);
+  const day1 = new Date(refe - 1000 * 60 * 60 * 24 * 6).toISOString();
+  const day2 = new Date(refe - 1000 * 60 * 60 * 24 * 5).toISOString();
+  const day3 = new Date(refe - 1000 * 60 * 60 * 24 * 4).toISOString();
+  const day4 = new Date(refe - 1000 * 60 * 60 * 24 * 3).toISOString();
+  const day5 = new Date(refe - 1000 * 60 * 60 * 24 * 2).toISOString();
+  const day6 = new Date(refe - 1000 * 60 * 60 * 24 * 1).toISOString();
+  const day7 = refe.toISOString();
+  const todayDate = today.toISOString();
 
   Promise.all([
     Transaction.findAll({
@@ -332,6 +330,18 @@ server.get("/transactions/history/weekly/:userId", (req, res, next) => {
     }), // Balance day 7
   ])
     .then((transactions) => {
+      let balances = [];
+      let balance = 0;
+      for (let i = 0; i < transactions.length; i = i + 2) {
+        let outcomes = transactions[i].reduce((total, trans) => 
+          trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+        let incomes = transactions[i + 1].reduce((total, trans) =>
+          trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+        let total = incomes - outcomes;
+        balance = balance + total;
+        balances.push(balance);
+      }
+
       let outcomesRecord = transactions[0].reduce(
         (total, trans) =>
           trans.state === "complete" ? total + Number(trans.amount) : total,
@@ -444,6 +454,7 @@ server.get("/transactions/history/weekly/:userId", (req, res, next) => {
         balance5,
         balance6,
         balance7,
+        balances,
       ]);
     })
     .catch((err) =>
@@ -589,13 +600,16 @@ server.post("/transactions/:sender/to/:receiver", (req, res, next) => {
                           {
                             email: acc[3].email,
                           },
+                          {
+                            email: acc[2].email,
+                          },
                         ],
                         dynamic_template_data: {
                           senderAcc: acc[0].cvu,
                           receiverAcc: acc[1].cvu,
                           senderName: `${acc[2].name} ${acc[2].surname}`,
                           receiverName: `${acc[3].name} ${acc[3].surname}`,
-                          amount: req.body.amount,
+                          amount: `${req.body.amount} ${acc[0].type}`,
                           message: req.body.message,
                         },
                       },

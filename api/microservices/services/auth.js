@@ -136,18 +136,26 @@ server.post("/auth/reset_password", async (req, res, next) => {
     const newResetToken = crypto.randomBytes(8).toString("hex");
     user.resetToken = newResetToken;
     await user.save();
+
     const msg = {
-      from: "bankhenry7@gmail.com",
-      to: user.email,
-      subject: "Henry Bank - Reset Password",
-      text: `
-          Hello ${user.name},  
-          Please use this code:${newResetToken} to reset your password.
-      `,
-      html: `
-          <h1>Hello ${user.name},</h1>
-          <p>Please use this code:${newResetToken} to reset your password.</p>
-      `,
+      template_id: process.env.SENGRID_TEMPLATE_ID_PASSWORD_RESET,
+      from: {
+        email: process.env.SENDGRID_SENDER_EMAIL,
+        name: process.env.SENDGRID_SENDER_NAME,
+      },
+      personalizations: [
+        {
+          to: [
+            {
+              email: req.body.email,
+            },
+          ],
+          dynamic_template_data: {
+            name: user.name,
+            newResetToken: newResetToken,
+          },
+        },
+      ],
     };
     await sgMail.send(msg);
     res.send({
