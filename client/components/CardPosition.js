@@ -16,14 +16,11 @@ export default CardPosition = ({ navigation, userLogged }) => {
   return (
     <Card>
       <CardItem header bordered>
-        <Body>
-          <Text>Account Balance: $ {userLogged.user.account.balance}</Text>
+        <Body style={{justifyContent:'center', alignItems:'center'}}>
+          <Text style={{fontSize:20, fontWeight: 'bold'}}>Account Balance</Text>
+          <Text style={{fontSize:20, color: 'green', fontWeight: 'bold'}}>$ {userLogged.user.account.balance}</Text>
         </Body>
-        <Text onPress={() => navigation.navigate("accountHistory", userLogged)}>
-          Account movements
-        </Text>
       </CardItem>
-
     </Card>
   );
 };

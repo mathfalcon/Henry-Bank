@@ -7,14 +7,14 @@ import styles from "../Styles/staticsStyles";
 import { LineChart } from "react-native-chart-kit";
 import axios from "axios";
 import { api } from "./Constants/constants";
-
+const Texta = require('react-native-svg').Text
 export default function userStats({ navigation }) {
   const [sortBy, setSort] = useState("month");
   const [data, setData] = useState({});
   const [dataValues, setDataValues] = useState([1]);
   const userLogged = useSelector((state) => state.auth.user);
   const [decoratorValue, setDecoratorValue] = useState("0");
-  const [decoratorX, setDecoratorX] = useState(300);
+  const [decoratorX, setDecoratorX] = useState(700);
   const [decoratorY, setDecoratorY] = useState(0);
 
   useEffect(() => {
@@ -74,42 +74,42 @@ export default function userStats({ navigation }) {
               width={Dimensions.get("window").width - 20} // from react-native
               height={250}
               yAxisLabel="$"
-              // decorator={() => {
-              //   return (
-              //     <View>
-              //       <Svg>
-              //         <Rect
-              //           x={decoratorX}
-              //           y={decoratorY + 10}
-              //           width="70"
-              //           height="30"
-              //           fill="black"
-              //           textAnchor="middle"
-              //         />
-              //         <Text
-              //           x={decoratorX + 35}
-              //           y={decoratorY + 30}
-              //           fill="white"
-              //           fontSize="16"
-              //           fontWeight="bold"
-              //           textAnchor="middle"
-              //         >
-              //           {decoratorValue}
-              //         </Text>
-              //       </Svg>
-              //     </View>
-              //   );
-              // }}
-              // onDataPointClick={(data) => {
-              //   setDecoratorValue(`$${data.value}`);
-              //   if (data.x > 300) {
-              //     setDecoratorX(parseInt(data.x - 50));
-              //     setDecoratorY(parseInt(data.y));
-              //   } else {
-              //     setDecoratorX(parseInt(data.x));
-              //     setDecoratorY(parseInt(data.y));
-              //   }
-              // }}
+              decorator={() => {
+                return (
+                  <View>
+                    <Svg>
+                      <Rect
+                        x={decoratorX}
+                        y={decoratorY + 10}
+                        width="70"
+                        height="30"
+                        fill="black"
+                        textAnchor="middle"
+                      />
+                      <Texta
+                        x={decoratorX + 35}
+                        y={decoratorY + 30}
+                        fill="white"
+                        fontSize="16"
+                        fontWeight="bold"
+                        textAnchor="middle"
+                      >
+                        {decoratorValue}
+                      </Texta>
+                    </Svg>
+                  </View>
+                );
+              }}
+              onDataPointClick={(data) => {
+                setDecoratorValue(`$${data.value}`);
+                if (data.x > 300) {
+                  setDecoratorX(parseInt(data.x - 50));
+                  setDecoratorY(parseInt(data.y));
+                } else {
+                  setDecoratorX(parseInt(data.x));
+                  setDecoratorY(parseInt(data.y));
+                }
+              }}
               chartConfig={{
                 backgroundColor: "#ffff57",
                 backgroundGradientFrom: "whitesmoke",

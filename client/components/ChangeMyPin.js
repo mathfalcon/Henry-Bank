@@ -39,12 +39,12 @@ function ChangeMyPin({ navigation, userId }) {
         .patch(`${api}/users/change_passcode`, updateInfo)
         .then((response) => {
           if (response.data.success) {               
-            Alert.alert("PassCode changed!");            
-            // setFieldValue("currentPin", "")
-            // setFieldValue("newPin", "")
-            // setFieldValue("confirmNewPin", "")                        
+            Alert.alert('Success', response.data.message);            
+            setFieldValue("currentPin", "")
+            setFieldValue("newPin", "")
+            setFieldValue("confirmNewPin", "")                      
           } else {
-            Alert.alert("Something went wrong");
+            Alert.alert("Failure", response.data.message);
           }
         })
         .catch((error) => Alert.alert("Something went wrong"));        
@@ -63,11 +63,12 @@ function ChangeMyPin({ navigation, userId }) {
     },
   });
 
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView>
         <View>
-          <Text style={styles.title}>Change my Pin Code</Text>
+          <Text style={styles.title}>Change my passcode</Text>
           <Text style={styles.subtitle}>
             Enter a new four digit Pin Code
           </Text>

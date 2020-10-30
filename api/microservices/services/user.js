@@ -37,7 +37,10 @@ server.engine("html", require("ejs").renderFile);
 
 // Route for getting all users
 server.get("/users", (req, res, next) => {
-  User.findAll({ include: [{ model: Account }], attributes: ['id', 'name', 'surname', 'role','email', 'phone'] })
+  User.findAll({
+    include: [{ model: Account }],
+    attributes: ["id", "name", "surname", "role", "email", "phone"],
+  })
     .then((users) => {
       res.send({ success: true, message: "Users list: ", users });
     })
@@ -123,7 +126,7 @@ server.post("/users/create", (req, res, next) => {
     role,
     emailToken,
     documentPhoto,
-    photo: documentPhoto
+    photo: documentPhoto,
   })
     .then((userCreated) => {
       const msg = {
@@ -326,18 +329,25 @@ server.patch("/users/promote/:id", (req, res, next) => {
 server.patch("/users/change_passcode", async (req, res, next) => {
   const { id, oldPasscode, passcode } = req.body;
   // , passcode: oldPasscode
-  User.findOne({ where: { id: id } })
-    .then(user => user.update(
-      { passcode: passcode },
-    )
-      .then(
-        res.send({ success: true, message: "passcode changed succesfully !", user })
-      )
-      .catch((err) =>
-        res
-          .status(400)
-          .send({ success: false, message: "Something went wrong: ", err })
-      ))
+
+  try {
+    const user = await User.findOne({ where: { id: id } });
+
+    if (user.checkPasscode(oldPasscode)) {
+      user
+        .update({ passcode: passcode })
+        .then((user) =>
+          res.send({ success: true, message: "Passcode successfully changed." })
+        );
+    } else {
+      return res.send({
+        success: false,
+        message: "The provided current Passcode is invalid.",
+      });
+    }
+  } catch(err) {
+    return res.send({success: false, message: 'Something went wrong', err})
+  }
 });
 //////////////////
 // ROUTES /DELETE/

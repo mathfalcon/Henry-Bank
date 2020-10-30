@@ -38,7 +38,7 @@ export default StyleSheet.create({
   },
   menuOp: {
     flex: 0.8,
-    height: 60
+    height: 60,
   },
   contentButton: {
     marginLeft: "50%",
@@ -58,10 +58,11 @@ export default StyleSheet.create({
     flexWrap: "wrap",
   },
   sendMoneyButton: {
-    borderRadius: 10,
+    borderRadius: 5,
     flexDirection: "row",
     backgroundColor: "#151515",
     height: 50,
+    width: 180,
     paddingHorizontal: 15,
     alignItems: "center",
     justifyContent: "center",

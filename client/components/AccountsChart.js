@@ -10,8 +10,8 @@ import { api } from "./Constants/constants";
 export default AccountMovementsChart = ({ userLogged }) => {
   const today = new Date();
   const [pastDaysBalance, setBalance] = useState([]);
-  const [decoratorValue, setDecoratorValue] = useState('0');
-  const [decoratorX, setDecoratorX] = useState(300);
+  const [decoratorValue, setDecoratorValue] = useState("0");
+  const [decoratorX, setDecoratorX] = useState(700);
   const [decoratorY, setDecoratorY] = useState(0);
 
   useEffect(() => {
@@ -27,10 +27,10 @@ export default AccountMovementsChart = ({ userLogged }) => {
 
   const decoratorView = StyleSheet.create({
     container: {
-      opacity: 1
-    }
-  })
-  
+      opacity: 1,
+    },
+  });
+
   return (
     <LineChart
       fromZero
@@ -67,7 +67,7 @@ export default AccountMovementsChart = ({ userLogged }) => {
             <Svg>
               <Rect
                 x={decoratorX}
-                y={decoratorY +10}
+                y={decoratorY + 10}
                 width="70"
                 height="30"
                 fill="black"
@@ -88,13 +88,13 @@ export default AccountMovementsChart = ({ userLogged }) => {
         );
       }}
       onDataPointClick={(data) => {
-        setDecoratorValue(`$${data.value}`)
-        if(data.x > 300){
-          setDecoratorX(parseInt(data.x -50))
-        setDecoratorY(parseInt(data.y))
-        } else{
-        setDecoratorX(parseInt(data.x))
-        setDecoratorY(parseInt(data.y))
+        setDecoratorValue(`$${data.value}`);
+        if (data.x > 300) {
+          setDecoratorX(parseInt(data.x - 50));
+          setDecoratorY(parseInt(data.y));
+        } else {
+          setDecoratorX(parseInt(data.x));
+          setDecoratorY(parseInt(data.y));
         }
       }}
       yAxisInterval={1} // optional, defaults to 1
@@ -114,6 +114,7 @@ export default AccountMovementsChart = ({ userLogged }) => {
       bezier
       style={{
         elevation: 15,
+        alignSelf: "center",
       }}
       withHorizontalLines={false}
       formatYLabel={(num) => parseInt(num)}

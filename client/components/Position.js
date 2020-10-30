@@ -77,10 +77,10 @@ export default Position = ({ navigation }) => {
                 style={{
                   color: "black",
                   backgroundColor: "#ffff6d",
-                  fontSize: 18,
-                  borderRadius: 10,
+                  fontSize: 15,
+                  borderRadius: 5,
                   flexDirection: "row",
-                  height: 50,
+                  height: 45,
                   paddingHorizontal: 15,
                   alignItems: "center",
                   justifyContent: "center",
@@ -145,7 +145,7 @@ export default Position = ({ navigation }) => {
                     type="FontAwesome5"
                     style={{ color: "#ffff8b", fontSize: 19 }}
                   />
-                  <Text style={styles.sendMoneyText}>RECHARGE MONEY</Text>
+                  <Text style={styles.sendMoneyText}>RECHARGE</Text>
                 </TouchableOpacity>
 
                 {userLogged.user.role === "admin" ? (
@@ -178,7 +178,7 @@ export default Position = ({ navigation }) => {
                         navigation,
                       })
                     }
-                    style={styles.adminPanelText}
+                    style={[styles.adminPanelText, styles.sendMoneyButton]}
                   >
                     <Icon
                       active

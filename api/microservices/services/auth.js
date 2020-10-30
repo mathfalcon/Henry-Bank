@@ -130,7 +130,6 @@ server.post("/auth/reset_password", async (req, res, next) => {
     const user = await User.findOne({ where: { email: req.body.email } });
     if (!user) {
       return res
-        .status(404)
         .send({ success: false, message: "User not found" });
     }
     const newResetToken = crypto.randomBytes(8).toString("hex");
@@ -247,12 +246,7 @@ server.put("/auth/change-password", (req, res, next) => {
   const { newResetToken, newPw } = req.body;
   User.findOne({ where: { resetToken: newResetToken } })
     .then((user) => {
-      // if (!user.checkPassword(currentPw)) {
-      //   res.send({
-      //     success: false,
-      //     message: "The provided actual password is incorrect",
-      //   });
-      // } else if (user.checkPassword(currentPw)) {
+
       user.password = newPw;
       user.save();
       res.status(200).send({
@@ -262,7 +256,7 @@ server.put("/auth/change-password", (req, res, next) => {
       //}
     })
     .catch((err) => {
-      res.status(400).send({
+      res.send({
         success: false,
         message: "The provided reset token is not valid",
       });
