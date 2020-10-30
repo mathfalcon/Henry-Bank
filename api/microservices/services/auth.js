@@ -261,6 +261,33 @@ server.put("/auth/change-password", (req, res, next) => {
     });
 });
 
+// Route for changing password
+server.put("/auth/change-password/user", (req, res, next) => {
+  const { currentPw, newPw, userId } = req.body;
+  User.findByPk(userId)
+    .then((user) => {
+      if (!user.checkPassword(currentPw))
+        return res.send({
+          success: false,
+          message: "The provided current password is not valid.",
+        });
+      else {
+        user.password = newPw;
+        user.save();
+        res.status(200).send({
+          success: true,
+          message: "The password has been successfully updated",
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(400).send({
+        success: false,
+        message: "Something went wrong",
+      });
+    });
+});
+
 // Deploying service server
 server.listen(3001, () => {
   console.log("Auth service running on 3001");
