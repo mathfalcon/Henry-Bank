@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Text, Item, Icon, Input, View, Label } from "native-base";
+import { Text, Item, Icon, Input, View, Label, Button } from "native-base";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Alert } from "react-native";
+import axios from "axios";
 import { api } from "./Constants/constants";
 import styles from "../Styles/forgotPassStyles";
-import CustomButton from "./customButton";
-import { CheckBox } from "react-native-elements";
+// import CustomButton from "./customButton";
 
-function ChangeMyPin({ navigation }) {
+function ChangeMyPin({ navigation, userId }) {  
+
+  const [initialState, setInitialState] = useState(true);
+  
   const {
     values,
     isSubmitting,
@@ -24,27 +27,37 @@ function ChangeMyPin({ navigation }) {
       newPin: "",
       confirmNewPin: "",
     },
-    onSubmit: () => {
+    
+    onSubmit: () => {      
+      const updateInfo = {
+        id: userId,
+        oldPasscode: values.currentPin,
+        passcode: values.newPin,        
+      };
+
       axios
-        .put(`${api}/auth/change-password/user`, {
-          currentPw: values.currentPass,
-          newPw: values.newPass,
-          userId: userLogged.id,
-        })
+        .patch(`${api}/users/change_passcode`, updateInfo)
         .then((response) => {
-          if (response.data.success) {
-            Alert.alert("Success", response.data.message);
-          } else Alert.alert("Failure", response.data.message);
+          if (response.data.success) {               
+            Alert.alert("PassCode changed!");            
+            // setFieldValue("currentPin", "")
+            // setFieldValue("newPin", "")
+            // setFieldValue("confirmNewPin", "")                        
+          } else {
+            Alert.alert("Something went wrong");
+          }
         })
-        .catch((err) => console.log(err));
+        .catch((error) => Alert.alert("Something went wrong"));        
     },
+
     validate: (values) => {
+      setInitialState(false);
       const errors = {};
-      if (!values.currentPin && values.currentPin.length < 4)
+      if (!values.currentPin || values.currentPin.length < 4)
         errors.currentPin = "Enter a 4 digit passcode.";
-      if (!values.newPin && values.newPin.length < 4)
+      if (!values.newPin || values.newPin.length < 4)
         errors.newPin = "Enter a 4 digit passcode.";
-      if (!values.confirmNewPin && values.confirmNewPin.length < 4)
+      if (!values.confirmNewPin || (values.confirmNewPin.length < 4) || (values.newPin !== values.confirmNewPin))
         errors.confirmNewPin = "Enter a 4 digit passcode.";
       return errors;
     },
@@ -56,8 +69,7 @@ function ChangeMyPin({ navigation }) {
         <View>
           <Text style={styles.title}>Change my Pin Code</Text>
           <Text style={styles.subtitle}>
-            In order to protect your account, make sure your password must
-            contain 5-20 digits, A-Z and a-z.
+            Enter a new four digit Pin Code
           </Text>
 
           <Item
@@ -84,6 +96,7 @@ function ChangeMyPin({ navigation }) {
               onChangeText={(text) => setFieldValue("currentPin", text)}
               value={values.currentPin}
               keyboardType="numeric"
+              secureTextEntry={true}
             />
           </Item>
           <Text
@@ -118,6 +131,7 @@ function ChangeMyPin({ navigation }) {
               onChangeText={(text) => setFieldValue("newPin", text)}
               value={values.newPin}
               keyboardType="numeric"
+              secureTextEntry={true}
             />
           </Item>
           <Text
@@ -152,6 +166,7 @@ function ChangeMyPin({ navigation }) {
               onChangeText={(text) => setFieldValue("confirmNewPin", text)}
               value={values.confirmNewPin}
               keyboardType="numeric"
+              secureTextEntry={true}
             />
           </Item>
           <Text
@@ -160,15 +175,28 @@ function ChangeMyPin({ navigation }) {
               marginHorizontal: 25,
             }}
           >
-            {touched.confirmNewPin && errors.confirmNewPin}
-            {console.log(errors)}
+            {touched.confirmNewPin && errors.confirmNewPin}            
           </Text>
           <View style={{ marginHorizontal: 20 }}>
-            <CustomButton
-              style={styles.buttonRequest}
-              title="RESET PASSWORD"
+          <Button
+              dark
               onPress={handleSubmit}
-            />
+              disabled={
+                initialState || !Object.values(errors).length === 0
+                  ? true
+                  : false
+              }
+              block
+              style={
+                initialState
+                  ? styles.buttonDisabled
+                  : Object.values(errors).length === 0
+                  ? [styles.buttonChange, styles.buttonEnabled]
+                  : [styles.buttonChange, styles.buttonDisabled]
+              }
+            >
+              <Text>RESET PIN CODE</Text>
+            </Button>
           </View>
         </View>
       </KeyboardAwareScrollView>

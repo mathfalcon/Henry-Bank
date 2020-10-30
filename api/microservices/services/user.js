@@ -325,18 +325,19 @@ server.patch("/users/promote/:id", (req, res, next) => {
 // change passcode
 server.patch("/users/change_passcode", async (req, res, next) => {
   const { id, oldPasscode, passcode } = req.body;
-  User.update(
-    { passcode: passcode },
-    { where: { id: id, passcode: oldPasscode } }
-  )
-    .then(
-      res.send({ success: true, message: "passcode changed succesfully !" })
+  // , passcode: oldPasscode
+  User.findOne({ where: { id: id } })
+    .then(user => user.update(
+      { passcode: passcode },
     )
-    .catch((err) =>
-      res
-        .status(400)
-        .send({ success: false, message: "Something went wrong: ", err })
-    );
+      .then(
+        res.send({ success: true, message: "passcode changed succesfully !", user })
+      )
+      .catch((err) =>
+        res
+          .status(400)
+          .send({ success: false, message: "Something went wrong: ", err })
+      ))
 });
 //////////////////
 // ROUTES /DELETE/

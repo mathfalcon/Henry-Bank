@@ -32,6 +32,18 @@ export default StyleSheet.create({
     borderColor: "gray",
     backgroundColor: "black",
   },
+  buttonChange: {
+    borderRadius: 5,
+    marginTop: 10,
+    marginBottom: 20,
+    marginHorizontal: 20,
+  },
+  buttonEnabled: {
+    opacity:1,        
+  },
+  buttonDisabled: {   
+    opacity:.5,            
+},
   logoImg: {
     marginTop: 40,
     height: 60,
