@@ -49,7 +49,6 @@ export default SendMoney = ({ navigation, route }) => {
   useEffect(() => {
     if (route.params && route.params.fromContacts) {
       dispatch(getUserLogged());
-      // console.log('from contact!')
       setSelectContact(route.params.userId);
       setFromContacts(true);
     }
@@ -79,6 +78,7 @@ export default SendMoney = ({ navigation, route }) => {
         const response = data.data;
         setInputMoney("");
         setSelectContact("");
+        setMessage('');
         setPassCode("");
 
         if (response.success) {

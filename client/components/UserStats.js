@@ -36,7 +36,7 @@ export default function userStats({ navigation }) {
     }
     setDataValues(arrayToSet);
   };
-  console.log(dataValues);
+  console.log(data);
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.view1}>
@@ -64,7 +64,7 @@ export default function userStats({ navigation }) {
             <LineChart
               fromZero
               data={{
-                labels: Object.keys(data) || [1],
+                labels: Object.keys(data).sort((a,b)=> a-b) || [1],
                 datasets: [
                   {
                     data: dataValues || [1],
@@ -74,42 +74,42 @@ export default function userStats({ navigation }) {
               width={Dimensions.get("window").width - 20} // from react-native
               height={250}
               yAxisLabel="$"
-              decorator={() => {
-                return (
-                  <View>
-                    <Svg>
-                      <Rect
-                        x={decoratorX}
-                        y={decoratorY + 10}
-                        width="70"
-                        height="30"
-                        fill="black"
-                        textAnchor="middle"
-                      />
-                      <Text
-                        x={decoratorX + 35}
-                        y={decoratorY + 30}
-                        fill="white"
-                        fontSize="16"
-                        fontWeight="bold"
-                        textAnchor="middle"
-                      >
-                        {decoratorValue}
-                      </Text>
-                    </Svg>
-                  </View>
-                );
-              }}
-              onDataPointClick={(data) => {
-                setDecoratorValue(`$${data.value}`);
-                if (data.x > 300) {
-                  setDecoratorX(parseInt(data.x - 50));
-                  setDecoratorY(parseInt(data.y));
-                } else {
-                  setDecoratorX(parseInt(data.x));
-                  setDecoratorY(parseInt(data.y));
-                }
-              }}
+              // decorator={() => {
+              //   return (
+              //     <View>
+              //       <Svg>
+              //         <Rect
+              //           x={decoratorX}
+              //           y={decoratorY + 10}
+              //           width="70"
+              //           height="30"
+              //           fill="black"
+              //           textAnchor="middle"
+              //         />
+              //         <Text
+              //           x={decoratorX + 35}
+              //           y={decoratorY + 30}
+              //           fill="white"
+              //           fontSize="16"
+              //           fontWeight="bold"
+              //           textAnchor="middle"
+              //         >
+              //           {decoratorValue}
+              //         </Text>
+              //       </Svg>
+              //     </View>
+              //   );
+              // }}
+              // onDataPointClick={(data) => {
+              //   setDecoratorValue(`$${data.value}`);
+              //   if (data.x > 300) {
+              //     setDecoratorX(parseInt(data.x - 50));
+              //     setDecoratorY(parseInt(data.y));
+              //   } else {
+              //     setDecoratorX(parseInt(data.x));
+              //     setDecoratorY(parseInt(data.y));
+              //   }
+              // }}
               chartConfig={{
                 backgroundColor: "#ffff57",
                 backgroundGradientFrom: "whitesmoke",
@@ -122,12 +122,14 @@ export default function userStats({ navigation }) {
                   strokeWidth: "2",
                   stroke: "#151515",
                 },
+                propsForVerticalLabels:{
+                  fontSize: 12
+                }
               }}
               bezier
-              style={{
-                elevation: 15,
-              }}
               withHorizontalLines={false}
+              formatYLabel={(num) => parseInt(num)}
+              formatXLabel={(num) => num % 2 === 0 && Object.keys(data).length > 12 ? '': num}
             />
           </Card>
         </View>

@@ -129,7 +129,7 @@ export default ManageTransactions = ({ navigation }) => {
                             </Button>
                         </View>
                     </View>
-                    <Divider style={{ backgroundColor: 'blue', height:3 }} />
+                    <Divider style={{ backgroundColor: '#151515', height:5 }} />
                     <List style={styles.list}>    
 
                     {showTransactions && showTransactions.map( e => (

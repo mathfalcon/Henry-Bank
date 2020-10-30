@@ -22,21 +22,21 @@ export default AdminPanel = ({ navigation }) => {
         </Header>
 
         <Tabs            
-            renderTabBar={()=> <ScrollableTab />}
+            renderTabBar={()=> <ScrollableTab style={{backgroundColor: '#151515'}}/>}
             locked={true}
         >
           <Tab heading="Users" tabStyle={{backgroundColor: '#151515'}} activeTabStyle={{backgroundColor: '#151515'}} activeTextStyle={{color: '#ffff8b'}} textStyle={{color: 'whitesmoke', opacity: 0.7}}>
             <ManageUsers />
           </Tab>
-          <Tab heading="Accounts" tabStyle={{backgroundColor: '#151515'}} activeTabStyle={{backgroundColor: '#151515'}} activeTextStyle={{color: '#ffff8b'}} textStyle={{color: 'whitesmoke', opacity: 0.7}}>
+          {/* <Tab heading="Accounts" tabStyle={{backgroundColor: '#151515'}} activeTabStyle={{backgroundColor: '#151515'}} activeTextStyle={{color: '#ffff8b'}} textStyle={{color: 'whitesmoke', opacity: 0.7}}>
             <ManageAccounts />
-          </Tab>
+          </Tab> */}
           <Tab heading="Transactions" tabStyle={{backgroundColor: '#151515'}} activeTabStyle={{backgroundColor: '#151515'}} activeTextStyle={{color: '#ffff8b'}} textStyle={{color: 'whitesmoke', opacity: 0.7}}>
             <ManageTransactions />
           </Tab>
-          <Tab heading="Stats" tabStyle={{backgroundColor: '#151515'}} activeTabStyle={{backgroundColor: '#151515'}} activeTextStyle={{color: '#ffff8b'}} textStyle={{color: 'whitesmoke', opacity: 0.7}}>
+          {/* <Tab heading="Stats" tabStyle={{backgroundColor: '#151515'}} activeTabStyle={{backgroundColor: '#151515'}} activeTextStyle={{color: '#ffff8b'}} textStyle={{color: 'whitesmoke', opacity: 0.7}}>
             <SeeStats />
-          </Tab>          
+          </Tab>           */}
         </Tabs>
       </Container>
     );

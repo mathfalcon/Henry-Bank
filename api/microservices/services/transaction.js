@@ -655,6 +655,7 @@ server.post("/transactions/:sender/to/:receiver", (req, res, next) => {
     })
     .catch((err) => console.log(err));
 });
+
 /////////////////
 // ROUTES /PUT/
 /////////////////
@@ -680,6 +681,7 @@ server.put("/transactions/account/recharge/:userId", async (req, res, next) => {
           state: "complete",
           senderId: bankUser.id,
           receiverId: userId,
+          createdAt: req.body.testFecha
         })
           .then((transaction) => {
             res.status(200).send({
