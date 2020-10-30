@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Tooltip } from "react-native-elements";
-import { getUsers, deleteUser, promoteUser } from "../../redux/actions/actions";
+// import { Tooltip } from "react-native-elements";
+import { getUsers } from "../../redux/actions/actions";
 import axios from "axios";
 import { api } from "../Constants/constants";
 import {
@@ -13,18 +13,11 @@ import {
 } from "react-native";
 import {
   Text,
-  Item,
-  Icon,
+  Item,  
   Form,
   Input,
   Label,
   Content,
-  Button,
-  Header,
-  Left,
-  Body,
-  Right,
-  Title,
 } from "native-base";
 
 import { SwipeListView } from "react-native-swipe-list-view";
@@ -48,8 +41,7 @@ export default ManageUsers = ({ navigation }) => {
   });
 
   const [listData, setListData] = useState();
-  const [modalVisible, setModalVisible] = useState(false);
-  const [showToast, setShowToast] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);  
 
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.users);
@@ -59,7 +51,9 @@ export default ManageUsers = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    let filterUsers = users.filter( user => user.email !== 'bankhenry@recharges.com');
+    let filterUsers = users.filter(
+      (user) => user.email !== "bankhenry@recharges.com"
+    );
 
     setListData(
       Array(1)
@@ -177,32 +171,63 @@ export default ManageUsers = ({ navigation }) => {
     >
       <View style={{ alignSelf: "flex-start", marginLeft: 50 }}>
         <Text>
-          <Text style={{ fontWeight: "bold" }}>Name:</Text>
-          <Text style={{ fontStyle: "italic", color: "red" }}>
-            {" "}
+          <Icon
+            name="users"
+            style={{ color: "black", fontSize: 20 }}
+            type="FontAwesome5"
+          />
+          <Text
+            style={{
+              fontStyle: "italic",
+              color: "black",
+              fontWeight: "bold",
+            }}
+          >
+            {"       "}
             {data.item.name} {data.item.surname}
           </Text>
         </Text>
         <Text>
-          <Text style={{ fontWeight: "bold" }}>Email:</Text>
+          <Icon
+            name="address-book"
+            style={{ color: "black", fontSize: 20 }}
+            type="FontAwesome5"
+          />
+          {"        "}
           <Text style={{ fontStyle: "italic" }}> {data.item.email}</Text>
         </Text>
         <Text>
-          <Text style={{ fontWeight: "bold" }}>Role:</Text>
-          <Text style={{ fontStyle: "italic" }}> {data.item.role}</Text>
-        </Text>
-        <Text>
-          <Text style={{ fontWeight: "bold" }}>Balance:</Text>
+          <Icon
+            name="user-tag"
+            style={{ color: "black", fontSize: 20 }}
+            type="FontAwesome5"
+          />
           <Text style={{ fontStyle: "italic" }}>
-            {" "}
-            ${data.item.account ? data.item.account.balance : null}
+            {"      "} {data.item.role}
           </Text>
         </Text>
         <Text>
-          <Text style={{ fontWeight: "bold" }}>CVU:</Text>
+          <Icon
+            name="wallet"
+            style={{
+              color: "black",
+              fontSize: 20,
+            }}
+            type="FontAwesome5"
+          />
+          <Text>
+            {"        "}${data.item.account ? data.item.account.balance : null}
+          </Text>
+        </Text>
+        <Text>
+          <Icon
+            name="credit-card"
+            style={{ color: "black", fontSize: 20 }}
+            type="FontAwesome5"
+          />
           <Text style={{ fontStyle: "italic" }}>
-            {" "}
-            ${data.item.account ? data.item.account.cvu : null}
+            {"        "}
+            CVU: {data.item.account ? data.item.account.cvu : null}
           </Text>
         </Text>
       </View>
@@ -211,8 +236,6 @@ export default ManageUsers = ({ navigation }) => {
 
   const renderHiddenItem = (data, rowMap) => (
     <View style={styles.rowBack}>
-
-
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnLeft]}
         onPress={() => promoteRow(rowMap, data.item.key)}

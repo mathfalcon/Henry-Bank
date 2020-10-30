@@ -27,7 +27,7 @@ function ChangeMyPin({ navigation, userId }) {
       newPin: "",
       confirmNewPin: "",
     },
-
+    
     onSubmit: () => {      
       const updateInfo = {
         id: userId,

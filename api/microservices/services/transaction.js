@@ -156,7 +156,7 @@ server.post("/transactions/historyByDate", (req, res, next) => {
     Transaction.findAll({
       where: {
         createdAt: { [Op.between]: [dateFrom, dateTo] },
-        receiverId: userId,  
+        receiverId: userId,
       },
       include: [
         {
@@ -208,7 +208,7 @@ server.post("/transactions/historyByDate", (req, res, next) => {
         0
       );
       let total = incomes - outcomes;
-      res.send({transactions: transactions[2]});
+      res.send({ transactions: transactions[2] });
     })
     .catch((err) =>
       res
@@ -222,16 +222,14 @@ server.get("/transactions/history/weekly/:userId", (req, res, next) => {
   const refe = new Date(
     Date.UTC(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0)
   );
-  const day1 = new Date(refe - 1000 * 60 * 60 * 24 * 7).toISOString();
-  const day2 = new Date(refe - 1000 * 60 * 60 * 24 * 6).toISOString();
-  const day3 = new Date(refe - 1000 * 60 * 60 * 24 * 5).toISOString();
-  const day4 = new Date(refe - 1000 * 60 * 60 * 24 * 4).toISOString();
-  const day5 = new Date(refe - 1000 * 60 * 60 * 24 * 3).toISOString();
-  const day6 = new Date(refe - 1000 * 60 * 60 * 24 * 2).toISOString();
-  const day7 = new Date(refe - 1000 * 60 * 60 * 24 * 1).toISOString();
-  const todayDate = refe.toISOString();
-  console.log(day1);
-  console.log(todayDate);
+  const day1 = new Date(refe - 1000 * 60 * 60 * 24 * 6).toISOString();
+  const day2 = new Date(refe - 1000 * 60 * 60 * 24 * 5).toISOString();
+  const day3 = new Date(refe - 1000 * 60 * 60 * 24 * 4).toISOString();
+  const day4 = new Date(refe - 1000 * 60 * 60 * 24 * 3).toISOString();
+  const day5 = new Date(refe - 1000 * 60 * 60 * 24 * 2).toISOString();
+  const day6 = new Date(refe - 1000 * 60 * 60 * 24 * 1).toISOString();
+  const day7 = refe.toISOString();
+  const todayDate = today.toISOString();
 
   Promise.all([
     Transaction.findAll({
@@ -332,6 +330,18 @@ server.get("/transactions/history/weekly/:userId", (req, res, next) => {
     }), // Balance day 7
   ])
     .then((transactions) => {
+      let balances = [];
+      let balance = 0;
+      for (let i = 0; i < transactions.length; i = i + 2) {
+        let outcomes = transactions[i].reduce((total, trans) => 
+          trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+        let incomes = transactions[i + 1].reduce((total, trans) =>
+          trans.state === "complete" ? total + Number(trans.amount) : total, 0);
+        let total = incomes - outcomes;
+        balance = balance + total;
+        balances.push(balance);
+      }
+
       let outcomesRecord = transactions[0].reduce(
         (total, trans) =>
           trans.state === "complete" ? total + Number(trans.amount) : total,
@@ -444,6 +454,7 @@ server.get("/transactions/history/weekly/:userId", (req, res, next) => {
         balance5,
         balance6,
         balance7,
+        balances,
       ]);
     })
     .catch((err) =>
@@ -572,6 +583,8 @@ server.post("/transactions/:sender/to/:receiver", (req, res, next) => {
                 amount,
                 message,
                 state: "complete",
+                senderBalance: acc[0].balance,
+                receiverBalance: acc[1].balance,
                 createdAt: testFecha,
               })
                 .then((transactionCreated) => {
@@ -587,13 +600,16 @@ server.post("/transactions/:sender/to/:receiver", (req, res, next) => {
                           {
                             email: acc[3].email,
                           },
+                          {
+                            email: acc[2].email,
+                          },
                         ],
                         dynamic_template_data: {
-                          senderAcc: acc[0].type,
-                          receiverAcc: acc[1].type,
+                          senderAcc: acc[0].cvu,
+                          receiverAcc: acc[1].cvu,
                           senderName: `${acc[2].name} ${acc[2].surname}`,
                           receiverName: `${acc[3].name} ${acc[3].surname}`,
-                          amount: req.body.amount,
+                          amount: `${req.body.amount} ${acc[0].type}`,
                           message: req.body.message,
                         },
                       },
@@ -781,62 +797,69 @@ server.post("/transactions/testing", (req, res, next) => {
   }).then((data) => res.send(data));
 });
 
-// Route used to get the last 7 days balance change of the user
-server.get("/transactions/account/graph", (req, res, next) => {
-  const { receiverId } = req.body;
-  const today = new Date();
-  const oneDayAgo = new Date(today);
-  const twoDayAgo = new Date(today);
-  const threeDayAgo = new Date(today);
-  const fourDayAgo = new Date(today);
-  const fiveDayAgo = new Date(today);
-  const sixDayAgo = new Date(today);
-  const weekAgo = new Date(today);
-
-  oneDayAgo.setDate(weekAgo.getDate() - 1);
-  twoDayAgo.setDate(weekAgo.getDate() - 2);
-  threeDayAgo.setDate(weekAgo.getDate() - 3);
-  fourDayAgo.setDate(weekAgo.getDate() - 4);
-  fiveDayAgo.setDate(weekAgo.getDate() - 5);
-  sixDayAgo.setDate(weekAgo.getDate() - 6);
-  weekAgo.setDate(weekAgo.getDate() - 7);
-
-  today.toDateString();
-  weekAgo.toDateString();
-
-  Transaction.findAll({
-    where: {
-      receiverId: receiverId,
-      state: "complete",
-      createdAt: {
-        [Op.gte]: new Date(weekAgo),
-        [Op.lte]: new Date(today),
-      },
-    },
-  }).then((transactions) =>
-    Account.findOne({ where: { userId: receiverId } }).then((account) => {
-      res.send({ transactions, account });
-    })
-  );
-});
-
 // Route for getting the transactions by time range of an user
-server.get("/transactions/account/graph/byTime", (req, res, next) => {
-  const { amount, message, state, receiverId, startDate, endDate } = req.body;
+server.post("/transactions/account/graph/byTime", (req, res, next) => {
+  const { userId, sortBy } = req.body;
+  console.log(req.body)
+  let today = new Date();
+  let startDate = new Date();
+
+  if (sortBy === "month") {
+    startDate.setMonth(today.getMonth() - 1);
+  } else if (sortBy === "year") {
+    startDate.setFullYear(today.getFullYear() - 1);
+  }
   Transaction.findAll({
     where: {
-      receiverId: receiverId,
+      [Op.or]: [{ receiverId: userId }, { senderId: userId }],
       state: "complete",
       createdAt: {
         [Op.gt]: new Date(startDate),
-        [Op.lt]: new Date(endDate),
+        [Op.lt]: new Date(today),
       },
     },
-  }).then((transactions) =>
-    Account.findOne({ where: { userId: receiverId } }).then((account) =>
-      res.send({ transactions, account })
-    )
-  );
+    order: [["createdAt", "DESC"]],
+  }).then((transactions) => {
+    let obj = {};
+    if (sortBy === "month") {
+      transactions.forEach((transaction) => {
+        let getDay = new Date(transaction.createdAt).getDate();
+        if (obj.hasOwnProperty(getDay)) {
+          obj[getDay].push(transaction);
+        } else {
+          obj[getDay] = [transaction];
+        }
+      });
+      let toReturn = {};
+
+      for (let key in obj) {
+        toReturn[key] =
+          userId == obj[key][0].senderId
+            ? obj[key][0].senderBalance
+            : obj[key][0].receiverBalance;
+      }
+      return res.send(toReturn);
+    } else if (sortBy === "year") {
+      transactions.forEach((transaction) => {
+        let getMonth = new Date(transaction.createdAt).getMonth() + 1;
+        if (obj.hasOwnProperty(getMonth)) {
+          obj[getMonth].push(transaction);
+        } else {
+          obj[getMonth] = [transaction];
+        }
+      });
+
+      let toReturn = {};
+      
+      for (let key in obj) {
+        toReturn[key] =
+          userId == obj[key][0].senderId
+            ? obj[key][0].senderBalance
+            : obj[key][0].receiverBalance;
+      }
+      return res.send(toReturn);
+    }
+  });
 });
 
 server.listen(3003, () => {

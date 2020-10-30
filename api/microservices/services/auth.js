@@ -136,18 +136,26 @@ server.post("/auth/reset_password", async (req, res, next) => {
     const newResetToken = crypto.randomBytes(8).toString("hex");
     user.resetToken = newResetToken;
     await user.save();
+
     const msg = {
-      from: "bankhenry7@gmail.com",
-      to: user.email,
-      subject: "Henry Bank - Reset Password",
-      text: `
-          Hello ${user.name},  
-          Please use this code:${newResetToken} to reset your password.
-      `,
-      html: `
-          <h1>Hello ${user.name},</h1>
-          <p>Please use this code:${newResetToken} to reset your password.</p>
-      `,
+      template_id: process.env.SENGRID_TEMPLATE_ID_PASSWORD_RESET,
+      from: {
+        email: process.env.SENDGRID_SENDER_EMAIL,
+        name: process.env.SENDGRID_SENDER_NAME,
+      },
+      personalizations: [
+        {
+          to: [
+            {
+              email: req.body.email,
+            },
+          ],
+          dynamic_template_data: {
+            name: user.name,
+            newResetToken: newResetToken,
+          },
+        },
+      ],
     };
     await sgMail.send(msg);
     res.send({
@@ -257,6 +265,33 @@ server.put("/auth/change-password", (req, res, next) => {
       res.status(400).send({
         success: false,
         message: "The provided reset token is not valid",
+      });
+    });
+});
+
+// Route for changing password
+server.put("/auth/change-password/user", (req, res, next) => {
+  const { currentPw, newPw, userId } = req.body;
+  User.findByPk(userId)
+    .then((user) => {
+      if (!user.checkPassword(currentPw))
+        return res.send({
+          success: false,
+          message: "The provided current password is not valid.",
+        });
+      else {
+        user.password = newPw;
+        user.save();
+        res.status(200).send({
+          success: true,
+          message: "The password has been successfully updated",
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(400).send({
+        success: false,
+        message: "Something went wrong",
       });
     });
 });

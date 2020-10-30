@@ -1,102 +1,140 @@
-import React from "react";
-import { Text, View, Dimensions } from "react-native";
-
-import { DatePicker, DateTimePicker } from "native-base";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { View, Dimensions, Text } from "react-native";
+import Svg, { Rect } from "react-native-svg";
+import { Button, Card, DatePicker, DateTimePicker } from "native-base";
 import styles from "../Styles/staticsStyles";
-import { BarChart } from "react-native-chart-kit";
+import { LineChart } from "react-native-chart-kit";
+import axios from "axios";
+import { api } from "./Constants/constants";
 
 export default function userStats({ navigation }) {
-  const showDatepicker = () => {
-    showMode("date");
+  const [sortBy, setSort] = useState("month");
+  const [data, setData] = useState({});
+  const [dataValues, setDataValues] = useState([1]);
+  const userLogged = useSelector((state) => state.auth.user);
+  const [decoratorValue, setDecoratorValue] = useState("0");
+  const [decoratorX, setDecoratorX] = useState(300);
+  const [decoratorY, setDecoratorY] = useState(0);
+
+  useEffect(() => {
+    getTransactionData();
+  }, [sortBy]);
+
+  const getTransactionData = async () => {
+    const response = await axios.post(
+      `${api}/transactions/account/graph/byTime`,
+      {
+        userId: userLogged.id,
+        sortBy: sortBy,
+      }
+    );
+    setData(response.data);
+    let arrayToSet = [];
+    for (let key in response.data) {
+      arrayToSet.push(response.data[key]);
+    }
+    setDataValues(arrayToSet);
   };
+  console.log(dataValues);
   return (
-    <View>
-      <View style={styles.calendarOne}>
-        <Text>From:</Text>
-        <DatePicker
-          defaultDate={new Date()}
-          maximumDate={new Date()}
-          locale={"en"}
-          timeZoneOffsetInMinutes={undefined}
-          modalTransparent={false}
-          animationType={"fade"}
-          androidMode={"default"}
-          placeHolderText="Touch here to select a date.."
-          textStyle={{ color: "black" }}
-          placeHolderTextStyle={{ color: "#d3d3d3" }}
-          onDateChange={(date) =>
-            setFieldValue("birth", date.toString().substr(4, 12))
-          }
-          disabled={false}
-        />
+    <View style={{ flex: 1 }}>
+      <View style={styles.view1}>
+        <Text style={styles.title}>My Stats</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-around",
+            width: "100%",
+            marginTop: 50,
+          }}
+        >
+          <Button dark onPress={() => setSort("month")}>
+            <Text style={styles.sortByText}>Sort by month</Text>
+          </Button>
+          <Button dark onPress={() => setSort("year")}>
+            <Text style={styles.sortByText}>Sort by year</Text>
+          </Button>
+        </View>
       </View>
-      <View style={styles.calendarOne}>
-        <Text>To:</Text>
-        <DatePicker
-          defaultDate={new Date()}
-          maximumDate={new Date()}
-          locale={"en"}
-          timeZoneOffsetInMinutes={undefined}
-          modalTransparent={false}
-          animationType={"fade"}
-          androidMode={"default"}
-          placeHolderText="Touch here to select a date.."
-          textStyle={{ color: "black" }}
-          placeHolderTextStyle={{ color: "#d3d3d3" }}
-          onDateChange={(date) =>
-            setFieldValue("birth", date.toString().substr(4, 12))
-          }
-          disabled={false}
-        />
-      </View>
-      <View>
+      <View style={styles.view2}>
         <View style={styles.graph}>
-          <Text style={styles.movements}>Movements</Text>
-          <BarChart
-            data={{
-              labels: ["Mon", "Tue", "Wed", "Tue", "Fri"],
-              datasets: [
-                {
-                  data: [
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                  ],
+          <Text style={styles.movements}>My account's balance variation</Text>
+          <Card>
+            <LineChart
+              fromZero
+              data={{
+                labels: Object.keys(data) || [1],
+                datasets: [
+                  {
+                    data: dataValues || [1],
+                  },
+                ],
+              }}
+              width={Dimensions.get("window").width - 20} // from react-native
+              height={250}
+              yAxisLabel="$"
+              decorator={() => {
+                return (
+                  <View>
+                    <Svg>
+                      <Rect
+                        x={decoratorX}
+                        y={decoratorY + 10}
+                        width="70"
+                        height="30"
+                        fill="black"
+                        textAnchor="middle"
+                      />
+                      <Text
+                        x={decoratorX + 35}
+                        y={decoratorY + 30}
+                        fill="white"
+                        fontSize="16"
+                        fontWeight="bold"
+                        textAnchor="middle"
+                      >
+                        {decoratorValue}
+                      </Text>
+                    </Svg>
+                  </View>
+                );
+              }}
+              onDataPointClick={(data) => {
+                setDecoratorValue(`$${data.value}`);
+                if (data.x > 300) {
+                  setDecoratorX(parseInt(data.x - 50));
+                  setDecoratorY(parseInt(data.y));
+                } else {
+                  setDecoratorX(parseInt(data.x));
+                  setDecoratorY(parseInt(data.y));
+                }
+              }}
+              chartConfig={{
+                backgroundColor: "#ffff57",
+                backgroundGradientFrom: "whitesmoke",
+                backgroundGradientTo: "whitesmoke",
+                decimalPlaces: 2, // optional, defaults to 2dp
+                color: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
+                labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                propsForDots: {
+                  r: "3",
+                  strokeWidth: "2",
+                  stroke: "#151515",
                 },
-              ],
-            }}
-            width={Dimensions.get("window").width} // from react-native
-            height={220}
-            yAxisLabel="$"
-            yAxisSuffix="k"
-            yAxisInterval={1} // optional, defaults to 1
-            chartConfig={{
-              backgroundColor: "#ffff57",
-              backgroundGradientFrom: "whitesmoke",
-              backgroundGradientTo: "whitesmoke",
-              decimalPlaces: 2, // optional, defaults to 2dp
-              color: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-              propsForDots: {
-                r: "6",
-                strokeWidth: "2",
-                stroke: "#ffa726",
-              },
-            }}
-            bezier
-            style={{
-              marginVertical: 8,
-              elevation: 15,
-            }}
-          />
+              }}
+              bezier
+              style={{
+                elevation: 15,
+              }}
+              withHorizontalLines={false}
+            />
+          </Card>
         </View>
       </View>
 
       <View style={styles.menuOp}>
-            <MenuOperation navigation={navigation} screen={'stats'} />
+        <MenuOperation navigation={navigation} screen={"stats"} />
       </View>
     </View>
   );

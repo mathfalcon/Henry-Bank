@@ -86,7 +86,6 @@ export default AccountMovementsChart = ({ userLogged }) => {
         );
       }}
       onDataPointClick={(data) => {
-        console.log(data)
         setDecoratorValue(`$${data.value}`)
         if(data.x > 300){
           setDecoratorX(parseInt(data.x -50))
