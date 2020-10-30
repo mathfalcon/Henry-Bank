@@ -109,7 +109,7 @@ server.post("/contacts/create", async (req, res, next) => {
 
 // Route for updating a contact information
 server.put("/contacts/update/:id", (req, res, next) => {
-  const {alias} = req.body
+  const {alias} = req.body  
   Contact.findByPk(req.params.id)
     .then((contact) => {
       contact.update({alias});
@@ -130,7 +130,7 @@ server.put("/contacts/update/:id", (req, res, next) => {
 
 // Route to delete a contact
 server.delete("/contacts/delete/:contactId", (req, res) => {
-  const {contactId} = req.params
+  const {contactId} = req.params  
   Contact.destroy({where: {id: contactId}})
     .then((deletedRecord) => {
       if (deletedRecord === 1)

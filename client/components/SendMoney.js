@@ -54,6 +54,12 @@ export default SendMoney = ({ navigation, route }) => {
       setFromContacts(true);
     }
   }, []);
+
+    useEffect(() => {
+      dispatch(getUserLogged())
+      dispatch(getContactList())
+      }
+  , []);
   
   const userContacts = useSelector((state) => state.contacts.contacts);
   const handleSubmit = () => {
@@ -76,15 +82,14 @@ export default SendMoney = ({ navigation, route }) => {
         setPassCode("");
 
         if (response.success) {
-          Alert.alert(`${response.message}`);
-          navigation.navigate("position");
+          Alert.alert(`${response.message}`);          
         } else if (!response.success) {
-          Alert.alert(`${response.message}`);
-          navigation.navigate("position");
+          Alert.alert(`${response.message}`);          
         } else {
-          Alert.alert("Your transaction is being processed");
-          navigation.navigate("position");
+          Alert.alert("Your transaction is being processed");          
         }
+        setFromContacts(false);
+        navigation.navigate("position");
       });
     // setInputMoney("");
     // setSelectContact("");
@@ -103,6 +108,7 @@ export default SendMoney = ({ navigation, route }) => {
                 setInputMoney("");
                 setSelectContact("");
                 setPassCode("");
+                setFromContacts(false);
                 navigation.navigate("position");
                 }
               }
