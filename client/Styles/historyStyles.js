@@ -87,8 +87,8 @@ export default StyleSheet.create({
         fontWeight: "bold",
     },
     menuOp:{        
-        height:50,
-        marginTop:-30,        
+        height:60,
+        marginTop:-40,        
         backgroundColor:"black",
     },
     money:{

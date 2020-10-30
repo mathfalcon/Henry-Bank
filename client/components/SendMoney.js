@@ -47,7 +47,7 @@ export default SendMoney = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (route.params.fromContacts) {
+    if (route.params && route.params.fromContacts) {
       dispatch(getUserLogged());
       // console.log('from contact!')
       setSelectContact(route.params.userId);

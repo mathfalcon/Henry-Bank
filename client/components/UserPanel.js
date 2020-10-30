@@ -23,10 +23,12 @@ import { api } from "./Constants/constants";
 import styles from "../Styles/forgotPassStyles";
 import CustomButton from "./customButton";
 import { CheckBox } from "react-native-elements";
+import { useSelector } from "react-redux";
 
 export default UserPanel = ({ route, navigation }) => {
   const userName = route.params.userLogged.user.name;
 
+  const userLogged = route.params.userLogged
   return (
     <View
       style={{
@@ -136,7 +138,7 @@ export default UserPanel = ({ route, navigation }) => {
               alignItems: "center",
             }}
             button
-            onPress={() => navigation.navigate("support")}
+            onPress={() => navigation.navigate("personalInfo", userLogged)}
           >
             <View>
               <Icon

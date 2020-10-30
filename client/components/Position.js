@@ -58,14 +58,10 @@ export default Position = ({ navigation }) => {
           <View style={styles.headerSection}>
             <View style={styles.avatarSection}>
               <Avatar
-                size={115}
-                rounded
+                size={100}
                 activeOpacity={0.7}
                 containerStyle={{
-                  backgroundColor: "#ffdd3c",
                   alignSelf: "center",
-                  shadowColor: "red",
-                  padding: 2,
                 }}
                 source={{
                   uri: `data:image/jpeg;base64,${userLogged.user.documentPhoto}`,

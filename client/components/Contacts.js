@@ -68,6 +68,7 @@ export default Contacts = ({ navigation }) => {
             key: `${i.user.email}`,
             text: `${i.alias}`,
             value: i.is_contact_of,
+            photo: i.user.documentPhoto
           })),
         }))
     );
@@ -110,10 +111,11 @@ export default Contacts = ({ navigation }) => {
         <View style={{ flex: 0.5 }}>
           <Avatar
             size="large"
-            icon={{ color: "black", name: "user", type: "font-awesome" }}
+            source={{
+              uri: `data:image/jpeg;base64,${data.item.photo}`,
+            }}
             activeOpacity={0.7}
             containerStyle={{
-              backgroundColor: "#ffff6d",
               alignSelf: "center",
             }}
           />

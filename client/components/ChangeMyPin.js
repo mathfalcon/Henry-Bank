@@ -24,7 +24,20 @@ function ChangeMyPin({ navigation }) {
       newPin: "",
       confirmNewPin: "",
     },
-    onSubmit: () => Alert.alert("ACA VA EL FETCH :)"),
+    onSubmit: () => {
+      axios
+        .put(`${api}/auth/change-password/user`, {
+          currentPw: values.currentPass,
+          newPw: values.newPass,
+          userId: userLogged.id,
+        })
+        .then((response) => {
+          if (response.data.success) {
+            Alert.alert("Success", response.data.message);
+          } else Alert.alert("Failure", response.data.message);
+        })
+        .catch((err) => console.log(err));
+    },
     validate: (values) => {
       const errors = {};
       if (!values.currentPin && values.currentPin.length < 4)

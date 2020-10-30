@@ -114,7 +114,7 @@ export default StyleSheet.create({
     fontSize: 15,
   },
   menuOp:{
-    height:50,    
+    height:60,    
     backgroundColor:"black",
   }
 });

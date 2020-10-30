@@ -1,50 +1,34 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
-    centeredView: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 90
-    },
-    calendarOne: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 90
-    },
-    calendarTwo: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 45
-    },
-    middleView: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 90,
-        width: 100, 
-        height: 100, 
-        backgroundColor: 'powderblue',
-        
-    },
-    graph:{
-        flex: 1,
-        marginTop: 90,
-        color: "blue"
-    },
-    movements:{
-        fontFamily: '',
-        textAlign:'center'
-    },
-    menuOp:{
-        height:50,    
-        backgroundColor:"black",
-        marginTop:365,
-    },
-})
+  movements: {
+    fontSize: 16,
+    textAlign: "center",
+  },
+  menuOp: {
+    height: 60,
+    backgroundColor: "black",
+  },
+  view1: {
+    flex: 3,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  view2: {
+    flex: 7,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 30,
+  },
+  sortByText: {
+    color: "whitesmoke",
+    padding: 15,
+    width: 120,
+    textAlign: "center",
+    textTransform: "uppercase",
+  },
+});
