@@ -19,7 +19,9 @@ import ResetPassword from "./ResetPassword";
 import ChangeMyPass from "./ChangeMyPass";
 import ChangeMyPin from "./ChangeMyPin";
 
-export default Security = ({ navigation }) => {
+export default Security = ({ navigation, route }) => {
+  const {userId} = route.params;
+
   return (
     <Container>
       <Header style={{ backgroundColor: "#151515" }}>
@@ -55,7 +57,7 @@ export default Security = ({ navigation }) => {
           activeTextStyle={{ color: "#ffff8b" }}
           textStyle={{ color: "whitesmoke", opacity: 0.7 }}
         >
-          <ChangeMyPin />
+          <ChangeMyPin userId={userId}/>
         </Tab>
       </Tabs>
     </Container>

@@ -26,6 +26,7 @@ import { CheckBox } from "react-native-elements";
 
 export default UserPanel = ({ route, navigation }) => {
   const userName = route.params.userLogged.user.name;
+  const userId = route.params.userLogged.user.id;
 
   return (
     <View
@@ -110,7 +111,7 @@ export default UserPanel = ({ route, navigation }) => {
               alignItems: "center",
             }}
             button
-            onPress={() => navigation.navigate("security")}
+            onPress={() => navigation.navigate("security", {userId})}
           >
             <View>
               <Icon
