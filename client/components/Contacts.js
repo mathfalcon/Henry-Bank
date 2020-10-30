@@ -68,8 +68,8 @@ export default Contacts = ({ navigation }) => {
         .map((_, i) => ({
           title: `Contacts`,
           data: userContacts.map((i) => ({
-            key: `${i.user.email}`,
-            text: `${i.alias}`,
+            email: `${i.user.email}`,
+            alias: `${i.alias}`,
             value: i.is_contact_of,
             photo: i.user.documentPhoto
           })),
@@ -189,7 +189,7 @@ export default Contacts = ({ navigation }) => {
           closeRow(rowMap, data.item.key)
           navigation.navigate("sendMoney", {
             contact: data.item.email,
-            userId: data.item.key,
+            userId: data.item.value,
             fromContacts: true,
           })
            }

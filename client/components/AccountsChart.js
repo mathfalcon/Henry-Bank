@@ -13,9 +13,10 @@ export default AccountMovementsChart = ({ userLogged }) => {
   const [decoratorValue, setDecoratorValue] = useState('0');
   const [decoratorX, setDecoratorX] = useState(300);
   const [decoratorY, setDecoratorY] = useState(0);
+
   useEffect(() => {
     getPastDaysBalance();
-  }, []);
+  }, [decoratorValue]);
 
   const getPastDaysBalance = async () => {
     const response = await axios(
@@ -23,6 +24,7 @@ export default AccountMovementsChart = ({ userLogged }) => {
     );
     setBalance(response.data);
   };
+
   const decoratorView = StyleSheet.create({
     container: {
       opacity: 1

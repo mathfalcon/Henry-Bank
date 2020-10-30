@@ -16,13 +16,14 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   view2: {
-    flex: 7,
+    flex: 10,
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
   },
   title: {
     fontSize: 30,
+    marginTop: 80
   },
   sortByText: {
     color: "whitesmoke",

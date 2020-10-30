@@ -18,6 +18,7 @@ import {
   Input,
   Label,
   Content,
+  Icon
 } from "native-base";
 
 import { SwipeListView } from "react-native-swipe-list-view";

@@ -45,10 +45,10 @@ export default Position = ({ navigation }) => {
   useEffect(() => {
     dispatch(getUserLogged());
     dispatch(getContactList());
-  }, []);
+  }, [userLogged]);
 
   const userLogged = useSelector((state) => state.auth);
-  console.log(userLogged);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden={true} />
