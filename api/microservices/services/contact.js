@@ -52,7 +52,7 @@ server.get("/contacts/:userId", (req, res, next) => {
       {
         model: User,
         as: "user",
-        attributes: ["email", "id"],
+        attributes: ["email", "id", 'documentPhoto'],
         include: Account,
       },
     ],

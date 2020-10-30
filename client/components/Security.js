@@ -49,7 +49,7 @@ export default Security = ({ navigation }) => {
           <ChangeMyPass />
         </Tab>
         <Tab
-          heading="Accounts"
+          heading="Passcode"
           tabStyle={{ backgroundColor: "#151515" }}
           activeTabStyle={{ backgroundColor: "#151515" }}
           activeTextStyle={{ color: "#ffff8b" }}

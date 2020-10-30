@@ -48,7 +48,7 @@ export default Position = ({ navigation }) => {
   }, []);
 
   const userLogged = useSelector((state) => state.auth);
-
+  console.log(userLogged);
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden={true} />
@@ -58,14 +58,10 @@ export default Position = ({ navigation }) => {
           <View style={styles.headerSection}>
             <View style={styles.avatarSection}>
               <Avatar
-                size={115}
-                rounded
+                size={100}
                 activeOpacity={0.7}
                 containerStyle={{
-                  backgroundColor: "#ffdd3c",
                   alignSelf: "center",
-                  shadowColor: "red",
-                  padding: 2,
                 }}
                 source={{
                   uri: `data:image/jpeg;base64,${userLogged.user.documentPhoto}`,
@@ -155,21 +151,23 @@ export default Position = ({ navigation }) => {
                 {userLogged.user.role === "admin" ? (
                   <>
                     <View style={{ marginVertical: 10 }}>
-                      <CustomButton
-                        style={{
-                          color: "white",
-                          backgroundColor: "#151515",
-                          fontSize: 15,
-                          width: 150,
-                        }}
-                        title="ADMIN PANEL"
+                      <TouchableOpacity
+                        style={styles.adminPanelText}
                         onPress={() =>
                           navigation.navigate("adminPanel", {
                             userLogged,
                             navigation,
                           })
                         }
-                      />
+                      >
+                        <Icon
+                          active
+                          name="user-cog"
+                          type="FontAwesome5"
+                          style={{ color: "#ffff8b", fontSize: 19 }}
+                        />
+                        <Text style={styles.sendMoneyText}>ADMIN PANEL</Text>
+                      </TouchableOpacity>
                     </View>
                   </>
                 ) : (

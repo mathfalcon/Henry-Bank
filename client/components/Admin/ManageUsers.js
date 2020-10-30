@@ -51,7 +51,9 @@ export default ManageUsers = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    let filterUsers = users.filter( user => user.email !== 'bankhenry@recharges.com');
+    let filterUsers = users.filter(
+      (user) => user.email !== "bankhenry@recharges.com"
+    );
 
     setListData(
       Array(1)
@@ -169,32 +171,63 @@ export default ManageUsers = ({ navigation }) => {
     >
       <View style={{ alignSelf: "flex-start", marginLeft: 50 }}>
         <Text>
-          <Text style={{ fontWeight: "bold" }}>Name:</Text>
-          <Text style={{ fontStyle: "italic", color: "red" }}>
-            {" "}
+          <Icon
+            name="users"
+            style={{ color: "black", fontSize: 20 }}
+            type="FontAwesome5"
+          />
+          <Text
+            style={{
+              fontStyle: "italic",
+              color: "black",
+              fontWeight: "bold",
+            }}
+          >
+            {"       "}
             {data.item.name} {data.item.surname}
           </Text>
         </Text>
         <Text>
-          <Text style={{ fontWeight: "bold" }}>Email:</Text>
+          <Icon
+            name="address-book"
+            style={{ color: "black", fontSize: 20 }}
+            type="FontAwesome5"
+          />
+          {"        "}
           <Text style={{ fontStyle: "italic" }}> {data.item.email}</Text>
         </Text>
         <Text>
-          <Text style={{ fontWeight: "bold" }}>Role:</Text>
-          <Text style={{ fontStyle: "italic" }}> {data.item.role}</Text>
-        </Text>
-        <Text>
-          <Text style={{ fontWeight: "bold" }}>Balance:</Text>
+          <Icon
+            name="user-tag"
+            style={{ color: "black", fontSize: 20 }}
+            type="FontAwesome5"
+          />
           <Text style={{ fontStyle: "italic" }}>
-            {" "}
-            ${data.item.account ? data.item.account.balance : null}
+            {"      "} {data.item.role}
           </Text>
         </Text>
         <Text>
-          <Text style={{ fontWeight: "bold" }}>CVU:</Text>
+          <Icon
+            name="wallet"
+            style={{
+              color: "black",
+              fontSize: 20,
+            }}
+            type="FontAwesome5"
+          />
+          <Text>
+            {"        "}${data.item.account ? data.item.account.balance : null}
+          </Text>
+        </Text>
+        <Text>
+          <Icon
+            name="credit-card"
+            style={{ color: "black", fontSize: 20 }}
+            type="FontAwesome5"
+          />
           <Text style={{ fontStyle: "italic" }}>
-            {" "}
-            ${data.item.account ? data.item.account.cvu : null}
+            {"        "}
+            CVU: {data.item.account ? data.item.account.cvu : null}
           </Text>
         </Text>
       </View>
@@ -203,8 +236,6 @@ export default ManageUsers = ({ navigation }) => {
 
   const renderHiddenItem = (data, rowMap) => (
     <View style={styles.rowBack}>
-
-
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnLeft]}
         onPress={() => promoteRow(rowMap, data.item.key)}

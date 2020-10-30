@@ -8,8 +8,12 @@ import { api } from "./Constants/constants";
 import styles from "../Styles/forgotPassStyles";
 import CustomButton from "./customButton";
 import { CheckBox } from "react-native-elements";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 function ChangeMyPass({ navigation }) {
+  const userLogged = useSelector((state) => state.auth.user);
+
   const {
     values,
     isSubmitting,
@@ -24,16 +28,25 @@ function ChangeMyPass({ navigation }) {
       newPass: "",
       confirmNewPass: "",
     },
-    onSubmit: () => Alert.alert("ACA VA EL FETCH :)"),
+    onSubmit: () => {
+      axios
+        .put(`${api}/auth/change-password/user`, {
+          currentPw: values.currentPass,
+          newPw: values.newPass,
+          userId: userLogged.id,
+        })
+        .then((response) => {
+          if (response.data.success) {
+            Alert.alert("Success", response.data.message);
+          } else Alert.alert("Failure", response.data.message);
+        })
+        .catch((err) => console.log(err));
+    },
     validate: (values) => {
       const errors = {};
       if (!/^(?=.*\d)(?=.*[A-Za-z])[A-Za-z0-9]{5,20}$/.test(values.currentPass))
         errors.newPass = "Must contain: 5-20 digits, A-Z and a-z.";
-      if (
-        !/^(?=.*\d)(?=.*[A-Za-z])[A-Za-z0-9]{5,20}$/.test(
-          values.newPass && values.newPass == values.currentPass
-        )
-      )
+      if (!/^(?=.*\d)(?=.*[A-Za-z])[A-Za-z0-9]{5,20}$/.test(values.newPass))
         errors.newPass = "Must contain: 5-20 digits, A-Z and a-z. ";
       if (values.confirmNewPass !== values.newPass || !values.confirmNewPass)
         errors.confirmNewPass = "Must be the same password.";

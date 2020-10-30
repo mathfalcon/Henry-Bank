@@ -83,13 +83,13 @@ User.prototype.randomSalt = function () {
 }
 
 // User used to provide recharges
-User.create({
-  email: 'bankhenry@recharges.com',
-  password: 'admin1234',
-  role: 'admin',
-  passcode: '8215',
-  isVerified: true
-})
+// User.create({
+//   email: 'bankhenry@recharges.com',
+//   password: 'admin1234',
+//   role: 'admin',
+//   passcode: '8215',
+//   isVerified: true
+// })
 
 Card.prototype.checkNumber = function (number) {
   return (
