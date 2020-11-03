@@ -1,2 +1,4 @@
 # henry-bank
-Proyecto de graduación de Henry
+Fintech App Project
+
+README under construction
