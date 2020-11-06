@@ -24,6 +24,7 @@ function Home({ navigation }) {
   loadAsync({
     // Load a font `Microgramma` from a static resource
     Microgramma: require("../assets/fonts/Microgramma.ttf"),
+    Poppins: require("../assets/fonts/Poppins-Regular.ttf")
   });
 
   return (

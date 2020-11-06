@@ -2,8 +2,6 @@ import { StyleSheet } from "react-native";
 //
 export default StyleSheet.create({
   container: {
-    marginHorizontal: "5%",
-    marginVertical: "5%",
     flex: 20,
     backgroundColor: "white",
     alignItems: "center",

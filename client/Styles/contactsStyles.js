@@ -2,17 +2,18 @@ import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   container: {
-    backgroundColor: "whitesmoke",
+    backgroundColor: "#151515",
     flex: 1,
   },
   header: {
-    backgroundColor: "#ffff57",
+    backgroundColor: "#151515",
     display: "flex",
   },
   headerTitle: {
-    color: "black",
-    alignSelf: "center",
-    width: "100%",
+    marginVertical: "15%",
+    marginHorizontal: "5%",
+    fontSize: 20,
+    fontFamily: "Poppins",
   },
   backTextWhite: {
     color: "white",
@@ -30,7 +31,7 @@ export default StyleSheet.create({
   },
   rowBack: {
     alignItems: "center",
-    backgroundColor: "#151515",
+    backgroundColor: "whitesmoke",
     flex: 1,
     flexDirection: "row",
     paddingLeft: 10,
@@ -50,16 +51,13 @@ export default StyleSheet.create({
     right: 75,
   },
   backRightBtnRight: {
-    backgroundColor: "#151515",
+    backgroundColor: "#d32f2f",
     right: 0,
-    
   },
   textAddContact: {
     fontSize: 12,
-    color: "white",
-    alignSelf: "flex-end",
     marginRight: 5,
-    color: "black",
+    color: "white",
   },
 
   centeredView: {
@@ -83,9 +81,9 @@ export default StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  buttoms: {
+  buttons: {
     flexDirection: "row",
-    flex: 1,
+    paddingTop: 20,
   },
   openButton: {
     color: "black",
@@ -101,20 +99,22 @@ export default StyleSheet.create({
     color: "#ffff57",
     fontWeight: "bold",
     textAlign: "center",
+    fontFamily: 'Poppins'
   },
   modalText: {
     marginBottom: -10,
     fontSize: 20,
     textAlign: "center",
     fontWeight: "bold",
+    fontFamily: 'Poppins'
   },
   error: {
     alignSelf: "center",
     color: "red",
     fontSize: 15,
   },
-  menuOp:{
-    height:60,    
-    backgroundColor:"black",
-  }
+  menuOp: {
+    height: 60,
+    backgroundColor: "black",
+  },
 });

@@ -6,6 +6,7 @@ import {
   Alert,
   StatusBar,
   Dimensions,
+  Image,
 } from "react-native";
 import { Avatar, Divider } from "react-native-elements";
 import CardPosition from "./CardPosition";
@@ -28,9 +29,10 @@ export default Position = ({ navigation }) => {
     if (!fontLoaded) {
       Font.loadAsync({
         BreeSerifRegular: require("../assets/fonts/BreeSerif-Regular.ttf"),
+        Poppins: require("../assets/fonts/Poppins-Regular.ttf"),
       });
     }
-  }, []);
+  }, [fontLoaded]);
   const dispatch = useDispatch();
 
   const handleLogOut = async () => {
@@ -56,31 +58,22 @@ export default Position = ({ navigation }) => {
       {userLogged.success ? (
         <Container>
           <View style={styles.headerSection}>
-            <View style={styles.avatarSection}>
-              <Avatar
-                size={100}
-                activeOpacity={0.7}
-                containerStyle={{
-                  alignSelf: "center",
-                }}
-                source={{
-                  uri: `data:image/jpeg;base64,${userLogged.user.documentPhoto}`,
-                }}
-              />
-            </View>
+            <Image
+              source={require("../assets/henryLogoWhite.png")}
+              style={styles.logoImg}
+            />
             <View style={styles.nameSection}>
-              <Text
-                style={styles.moneySection}
-              >{`Hello ${userLogged.user.name} ${userLogged.user.surname}`}</Text>
-
+              <Text style={styles.moneySection}>
+                Hello,{"\n"}
+                {`${userLogged.user.name} ${userLogged.user.surname}`}
+              </Text>
               <TouchableOpacity
                 style={{
                   color: "black",
                   backgroundColor: "#ffff6d",
-                  fontSize: 15,
                   borderRadius: 5,
                   flexDirection: "row",
-                  height: 45,
+                  height: 30,
                   paddingHorizontal: 15,
                   alignItems: "center",
                   justifyContent: "center",
@@ -97,102 +90,95 @@ export default Position = ({ navigation }) => {
                 title="LOG OUT"
                 onPress={handleLogOut}
               >
-                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                <Text style={{ fontSize: 17}}>
                   LOG OUT
                 </Text>
                 <Icon
                   active
                   name="sign-out-alt"
                   type="FontAwesome5"
-                  style={{ color: "black", fontSize: 23, marginLeft: 10 }}
+                  style={{ color: "black", fontSize: 17, marginLeft: 10 }}
                 />
               </TouchableOpacity>
             </View>
           </View>
 
           <View style={styles.cardPosition}>
-            <View style={{ flex: 3 }}>
-              <View style={{ marginHorizontal: 15 }}>
-                <CardPosition userLogged={userLogged} navigation={navigation} />
-              </View>
-              <View style={{ marginHorizontal: 15 }}>
-                <Card>
-                  <AccountMovementsChart userLogged={userLogged} />
-                </Card>
-              </View>
-              <View style={styles.buttonsView}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("sendMoney")}
-                  style={styles.sendMoneyButton}
-                >
-                  <Icon
-                    active
-                    name="paper-plane"
-                    type="FontAwesome5"
-                    style={{ color: "#ffff8b", fontSize: 19 }}
-                  />
-                  <Text style={styles.sendMoneyText}>SEND MONEY</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("recharge", { userLogged, navigation })
-                  }
-                  style={styles.sendMoneyButton}
-                >
-                  <Icon
-                    active
-                    name="wallet"
-                    type="FontAwesome5"
-                    style={{ color: "#ffff8b", fontSize: 19 }}
-                  />
-                  <Text style={styles.sendMoneyText}>RECHARGE</Text>
-                </TouchableOpacity>
+            <View style={{ alignItems: "center", flex: 2.1 }}>
+              <AccountMovementsChart userLogged={userLogged} />
+            </View>
+            <View style={{ flex: 1.2 }}>
+              <CardPosition userLogged={userLogged} navigation={navigation} />
+            </View>
+            <View style={styles.buttonsView}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("sendMoney")}
+                style={styles.sendMoneyButton}
+              >
+                <Icon
+                  active
+                  name="paper-plane"
+                  type="FontAwesome5"
+                  style={{ color: "#ffff8b", fontSize: 15 }}
+                />
+                <Text style={styles.sendMoneyText}>SEND MONEY</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("recharge", { userLogged, navigation })
+                }
+                style={styles.sendMoneyButton}
+              >
+                <Icon
+                  active
+                  name="wallet"
+                  type="FontAwesome5"
+                  style={{ color: "#ffff8b", fontSize: 15 }}
+                />
+                <Text style={styles.sendMoneyText}>RECHARGE</Text>
+              </TouchableOpacity>
 
-                {userLogged.user.role === "admin" ? (
-                  <>
-                    <View style={{ marginVertical: 10 }}>
-                      <TouchableOpacity
-                        style={styles.adminPanelText}
-                        onPress={() =>
-                          navigation.navigate("adminPanel", {
-                            userLogged,
-                            navigation,
-                          })
-                        }
-                      >
-                        <Icon
-                          active
-                          name="user-cog"
-                          type="FontAwesome5"
-                          style={{ color: "#ffff8b", fontSize: 19 }}
-                        />
-                        <Text style={styles.sendMoneyText}>ADMIN PANEL</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </>
-                ) : (
+              {userLogged.user.role === "admin" ? (
+                <>
                   <TouchableOpacity
+                    style={styles.adminPanelText}
                     onPress={() =>
-                      navigation.navigate("userPanel", {
+                      navigation.navigate("adminPanel", {
                         userLogged,
                         navigation,
                       })
                     }
-                    style={[styles.adminPanelText, styles.sendMoneyButton]}
                   >
                     <Icon
                       active
                       name="user-cog"
                       type="FontAwesome5"
-                      style={{ color: "#ffff8b", fontSize: 19 }}
+                      style={{ color: "#ffff8b", fontSize: 15 }}
                     />
-                    <Text style={styles.sendMoneyText}>USER PANEL</Text>
+                    <Text style={styles.sendMoneyText}>ADMIN PANEL</Text>
                   </TouchableOpacity>
-                )}
-              </View>
+                </>
+              ) : (
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("userPanel", {
+                      userLogged,
+                      navigation,
+                    })
+                  }
+                  style={[styles.adminPanelText]}
+                >
+                  <Icon
+                    active
+                    name="user-cog"
+                    type="FontAwesome5"
+                    style={{ color: "#ffff8b", fontSize: 19 }}
+                  />
+                  <Text style={styles.sendMoneyText}>USER PANEL</Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
-
           <View style={styles.menuOp}>
             <MenuOperation
               navigation={navigation}

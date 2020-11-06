@@ -59,7 +59,7 @@ function ChangeMyPass({ navigation }) {
     <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView>
         <View>
-          <Text style={styles.title}>Change my password</Text>
+          <Text style={styles.title}>Change your password</Text>
           <Text style={styles.subtitle}>
             In order to protect your account, make sure your password must
             contain 5-20 digits, A-Z and a-z.

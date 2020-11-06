@@ -333,7 +333,7 @@ export default PersonalInfo = ({ navigation, route }) => {
               // onPress={handleSubmit}
             />
           </View>
-          <Text style={{ alignSelf: "center", marginTop: 80 }}>
+          <Text style={{ alignSelf: "center", marginVertical: 30 }}>
             <Text>Back to </Text>
             <Text
               style={{ fontWeight: "bold" }}

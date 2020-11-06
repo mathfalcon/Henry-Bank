@@ -8,12 +8,13 @@ export default StyleSheet.create({
     backgroundColor: "whitesmoke",
   },
   header: {
-    backgroundColor: "#ffff57",
+    backgroundColor: "#151515",
     height: 150,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    marginHorizontal:20
   },
   headerTitle: {
-    color: "black",
+    color: "white",
     alignSelf: "center",
   },
   title: {
@@ -49,7 +50,6 @@ export default StyleSheet.create({
     borderRadius: 5,
   },
   buttom: {
-    margin: 20,
     marginTop: 50,
   },
   main: {
@@ -63,5 +63,6 @@ export default StyleSheet.create({
   main2:{
     flex: 2,
     padding: 15,
+    marginHorizontal:20
   }
 });

@@ -38,7 +38,7 @@ export default RechargeMoney = ({ route }) => {
       });
   };
   return (
-    <KeyboardAwareScrollView style={{ backgroundColor: "#ffff8b", flex: 1 }}>
+    <KeyboardAwareScrollView style={{ backgroundColor: "whitesmoke", flex: 1 }}>
       <View style={styles.mainView}>
         <View style={styles.firstView}>
           <View style={styles.titleView}>
@@ -93,20 +93,21 @@ export default RechargeMoney = ({ route }) => {
             </Form>
             <View style={{ flexDirection: "row", alignSelf: "center" }}>
               <Button
-                style={{ marginHorizontal: 10, marginVertical: 10 }}
+                style={{ marginHorizontal: 10, marginVertical: 10, borderRadius:10 }}
                 dark
                 block
                 onPress={() => navigation.goBack()}
+
               >
-                <Text>GO BACK</Text>
+                <Text style={{color:'white'}}>GO BACK</Text>
               </Button>
               <Button
-                style={{ marginHorizontal: 10, marginVertical: 10 }}
+                style={{ marginHorizontal: 10, marginVertical: 10,borderRadius:10 }}
                 dark
                 block
                 onPress={() => handleRecharge()}
               >
-                <Text>CONFIRM RECHARGE</Text>
+                <Text style={{color:'white'}}>CONFIRM RECHARGE</Text>
               </Button>
             </View>
           </View>
@@ -131,38 +132,25 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     justifyContent: "center",
   },
-  cardNumber: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#ffff57",
-    height: 50,
-    width: 250,
-    alignSelf: "center",
-  },
-  card: {
-    width: 300,
-    height: 400,
-    justifyContent: "center",
-  },
-  container: {},
   title: {
-    color: "#151515",
-    fontSize: 35,
+    color: "whitesmoke",
+    fontSize: 20,
     alignSelf: "center",
-    marginTop: 25,
     fontWeight: "bold",
+    fontFamily: 'Poppins'
   },
   titleView: {
     flex: 1,
-    padding: 15,
+    padding: 20,
     width: 1500,
-    backgroundColor: "#ffff8b",
+    backgroundColor: "#151515",
   },
   mainView: {
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
-    backgroundColor: "#ffff8b",
+    backgroundColor: "whitesmoke",
+    marginHorizontal:20
   },
   firstView: {
     flex: 1,
@@ -170,7 +158,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   secondView: {
-    flex: 2,
     width: "100%",
     alignItems: "center",
   },
@@ -179,7 +166,7 @@ const styles = StyleSheet.create({
   },
   textDescription: {
     textAlign: "center",
-    margin: 15,
+    margin: 20,
     fontSize: 17,
   },
 });

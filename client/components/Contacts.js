@@ -12,6 +12,7 @@ import {
   View,
   Alert,
   Modal,
+  ScrollView,
 } from "react-native";
 import {
   Text,
@@ -42,7 +43,7 @@ export default Contacts = ({ navigation }) => {
   const [input, setInput] = useState({
     id: "",
     name: "",
-    email: "",    
+    email: "",
     phoneNumber: "",
   });
   const [error, setError] = useState({
@@ -55,13 +56,13 @@ export default Contacts = ({ navigation }) => {
 
   const dispatch = useDispatch();
   const userLogged = useSelector((state) => state.auth.user);
-  const userContacts = useSelector((state) => state.contacts.contacts);    
+  const userContacts = useSelector((state) => state.contacts.contacts);
 
   useEffect(() => {
     dispatch(getContactList(userLogged.id));
   }, []);
 
-  useEffect(() => {    
+  useEffect(() => {
     setListData(
       Array(1)
         .fill("")
@@ -72,34 +73,34 @@ export default Contacts = ({ navigation }) => {
             alias: `${i.alias}`,
             value: i.is_contact_of,
             photo: i.user.documentPhoto,
-            id: i.id
+            id: i.id,
           })),
         }))
     );
   }, [userContacts]);
 
-  const modifyRow = (rowMap, rowKey, id, email) => {    
+  const modifyRow = (rowMap, rowKey, id, email) => {
     setInput({
       ...input,
       id: id,
-      email: email,      
+      email: email,
     });
-    closeRow(rowMap, rowKey)
+    closeRow(rowMap, rowKey);
     setModify(true);
-    setModalVisible(true);    
+    setModalVisible(true);
   };
 
-  const deleteRow = (rowMap, rowKey, id) => {    
+  const deleteRow = (rowMap, rowKey, id) => {
     Alert.alert(
       "DELETE CONTACT",
-      "Delete this contact?",      
+      "Delete this contact?",
       [
         {
-          text: "Yes, Delete",          
+          text: "Yes, Delete",
           onPress: () => {
-            axios.delete(`${api}/contacts/delete/${id}`).then((response) => {                            
-              if (response.data.success) {                                
-                dispatch(getContactList(userLogged.id));                
+            axios.delete(`${api}/contacts/delete/${id}`).then((response) => {
+              if (response.data.success) {
+                dispatch(getContactList(userLogged.id));
                 closeRow(rowMap, rowKey);
               } else {
                 Alert.alert(
@@ -108,7 +109,7 @@ export default Contacts = ({ navigation }) => {
                   [
                     {
                       text: "Understood",
-                      onPress: () => closeRow(rowMap, rowKey)
+                      onPress: () => closeRow(rowMap, rowKey),
                     },
                   ],
                   { cancelable: false }
@@ -120,7 +121,7 @@ export default Contacts = ({ navigation }) => {
         { text: "No, Leave it", onPress: () => closeRow(rowMap, rowKey) },
       ],
       { cancelable: false }
-    );        
+    );
   };
 
   const closeRow = (rowMap, rowKey) => {
@@ -128,7 +129,6 @@ export default Contacts = ({ navigation }) => {
       rowMap[rowKey].closeRow();
     }
   };
-     
 
   const onRowDidOpen = (rowKey) => {
     // console.log("This row opened", rowKey);
@@ -186,26 +186,27 @@ export default Contacts = ({ navigation }) => {
   const renderHiddenItem = (data, rowMap) => (
     <View style={styles.rowBack}>
       <TouchableOpacity
-        onPress={() =>{
-          closeRow(rowMap, data.item.key)
+        onPress={() => {
+          closeRow(rowMap, data.item.key);
           navigation.navigate("sendMoney", {
             contact: data.item.email,
             userId: data.item.value,
             fromContacts: true,
-          })
-           }
-        }
+          });
+        }}
       >
-        <Text style={{ color: "#ffff8b" }}>Send Money</Text>
+        <Text style={{ color: "black" }}>Send Money</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnLeft]}
-        onPress={() => modifyRow(rowMap, data.item.key, data.item.id, data.item.email)}
+        onPress={() =>
+          modifyRow(rowMap, data.item.key, data.item.id, data.item.email)
+        }
       >
         <Text style={styles.backTextBlack}>Modify</Text>
       </TouchableOpacity>
-      
+
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnRight]}
         onPress={() => deleteRow(rowMap, data.item.key, data.item.id)}
@@ -235,27 +236,26 @@ export default Contacts = ({ navigation }) => {
     });
 
     if (!error.name && !error.email) {
-      if (modify) {        
+      if (modify) {
         axios
-        .put(`${api}/contacts/update/${input.id}`, {
-          alias: input.name,
-        })
-        .then((response) => {
-          if (response.data.success) {  
-            Alert.alert("Success", response.data.message); 
-            dispatch(getContactList(userLogged.id));
-            setModalVisible(!modalVisible) 
-            setInput({
-              name: "",
-              email: "",
-              phoneNumber: "",
-            }); 
-          } else {              
-            Alert.alert("Failure", response.data.message);                        
-          }        
-        })
-        .catch( err => console.log( err ));
-    
+          .put(`${api}/contacts/update/${input.id}`, {
+            alias: input.name,
+          })
+          .then((response) => {
+            if (response.data.success) {
+              Alert.alert("Success", response.data.message);
+              dispatch(getContactList(userLogged.id));
+              setModalVisible(!modalVisible);
+              setInput({
+                name: "",
+                email: "",
+                phoneNumber: "",
+              });
+            } else {
+              Alert.alert("Failure", response.data.message);
+            }
+          })
+          .catch((err) => console.log(err));
       } else {
         axios
           .post(`${api}/contacts/create`, {
@@ -264,7 +264,7 @@ export default Contacts = ({ navigation }) => {
             emailOfContact: input.email,
           })
           .then((response) => {
-            if (response.data.success) {              
+            if (response.data.success) {
               Alert.alert("Success", response.data.message);
               setInput({
                 name: "",
@@ -272,19 +272,19 @@ export default Contacts = ({ navigation }) => {
                 phoneNumber: "",
               });
               dispatch(getContactList(userLogged.id));
-              setModalVisible(!modalVisible)             
+              setModalVisible(!modalVisible);
             } else if (response.data.code === "not_client") {
               Alert.alert("Invite your contact", response.data.message, [
                 {
-                  text: "Maybe later",                  
+                  text: "Maybe later",
                   onPress: () => {
-                    setModalVisible(!modalVisible)
-                  }
+                    setModalVisible(!modalVisible);
+                  },
                 },
                 {
                   text: "Sounds good",
                   onPress: () => {
-                    setModalVisible(!modalVisible);                    
+                    setModalVisible(!modalVisible);
                     navigation.navigate("invitation");
                   },
                 },
@@ -294,9 +294,9 @@ export default Contacts = ({ navigation }) => {
                 email: "",
                 phoneNumber: "",
               });
-            } else {              
-              Alert.alert("Failure", response.data.message);   
-              dispatch(getContactList(userLogged.id));           
+            } else {
+              Alert.alert("Failure", response.data.message);
+              dispatch(getContactList(userLogged.id));
             }
           })
           .catch((err) => console.log(err));
@@ -307,50 +307,53 @@ export default Contacts = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Header style={styles.header}>
-        <Left>
+        <Left style={{ flex: 1 }}>
           <Button transparent onPress={() => navigation.navigate("position")}>
-            <Icon style={{ color: "black" }} name="arrow-back" />
+            <Icon style={{ color: "white" }} name="arrow-back" />
           </Button>
         </Left>
-        <Body>
-          <Title style={styles.headerTitle}>CONTACTS</Title>
+        <Body style={{ flex: 3 }}>
+          <Title style={styles.headerTitle}>Contacts</Title>
         </Body>
-        <Right>
+      </Header>
+      <ScrollView>
+        <View style={{ flex: 1 }}>
+          <SwipeListView
+            useSectionList
+            sections={listData}
+            renderItem={renderItem}
+            renderHiddenItem={renderHiddenItem}
+            // renderSectionHeader={renderSectionHeader}
+            leftOpenValue={115}
+            rightOpenValue={-150}
+            previewRowKey={"0"}
+            previewOpenValue={-40}
+            previewOpenDelay={3000}
+            onRowDidOpen={onRowDidOpen}
+          />
+        </View>
+        <View style={{ backgroundColor: "#151515", flex: 5 }}>
           <Button
             iconRight
             transparent
             onPress={() => {
               setModalVisible(!modalVisible);
             }}
+            style={{ alignSelf: "flex-end" }}
           >
             <Text style={styles.textAddContact}>Add Contact</Text>
 
             <Icon
               name="user-plus"
               type="FontAwesome5"
-              style={{ color: "black" }}
+              style={{ color: "white" }}
               // onPress={() => setShowconfirmPass(!showconfirmPass)}
             />
           </Button>
-        </Right>
-      </Header>
-
-      <SwipeListView
-        useSectionList
-        sections={listData}
-        renderItem={renderItem}
-        renderHiddenItem={renderHiddenItem}
-        // renderSectionHeader={renderSectionHeader}
-        leftOpenValue={115}
-        rightOpenValue={-150}
-        previewRowKey={"0"}
-        previewOpenValue={-40}
-        previewOpenDelay={3000}
-        onRowDidOpen={onRowDidOpen}
-      />
-
+        </View>
+      </ScrollView>
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
@@ -363,75 +366,59 @@ export default Contacts = ({ navigation }) => {
               {!modify ? "Add New Contact" : "Modify Contact Name"}
             </Text>
             <Content>
-              <Form>
-                <Item floatingLabel>
-                  <Label>Name</Label>
-                  <Input
-                    name="name"
-                    value={input.name}
-                    onChangeText={(text) => handleChange("name", text)}
-                  />
-                </Item>
-                {error.name && (
-                  <Text style={styles.error}>Must fill this field</Text>
-                )}
+              <View>
+                <Form>
+                  <Item floatingLabel>
+                    <Label>Name</Label>
+                    <Input
+                      name="name"
+                      value={input.name}
+                      onChangeText={(text) => handleChange("name", text)}
+                    />
+                  </Item>
+                  {error.name && (
+                    <Text style={styles.error}>Must fill this field</Text>
+                  )}
 
-                <Item floatingLabel>
-                  <Label>Email</Label>
-                  <Input
-                    disabled={modify}
-                    name="email"
-                    value={input.email}
-                    onChangeText={(text) => handleChange("email", text)}
-                  />
-                </Item>
-                {error.email && (
-                  <Text style={styles.error}>Enter a valid Email</Text>
-                )}
-
-                {/* <Item floatingLabel last>
-                  <Label>Phone Number</Label>
-                  <Input
-                    name="phoneNumber"
-                    value={input.phoneNumber}
-                    onChangeText={(text) => handleChange("phoneNumber", text)}
-                  />
-                </Item>
-                <PhoneNumberInput 
-                  name="phoneNumber"
-                  value={input.phoneNumber}
-                  onChangeText={(text) => handleChange("phoneNumber", text)}
-                />
-                {error.phoneNumber && (
-                  <Text style={styles.error}>Must fill this field</Text>
-                )} */}
-
-                <View style={styles.buttoms}>
-                  <TouchableHighlight
-                    style={{ ...styles.openButton, backgroundColor: "#151515" }}
-                    onPress={() => {
-                      setInput({
-                        name: "",
-                        email: "",
-                        phoneNumber: "",
-                      });
-                      setError(false);
-                      setModify(false);
-                      setModalVisible(!modalVisible);
-                    }}
-                  >
-                    <Text style={styles.textStyle}>CANCEL</Text>
-                  </TouchableHighlight>
-                  <TouchableHighlight
-                    style={{ ...styles.openButton, backgroundColor: "#151515" }}
-                    onPress={handleContact}
-                  >
-                    <Text style={styles.textStyle}>
-                      {!modify ? "ADD" : "MODIFY"}
-                    </Text>
-                  </TouchableHighlight>
-                </View>
-              </Form>
+                  <Item floatingLabel>
+                    <Label>Email</Label>
+                    <Input
+                      disabled={modify}
+                      name="email"
+                      value={input.email}
+                      onChangeText={(text) => handleChange("email", text)}
+                    />
+                  </Item>
+                  {error.email && (
+                    <Text style={styles.error}>Enter a valid Email</Text>
+                  )}
+                </Form>
+              </View>
+              <View style={styles.buttons}>
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: "#151515" }}
+                  onPress={() => {
+                    setInput({
+                      name: "",
+                      email: "",
+                      phoneNumber: "",
+                    });
+                    setError(false);
+                    setModify(false);
+                    setModalVisible(!modalVisible);
+                  }}
+                >
+                  <Text style={styles.textStyle}>CANCEL</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: "#151515" }}
+                  onPress={handleContact}
+                >
+                  <Text style={styles.textStyle}>
+                    {!modify ? "ADD" : "MODIFY"}
+                  </Text>
+                </TouchableHighlight>
+              </View>
             </Content>
           </View>
         </View>

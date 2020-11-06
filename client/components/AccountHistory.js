@@ -62,22 +62,19 @@ export default AccountHistory = ({ navigation, route }) => {
               </Left>
               <Body style={{flex: 3}}>
                 <Title style={styles.headerTitle}>
-                  Current Balance: ${userLogged.account.balance}
+                  Account Movements
                 </Title>
               </Body>
             </Header>
 
             <Content style={styles.container}>
-              <Image
-                style={styles.background}
-                source={require("../assets/RectangleOne.png")}
-              />
               <View style={styles.headerMovement}>
                 <Left>
-                  <Text>Latest Movements</Text>
+                  <Text style={{fontSize: 17}}>Latest Movements</Text>
                 </Left>
                 <Right>
                   <Button transparent onPress={() => setTheFilter(false)}>
+                    <Text style={{color: '#151515'}}>Filter</Text>
                     <Icon
                       style={{ color: "black" }}
                       type="AntDesign"
