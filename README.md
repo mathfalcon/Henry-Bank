@@ -48,11 +48,13 @@ To run this project locally follow the next steps:
 # App Previews
 
 ### Promotional Video:
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/t1KtkQB5uQ8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![Click Here](https://img.youtube.com/vi/t1KtkQB5uQ8/0.jpg)](https://www.youtube.com/watch?v=t1KtkQB5uQ8) 
+Click Me
 
 ### Project Full Demo (in spanish):
-<iframe width="560" height="315" src="https://www.youtube.com/embed/BcFIxGM8K_Y" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+[![Click Me](https://img.youtube.com/vi/BcFIxGM8K_Y/0.jpg)](https://www.youtube.com/watch?v=BcFIxGM8K_Y)
+Click Me
 
 # About Us:
 
