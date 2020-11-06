@@ -72,4 +72,3 @@ We are 5 developers actually residing in Argentina and Uruguay.
 - Agustin Dominguez (AR) [GitHub](https://github.com/GusdomDominguez) [LinkedIn](https://www.linkedin.com/in/agustindominguez-43b4221b1/)
 - Ariel Tecay (AR) [GitHub](https://github.com/arieltecay) [LinkedIn](https://www.linkedin.com/in/ariel-tecay-9a78a957/)
 - José González Padrón (AR) [GitHub](https://github.com/JoseTomas-GP95) [LinkedIn](https://www.linkedin.com/in/jos%C3%A9-gonz%C3%A1lez-padr%C3%B3n-6251a316a//)
-
