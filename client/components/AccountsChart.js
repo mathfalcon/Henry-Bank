@@ -6,9 +6,10 @@ import { Container, View } from "native-base";
 import { LineChart } from "react-native-chart-kit";
 import axios from "axios";
 import { api } from "./Constants/constants";
+import moment from 'moment';
+moment().format();
 
 export default AccountMovementsChart = ({ userLogged }) => {
-  const today = new Date();
   const [pastDaysBalance, setBalance] = useState([]);
   const [decoratorValue, setDecoratorValue] = useState("0");
   const [decoratorX, setDecoratorX] = useState(700);
@@ -36,13 +37,13 @@ export default AccountMovementsChart = ({ userLogged }) => {
       fromZero
       data={{
         labels: [
-          today.getDate() - 7,
-          today.getDate() - 6,
-          today.getDate() - 5,
-          today.getDate() - 4,
-          today.getDate() - 3,
-          today.getDate() - 2,
-          "Yesterday",
+          moment().subtract(6, 'days').date().toString()+ '/' + moment().subtract(6, 'days').month(),
+          moment().subtract(5, 'days').date().toString()+ '/' + moment().subtract(5, 'days').month(),
+          moment().subtract(4, 'days').date().toString()+ '/' + moment().subtract(4, 'days').month(),
+          moment().subtract(3, 'days').date().toString()+ '/' + moment().subtract(3, 'days').month(),
+          moment().subtract(2, 'days').date().toString()+ '/' + moment().subtract(2, 'days').month(),
+          moment().subtract(1, 'days').date().toString()+ '/' + moment().subtract(1, 'days').month(),
+          moment().date().toString()+ '/' + moment().month(),
         ],
         datasets: [
           {
@@ -59,22 +60,22 @@ export default AccountMovementsChart = ({ userLogged }) => {
         ],
       }}
       width={Dimensions.get("window").width - 40} // from react-native
-      height={200}
+      height={180}
       yAxisLabel="$"
       decorator={() => {
         return (
-          <View style={decoratorView.container}>
+          <View style={decoratorView.container} >
             <Svg>
               <Rect
                 x={decoratorX}
                 y={decoratorY + 10}
-                width="70"
+                width="80"
                 height="30"
-                fill="black"
+                fill="#2D2D2D"
                 textAnchor="middle"
               />
               <Text
-                x={decoratorX + 35}
+                x={decoratorX + 40}
                 y={decoratorY + 30}
                 fill="white"
                 fontSize="16"
@@ -99,16 +100,16 @@ export default AccountMovementsChart = ({ userLogged }) => {
       }}
       yAxisInterval={1} // optional, defaults to 1
       chartConfig={{
-        backgroundColor: "#ffff57",
-        backgroundGradientFrom: "whitesmoke",
-        backgroundGradientTo: "whitesmoke",
+        backgroundColor: "#151515",
+        backgroundGradientFrom: "#151515",
+        backgroundGradientTo: "#151515",
         decimalPlaces: 2, // optional, defaults to 2dp
-        color: (opacity = 10) => `rgba(0, 0, 0, ${opacity})`,
-        labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+        color: (opacity = 10) => `rgba(255, 255, 255, ${opacity})`,
+        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
         propsForDots: {
-          r: "3",
-          strokeWidth: "2",
-          stroke: "#151515",
+          r: "2",
+          strokeWidth: "1",
+          stroke: "white",
         },
       }}
       bezier
@@ -116,6 +117,7 @@ export default AccountMovementsChart = ({ userLogged }) => {
         elevation: 15,
         alignSelf: "center",
       }}
+      yLabelsOffset={5}
       withHorizontalLines={false}
       formatYLabel={(num) => parseInt(num)}
     />

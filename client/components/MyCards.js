@@ -1,25 +1,63 @@
 import React from "react";
-import { View, StyleSheet, Text, Image } from "react-native";
+import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
 import { CardView } from "react-native-credit-card-input";
-import ClientCard from "./ClientCard";
-import MenuCards from "./MenuCards";
 import { useSelector } from "react-redux";
-import CreditCardDisplay from "react-native-credit-card-display";
 
 function MyCards({ navigation }) {
   const userLogged = useSelector((state) => state.auth.user);
+  console.log(userLogged.account);
   return (
     <View style={styles.container}>
       <View style={styles.blackMenu}>
-        <View>
-          <Image
-            source={require("../assets/henryLogoBlack.jpg")}
-            style={styles.logoImg}
-          />
-        </View>
-        <View>
-          <Text style={styles.title}>MY CARDS</Text>
-        </View>
+        <Text style={styles.title}>Account Details</Text>
+      </View>
+      <View style={{ justifyContent: "center", flex: 2 }}>
+        <ScrollView>
+          <View
+            style={{
+              marginHorizontal: 45,
+              alignItems: "center",
+              marginTop:25
+            }}
+          >
+            <Text
+              style={{ fontFamily: "Poppins", color: "#ffff8e", fontSize: 17 }}
+            >
+              Account Details
+            </Text>
+          </View>
+          <View
+            style={{
+              marginHorizontal: 45,
+              borderColor: "#ffff8e",
+              borderWidth: 1,
+              borderRadius: 10,
+              alignItems: "center",
+              padding: 10,
+            }}
+          >
+            <Text
+              style={{ fontFamily: "Poppins", color: "#FFFFFF", fontSize: 17 }}
+            >
+              CVU
+            </Text>
+            <Text
+              style={{ fontSize: 17, fontFamily: "Poppins", color: "#ffff8e" }}
+            >
+              {userLogged.account.cvu}
+            </Text>
+            <Text
+              style={{ fontFamily: "Poppins", color: "#FFFFFF", fontSize: 17 }}
+            >
+              TYPE
+            </Text>
+            <Text
+              style={{ fontSize: 17, fontFamily: "Poppins", color: "#ffff8e" }}
+            >
+              {userLogged.account.type}
+            </Text>
+          </View>
+        </ScrollView>
       </View>
       <View style={styles.card}>
         <CardView
@@ -27,18 +65,20 @@ function MyCards({ navigation }) {
           appStack
           requiresCVC={true}
           placeholder={{
-            cvc: "123",
+            cvc: "***",
           }}
-          cvc="11111"
           brand="henry"
           name={`${userLogged.name} ${userLogged.surname}`}
-          number={userLogged.account.card.number}
-          expiry={userLogged.account.card.expiration_date.split('T')[0]}
-          scale={1.3}
-          imageFront={require("../assets/yellowBackground.png")}
+          number={userLogged.account.card.number
+            .replace(/(.{4})/g, "$1 ")
+            .trim()}
+          expiry={userLogged.account.card.expiration_date.split("T")[0]}
+          scale={1.1}
+          imageFront={require("../assets/yellowBackground1.png")}
           imageBack={require("../assets/cardBackOk.png")}
         />
       </View>
+
       <View style={styles.menuOp}>
         <MenuOperation navigation={navigation} screen={"cards"} />
       </View>
@@ -51,32 +91,26 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     // alignItems: "center",
     // justifyContent: "space-evenly",
-    backgroundColor: "#ffff8b",
-    flex: 18,
+    backgroundColor: "#2D2D2D",
+    flex: 1,
   },
   card: {
     // zIndex: 2,
-    flex: 10,
+    flex: 2.5,
     alignSelf: "center",
-    alignItems:'center',
-    justifyContent: 'center'
+    alignItems: "center",
   },
   blackMenu: {
-    // bottom: "1.2%",
-    // width:500,
-    // height: 160,
     backgroundColor: "#151515",
-    // zIndex: 2,
-    flex: 2,
-    justifyContent: "space-around",
-    alignItems: 'center',
-    flexDirection: 'row',
+    flex: 0.8,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly",
   },
   title: {
-    color: "#ffff8b",
-    alignSelf: "flex-end",
+    color: "white",
     fontSize: 30,
-    marginRight: 15,
+    fontFamily: "Poppins",
   },
   menu: {
     // top: 685,
@@ -84,13 +118,12 @@ const styles = StyleSheet.create({
     // zIndex: 4,
   },
   menuOp: {
-    height: 50,
+    height: 60,
     backgroundColor: "black",
   },
   logoImg: {
-    height: 60,
-    width: 60,
-    borderRadius: 10,
+    height: 80,
+    width: 80,
   },
 });
 export default MyCards;

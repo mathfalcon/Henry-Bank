@@ -13,10 +13,10 @@ import {
   Left,
   Body,
   Title,
-  Avatar,
   Right,
   Button,
 } from "native-base";
+import { Avatar } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Alert, Image } from "react-native";
 import { api } from "./Constants/constants";
@@ -29,7 +29,8 @@ export default UserPanel = ({ route, navigation }) => {
   const userName = route.params.userLogged.user.name;
   const userId = route.params.userLogged.user.id;
 
-  const userLogged = route.params.userLogged
+  const userLogged = route.params.userLogged;
+
   return (
     <View
       style={{
@@ -42,47 +43,35 @@ export default UserPanel = ({ route, navigation }) => {
         style={{
           backgroundColor: "#ffff8b",
           alignItems: "center",
-
           justifyContent: "flex-start",
         }}
       >
         <Button transparent onPress={() => navigation.goBack()}>
-          <Icon style={{ color: "black", fontSize: 35 }} name="arrow-back" />
+          <Icon style={{ color: "#151515", fontSize: 25 }} name="arrow-back" />
         </Button>
-        <Title style={{ color: "black" }}>Welcome to your user panel</Title>
+        <Title style={{ color: "#151515", fontSize: 20 }}>
+          Welcome to your user panel
+        </Title>
       </Header>
-      {/*       <Avatar
-        size={115}
-        rounded
-        activeOpacity={0.7}
-        containerStyle={{
-          backgroundColor: "#ffdd3c",
-          alignSelf: "center",
-          shadowColor: "red",
-          padding: 2,
-        }}
-                source={
-          img
-            ? {
-                uri: `data:image/jpeg;base64,${route.params.userLogged.user.documentPhoto}`,
-              }
-            : null
-        } 
-      /> */}
       <View
         style={{
           flexDirection: "column",
-          marginVertical: 40,
+          justifyContent: "center",
+          flex: 1,
         }}
       >
-        <Image
-          source={require("../assets/henryLogo.jpg")}
-          style={{
-            height: 60,
-            width: 60,
+        <Avatar
+          size="large"
+          source={{
+            uri: `data:image/jpeg;base64,${userLogged.user.documentPhoto}`,
+          }}
+          activeOpacity={1}
+          containerStyle={{
             alignSelf: "center",
-            borderRadius: 10,
-            marginVertical: 10,
+            backgroundColor: 'whitesmoke',
+            marginVertical:30,
+            height:100,
+            width:100
           }}
         />
         <Text
@@ -91,7 +80,7 @@ export default UserPanel = ({ route, navigation }) => {
             textAlign: "center",
             fontWeight: "bold",
             color: "whitesmoke",
-            marginVertical: 10,
+            marginBottom: 30,
           }}
         >
           Hi {userName}!
@@ -107,13 +96,13 @@ export default UserPanel = ({ route, navigation }) => {
             style={{
               width: 130,
               height: 130,
-              backgroundColor: "#ffff8b",
+              backgroundColor: "whitesmoke",
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
             }}
             button
-            onPress={() => navigation.navigate("security", {userId})}
+            onPress={() => navigation.navigate("security", { userId })}
           >
             <View>
               <Icon
@@ -133,7 +122,7 @@ export default UserPanel = ({ route, navigation }) => {
             style={{
               width: 130,
               height: 130,
-              backgroundColor: "#ffff8b",
+              backgroundColor: "whitesmoke",
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
@@ -166,7 +155,7 @@ export default UserPanel = ({ route, navigation }) => {
             style={{
               width: 130,
               height: 130,
-              backgroundColor: "#ffff8b",
+              backgroundColor: "whitesmoke",
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
@@ -195,7 +184,7 @@ export default UserPanel = ({ route, navigation }) => {
             style={{
               width: 130,
               height: 130,
-              backgroundColor: "#ffff8b",
+              backgroundColor: "whitesmoke",
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",

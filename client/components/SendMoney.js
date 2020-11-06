@@ -113,7 +113,7 @@ export default SendMoney = ({ navigation, route }) => {
                 }
               }
             >
-              <Icon style={{ color: "black" }} name="arrow-back" />
+              <Icon style={{ color: "white" }} name="arrow-back" />
             </Button>
             <Title style={styles.headerTitle}>SEND MONEY</Title>
           </Body>
@@ -139,7 +139,7 @@ export default SendMoney = ({ navigation, route }) => {
             </Picker>
           </View>
           <Label style={{ textAlign: "center", paddingVertical: 5 }}>
-            <Text>Select a contact</Text>
+            <Text style={{color:'white'}}>Select a contact</Text>
           </Label>
         </Header>
       </View>
@@ -163,6 +163,7 @@ export default SendMoney = ({ navigation, route }) => {
             <Input
               placeholder="Message"
               multiline={true}
+              style={{height:150}}
               onChangeText={(value) => setMessage(value)}
             />
           </Item>
@@ -182,7 +183,7 @@ export default SendMoney = ({ navigation, route }) => {
           )}
           </Item>
         <Button style={styles.buttom} dark block onPress={handleSubmit}>
-          <Text>SEND MONEY</Text>
+          <Text style={{color:'white'}}>SEND MONEY</Text>
         </Button>
       </View>
     </KeyboardAwareScrollView>

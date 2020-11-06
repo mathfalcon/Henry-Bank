@@ -140,7 +140,7 @@ export default MenuOperation = ({ navigation, screen }) => {
                 <Text style={styles.errorText}>{error}</Text>
               </View>
               <View style={styles.inputs}>
-                <Input
+              <Input
                   secureTextEntry={true}
                   disabled={true}
                   rounded

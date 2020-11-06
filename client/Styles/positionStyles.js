@@ -24,17 +24,18 @@ export default StyleSheet.create({
   },
   moneySection: {
     alignSelf: "center",
-    marginBottom: 5,
     color: "whitesmoke",
+    fontFamily: "Poppins",
+    fontSize: 23,
+    textAlign: "right",
   },
 
   cardPosition: {
-    flex: 7,
+    flex: 6,
     flexDirection: "column",
-    width: "100%",
     justifyContent: "space-around",
-    backgroundColor: "#ffff8b",
-    paddingTop: 15,
+    backgroundColor: "#151515",
+    alignSelf: 'center',
   },
   menuOp: {
     flex: 0.8,
@@ -45,27 +46,24 @@ export default StyleSheet.create({
   },
   nameSection: {
     justifyContent: "center",
-    flex: 4,
-    flexDirection: "column",
-    paddingRight: 45,
   },
   buttonsView: {
-    flex: 1,
+    flex: 1.5,
     flexDirection: "row",
-    backgroundColor: "#ffff8b",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
     alignContent: "center",
     flexWrap: "wrap",
+    marginHorizontal: 45, 
   },
   sendMoneyButton: {
     borderRadius: 5,
     flexDirection: "row",
-    backgroundColor: "#151515",
+    backgroundColor: "#2D2D2D",
     height: 50,
-    width: 180,
+    width: 150,
     paddingHorizontal: 15,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     shadowColor: "#000",
     shadowOffset: {
       width: 3,
@@ -80,12 +78,13 @@ export default StyleSheet.create({
     marginLeft: 5,
     alignSelf: "center",
     color: "whitesmoke",
+    fontSize: 15
   },
   adminPanelText: {
     borderRadius: 10,
     marginTop: 20,
     flexDirection: "row",
-    backgroundColor: "#151515",
+    backgroundColor: "#2D2D2D",
     height: 50,
     paddingHorizontal: 15,
     alignItems: "center",
@@ -97,7 +96,13 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.9,
     shadowRadius: 12.35,
-
     elevation: 10,
+    width: '100%'
+  },
+  logoImg: {
+    height: 100,
+    width: 100,
+    alignSelf: "center",
+    borderRadius: 10,
   },
 });

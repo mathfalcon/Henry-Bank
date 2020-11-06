@@ -1,6 +1,6 @@
 http:
   port: 8080
-  hostname: 192.168.1.2
+  hostname: YOUR_LOCAL_IP
 https:
   port: 8080
   hostname: localhost
@@ -11,35 +11,29 @@ apiEndpoints:
   # User's routes
   user: 
     methods: 'GET,POST,PUT,PATCH,DELETE' 
-    host: 192.168.1.2
+    host: YOUR_LOCAL_IP
     paths: ['/users/','/users/*']
   auth: 
     methods: 'GET,POST,PUT,PATCH,DELETE' 
-    host: 192.168.1.2
+    host: YOUR_LOCAL_IP
     paths: '/auth/*'
-  register: 
-    methods: 'GET,POST,PUT,PATCH,DELETE' 
-    host: 192.168.1.2
-    paths: '/register/*'
   transaction: 
     methods: 'GET,POST,PUT,PATCH,DELETE' 
-    host: 192.168.1.2
+    host: YOUR_LOCAL_IP
     paths: '/transactions/*'
   contact: 
     methods: 'GET,POST,PUT,PATCH,DELETE' 
-    host: 192.168.1.2
+    host: YOUR_LOCAL_IP
     paths: ['/contacts/','/contacts/*']
 serviceEndpoints:
   userService:
-    url: 'http://192.168.1.2:3000'
+    url: 'http://YOUR_LOCAL_IP:3000'
   authService:
-    url: 'http://192.168.1.2:3001'
-  registerService:
-    url: 'http://192.168.1.2:3002'
+    url: 'http://YOUR_LOCAL_IP:3001'
   transactionService:
-    url: 'http://192.168.1.2:3003'
+    url: 'http://YOUR_LOCAL_IP:3003'
   contactService:
-    url: 'http://192.168.1.2:3004'
+    url: 'http://YOUR_LOCAL_IP:3004'
 policies:
   - basic-auth
   - cors
@@ -65,14 +59,6 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: authService
-              changeOrigin: true
-  registerPipeline:  
-    apiEndpoints:
-      - register
-    policies:
-      - proxy:
-          - action:
-              serviceEndpoint: registerService
               changeOrigin: true
   transactionPipeline:
     apiEndpoints:

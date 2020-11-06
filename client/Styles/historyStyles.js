@@ -23,7 +23,8 @@ export default StyleSheet.create({
     title:{
         marginVertical: "15%",
         marginHorizontal: "5%",
-        fontSize: 20
+        fontSize: 20,
+        fontFamily: 'Poppins'
     },
     header: {
         backgroundColor: '#151515',

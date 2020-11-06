@@ -68,7 +68,7 @@ function ChangeMyPin({ navigation, userId }) {
     <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView>
         <View>
-          <Text style={styles.title}>Change my passcode</Text>
+          <Text style={styles.title}>Change your passcode</Text>
           <Text style={styles.subtitle}>
             Enter a new four digit Pin Code
           </Text>
